@@ -22,3 +22,14 @@ Azure AutoML in DevPlat 2.0 provides the following main feature areas:
 # REST API support for AutoML
 
 # Python SDK 2.0 support for AutoML
+
+
+
+
+## Contributing
+
+We welcome contributions and suggestions! Please see the [contributing guidelines](CONTRIBUTING.md) for details.
+
+## Code of Conduct
+
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). Please see the [code of conduct](CODE_OF_CONDUCT.md) for details.
