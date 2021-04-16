@@ -133,7 +133,7 @@ https://github.com/Azure/automl-devplat2-preview/blob/main/schemas/0.0.65/AutoML
 
 In reality, "AutoMLCommon.yaml" is the core/shared parameters, and the AutoMLJob specification YAML file is the following file named "AutoMLJob.yaml" which "derives" from the above:
 
-https://github.com/Azure/azureml_run_specification/blob/b6dfd54aace77c464134ec6fe7cd1f4436e8ecdd/schemas/AutoMLJob.yaml
+https://github.com/Azure/automl-devplat2-preview/blob/main/schemas/0.0.65/AutoMLJob.yaml
 
 But most AutoML settings are in "AutoMLCommon.yaml" since "AutoMLJob.yaml" only add the 'compute' parameter.
 The reson for having "AutoMLCommon.yaml" as shared parameters file is because there's another derived schema named "AutoMLComponent" which will be used for integration into Azure ML Pipelines. 
