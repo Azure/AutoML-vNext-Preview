@@ -50,6 +50,9 @@ https://azmlworkshopdata.blob.core.windows.net/safedriverdata/porto_seguro_safe_
 
 ![image](https://user-images.githubusercontent.com/1712635/115085742-e1d97880-9ebf-11eb-9dfd-272741dcd588.png)
 
+.. image :: https://user-images.githubusercontent.com/1712635/115085742-e1d97880-9ebf-11eb-9dfd-272741dcd588.png
+    :alt: AML Dataset already uploaded into a Workspace
+
 This AutoML job can be executed by running the following CLI command (after setting your compute name in the YAML above):
 
 .. code-block:: console
