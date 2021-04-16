@@ -42,6 +42,15 @@ The .YAML config below will train multiple models until it finds the best model 
    featurization:
      featurization_config: auto
 
+In the above .YAML config there are three parameters/assets that you'll need to prepare in advanced:
+
+- 1. job name: Initially it'll be "01-portoseguro-cli-classif-job-single-dataset-1", but every new job needs to have a different name provided/updated by you.
+- 2. target compute: You need to create a cluster in AML named "cpu-cluster" or similar and then update the .YAML config.
+- 3. dataset: Such as "azureml:porto_seguro_safe_driver_single_dataset:1" - In this PRIVATE PREVIEW you need to manualy upload a dataset thorugh the AML UI, in advanced.
+
+How to upload a dataset to AML
+------------------------------
+
 In order to reference the input dataset above ("azureml:porto_seguro_safe_driver_single_dataset:1"), for this PRIVATE PREVIEW only, you first need to upload the dataset into your Azure ML Workspace, then reference to it from the .YAML as done above. In next previews, you will also be able to directly provide a local path to a dataset filename (i.e. a local .csv file) and it'll be uploaded automatically to Azure ML Workspace.
 
 For the above example, you can download the dataset .csv file from this HTTP URL and then manually upload it as an AML Dataset in your workspace with the name "porto_seguro_safe_driver_single_dataset": 
