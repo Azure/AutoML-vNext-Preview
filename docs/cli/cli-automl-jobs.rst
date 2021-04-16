@@ -1,5 +1,5 @@
-Train AutoML Models (Create AutoML Job)
-=======================================
+Train AutoML Models (Create AutoML Job) with the CLI
+====================================================
 
 A Job is a resource that specifies all aspects of a computation job. It aggregates 3 things:
 
