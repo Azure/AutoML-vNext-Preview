@@ -47,11 +47,12 @@ In order to learn how to use the CLI to create AutoML jobs, follow this quick st
 
 # REST API support for AutoML
 
-(TBD)
+(TBD) - Need to add information. (TBD)
+
 
 # Python SDK 2.0 support for AutoML
 
-(TBD)
+(TBD) - Will be available in next previews, not in the 1st Private Preview (April/May 2021) for AutomML but later.
 
 
 ## Contributing
