@@ -1,4 +1,4 @@
-# Private Preview: Azure Machine Learning Automated ML in DevPlat 2.0 
+# Private Preview: AutoML in Azure ML 2.0 developer experience (DevPlat 2.0)
 
 > Welcome to the PRIVATE PREVIEW of **Azure Machine Learning Automated ML for the Azure ML 2.0 developer experience (DevPlat 2.0)**
 > AutoML in the 2.0 developer platform will provide first class API/CLI/SDK support for automated model training.
