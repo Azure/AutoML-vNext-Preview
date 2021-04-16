@@ -124,156 +124,41 @@ Set by default AML Workspace:
 ``az configure --defaults workspace=your_workspace_name``
 
 
+Understanding the AutoML Job specification
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+The following is the AutoMLJob specification YAML file for CLI version 0.0.65:
 
-Understanding a job specification
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://github.com/Azure/automl-devplat2-preview/blob/main/schemas/0.0.65/AutoMLCommon.yaml
 
-The following is a fully fleshed out job specification YAML file:
+In reality, "AutoMLCommon.yaml" is the core/shared parameters, and the AutoMLJob specification YAML file is the following file named "AutoMLJob.yaml" which "derives" from the above:
 
-.. literalinclude:: ../../examples/iris/iris_job.yml
-   :language: yaml
+https://github.com/Azure/azureml_run_specification/blob/b6dfd54aace77c464134ec6fe7cd1f4436e8ecdd/schemas/AutoMLJob.yaml
 
+But most AutoML settings are in "AutoMLCommon.yaml" since "AutoMLJob.yaml" only add the 'compute' parameter.
+The reson for having "AutoMLCommon.yaml" as shared parameters file is because there's another derived schema named "AutoMLComponent" which will be used for integration into Azure ML Pipelines. 
         
-``code / local_path`` is the path to your code directory relative to where the YAML file lives. 
 
-- This directory is uploaded as a snapshot to Azure ML and mounted to your job for execution. 
-- All of the files from 'local_path' are uploaded as a snapshot before the job is created and can be viewed in the Snapshot tab of the run from Studio UI.
-     
-``command`` defines the command that gets run on the remote compute. 
+Other AutoML training examples
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- ``command`` executes from the root of the code directory defined above.
-- This is a typical command, for example: ``python train.py`` or ``Rscript train.R`` and can include as many arguments as you desire.
+- Classification task with train/validation split by size/%
 
-``environment`` defines the environment you want to run your job in.
+.. code-block:: bash
 
-- ``azureml:`` is a special moniker used to refer to an existing entity within the workspace. 
-- ``azureml:AzureML-Minimal:1`` specifies version 1 of an environment called AzureML-Minimal (one of the Azure ML curated environments) that exists in the current workspace. 
-- You can also specify an environment definition inline using the syntax in the hello world example above.
+    az ml job create --file examples/TBD ******************
 
-``compute`` defines where you want to run your job and compute-specific information
+- Classification task with specific train AML dataset and validation AML dataset
 
-- ``target`` indicates the compute you want to run your job against. For example, ``azureml:goazurego`` refers to a compute cluster called 'goazurego' in the current workspace.
-- You can override the compute (or any field in the YAML file) by using the ``--set`` parameter for ``az ml job create``, e.g. ``--set compute.target=azureml:cpu-cluster``
+.. code-block:: bash
 
-``inputs`` defines data you want mounted or downloaded for your job.
+    az ml job create --file examples/TBD ******************
     
-- ``data`` is either the 1) reference an existing data asset in your workspace you want to use (using the ``azureml:<name>:<version>`` notation) or 2) an inline definition of the data
-- ``mode`` indicates how you want the data made available on the compute for the job. 'mount' and 'download' are the two supported options.
-
-``name`` is the (optional) user-defined identifier of the job's run, which needs to be *unique*. If you do not provide a name a GUID name will be generated for you. To find the generated GUID, you can either look at the job object returned by ``az ml job create`` in the ``name`` property, or you can look under the "Experiments" tab of the Studio UI. The job name corresponds to the "Run ID" in the UI.
-
-``experiment_name`` is the (optional) experiment name you want to track your job runs under. Your runs will be tagged with this experiment name, and in the Studio UI the runs will be organized under that experiment in the "Experiments" tab. If this field is not provided, your runs will be tagged with the experiment name "Default". We recommend that you provide a custom experiment_name for each of your jobs to more easily manage your jobs' run details.
-
-Real training examples
-~~~~~~~~~~~~~~~~~~~~~~
-
-Here's an example that runs  **Python code.**
+- Classification task allowing only certain algorithms (whitelisting algos)
 
 .. code-block:: bash
 
-    az ml environment create --file examples/train/tensorflow/tf_env.yml
-    az ml job create --file examples/train/tensorflow/mnist/tf_mnist_job.yml
-
-
-.. literalinclude:: ../../examples/train/tensorflow/mnist/tf_mnist_job.yml
-   :language: yaml
-
-Here's an example that runs **R code:**
-
-.. code-block:: bash
-
-    az ml job create --file examples/train/r/accident-prediction/r_job.yml
-
-.. literalinclude:: ../../examples/train/r/accident-prediction/r_job.yml
-   :language: yaml
-
-
-Train an XGBoost model
------------------------
-
-Next, let's train an xgboost model on an IRIS dataset.
-
-Let's navigate to the examples/iris directory in the repository and see what we should do next.
-
-.. code-block:: bash
-
-    cd ./examples/iris/
-    
-Define your environment
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-First we are going to define the xgboost environment we want to use for the job:
-
-.. literalinclude:: ../../examples/iris/xgboost_env.yml
-   :language: yaml
-
-Now create the environment:
-
-.. code-block:: bash
-
-    az ml environment create --file xgboost_env.yml
-    
-    
-Create your data asset
-~~~~~~~~~~~~~~~~~~~~~~
-
-Next create a data asset for your training data:
-
-.. literalinclude:: ../../examples/iris/iris_data.yml
-   :language: yaml
-
-.. code-block:: bash
-
-    az ml data create --file iris_data.yml
-
-
-The above example will upload the data from the local folder `.data/` to the workspace's default Blob storage (`workspaceblobstore`). It creates a data asset under the name `irisdata` in your workspace.
-
-Create your xgboost training job
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. literalinclude:: ../../examples/iris/iris_job.yml
-   :language: yaml
-   
-To submit the job:
-
-.. code-block:: bash
-
-    az ml job create --file iris_job.yml
-
-
-Defining environment and data inline
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-The above example for configuring the job assumes that you have existing registered assets for environment and data in your workspace that you are referencing for the job.
-
-However, you may not need to or want to explicitly version and track the environment or data for your job. In that case, you can simply define those specifications inline within your job configuration YAML file, e.g. iris_job_inline.yml:
-
-.. code-block:: yaml
-
-    experiment_name: xgboost-iris
-    code: 
-        local_path: train
-    command: >-
-        python train.py --data {inputs.training_data} 
-    environment:
-        conda_file: file:xgboost_conda.yml
-        docker: 
-            image: mcr.microsoft.com/azureml/openmpi3.1.2-ubuntu18.04
-    compute:
-        target: azureml:goazurego
-    inputs:
-        training_data:
-            data: azureml:irisdata:1
-            mode: mount
-            
-Submit the job:
-
-.. code-block:: bash
-
-    az ml job create --file iris_job_inline.yml
+    az ml job create --file examples/TBD ******************
 
 Monitor a job
 -------------
