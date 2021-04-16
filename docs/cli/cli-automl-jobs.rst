@@ -49,7 +49,7 @@ In the above .YAML config there are three parameters/assets that you'll need to 
 - 3. dataset: Such as "azureml:porto_seguro_safe_driver_single_dataset:1" - In this PRIVATE PREVIEW you need to manualy upload a dataset thorugh the AML UI, in advanced.
 
 How to upload a dataset to AML
-------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In order to reference the input dataset above ("azureml:porto_seguro_safe_driver_single_dataset:1"), for this PRIVATE PREVIEW only, you first need to upload the dataset into your Azure ML Workspace, then reference to it from the .YAML as done above. In next previews, you will also be able to directly provide a local path to a dataset filename (i.e. a local .csv file) and it'll be uploaded automatically to Azure ML Workspace.
 
