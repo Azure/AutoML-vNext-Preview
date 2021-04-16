@@ -15,7 +15,7 @@ Create your first AutoML job with the CLI
 The below example uses the command job using a specific .YAML configuration specially made for AutoML jobs. 
 The .YAML config below will train multiple models until it finds the best model based on the configuration settings (.YAML config file) provided to AutoML.
 
-Example .YAML: /examples/cli/classification/01-portoseguro-classif-job-single-dataset.yaml
+``Example .YAML: /examples/cli/classification/01-portoseguro-classif-job-single-dataset.yaml``
 
 .. code-block:: yaml
 
@@ -42,9 +42,9 @@ Example .YAML: /examples/cli/classification/01-portoseguro-classif-job-single-da
    featurization:
      featurization_config: auto
 
-In order to reference the input dataset, for this PRIVATE PREVIEW only, you need to first upload the dataset into your Azure ML Workspace, then reference to it from the .YAML. In next previews, you will also be able to directly provide a local path to a dataset file and it'll be uploaded automatically to Azure ML.
+In order to reference the input dataset above ("azureml:porto_seguro_safe_driver_single_dataset:1"), for this PRIVATE PREVIEW only, you first need to upload the dataset into your Azure ML Workspace, then reference to it from the .YAML as done above. In next previews, you will also be able to directly provide a local path to a dataset filename (i.e. a local .csv file) and it'll be uploaded automatically to Azure ML Workspace.
 
-For the above example, you can download the dataset .csv file from this HTTP URL:
+For the above example, you can download the dataset .csv file from this HTTP URL and then manually upload it as an AML Dataset in your workspace with the name "porto_seguro_safe_driver_single_dataset": 
 
 https://azmlworkshopdata.blob.core.windows.net/safedriverdata/porto_seguro_safe_driver_prediction_train.csv
 
