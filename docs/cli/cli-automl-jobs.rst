@@ -71,6 +71,12 @@ If you want to specify those "defaults" in the very same CLI command, then you c
 
     az ml job create --file 01-portoseguro-classif-job-single-dataset.yaml --workspace-name "your_workspace_name" --resource-group "your_resource_group_name" --subscription "XXXXXXXX-YOUR-SUBSCRIPTION-ID-XXXXXXXXXXX"
 
+You can also specify the Job's name as a CLI parameter so it'll override any job name specified in the .YAML config file, so you don't need to change the .YAML every time you create another run with the same .YAML (Since each Job's name need to be unique and cannot be repeated):
+
+.. code-block:: console
+
+    az ml job create --file 01-portoseguro-classif-job-single-dataset.yaml --name my-specific-job-name
+
 Useful az commands
 ~~~~~~~~~~~~~~~~~~
 
