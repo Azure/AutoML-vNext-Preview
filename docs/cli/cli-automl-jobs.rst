@@ -1,5 +1,5 @@
-Train Models (Create Jobs)
-==========================
+Train AutoML Models (Create AutoML Job)
+=======================================
 
 A Job is a resource that specifies all aspects of a computation job. It aggregates 3 things:
 
@@ -7,29 +7,24 @@ A Job is a resource that specifies all aspects of a computation job. It aggregat
 2. How to run it
 3. Where to run it
 
-A user can execute a job via the CLI by executing an `az ml job create` command. The examples below encapsulate how a user might expand their job definition as they progress with their work.
+A user can execute a job via the CLI by executing an `az ml job create` command. 
 
-Create your first job
----------------------
+Create your first AutoML job with the CLI
+-----------------------------------------
 
-For this example, we'll simply clone the v2 preview repo and run the first example!
 
-.. code-block:: bash
 
-    git clone https://github.com/Azure/azureml-v2-preview
+The below example uses the command job similar to previous sections but using a specific .YAML configuration specially made for AutoML jobs. 
+The .YAML config below will train multiple models until it finds the best model under the configuration settings (.YAML config file) provided to AutoML.
 
-Check that a compute cluster exists in your workspace and you have a compute cluster named goazurego (if not, you can modify the name of the cluster in your YAML file).
 
-.. code-block:: bash
 
-    az ml job create --file azureml-v2-preview/examples/train/basic-command-job/hello_python_job.yml
 
-This will run a simple "hello world" python script. Here is the YML that we ran.
 
-.. literalinclude:: ../../examples/train/basic-command-job/hello_python_job.yml
-   :language: yaml
 
-Let's go into more details on the job specification.
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 Understanding a job specification
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
