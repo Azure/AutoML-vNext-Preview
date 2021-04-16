@@ -84,7 +84,7 @@ You can also specify the Job's name as a CLI parameter so it'll override any job
 
 .. code-block:: console
 
-    az ml job create --file 01-portoseguro-classif-job-single-dataset.yaml --name my-specific-job-name
+    az ml job create --file 01-portoseguro-classif-job-single-dataset.yaml --name my-specific-job-name-02
 
 Once the AutoML Job is created from the CLI, you can navigate to the Azure ML Workspace and check how the AutoML job is running:
 
