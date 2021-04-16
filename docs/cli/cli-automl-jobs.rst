@@ -57,6 +57,19 @@ Then, the AutoML job can be executed by running the following CLI command (after
 
     az ml job create --file 01-portoseguro-classif-job-single-dataset.yaml
 
+.. image :: https://user-images.githubusercontent.com/1712635/115087101-6af1af00-9ec2-11eb-9ebb-33f7302c8b4b.png
+    :alt: AutoML Job creation from CLI
+
+The above command is the simplest way you can do it, but note it will be using your "CLI AML defaults": 
+   - Default Azure Subscription
+   - Default Azure Resource Group
+   - Default AML Workspace.
+
+If you want to specify those "defaults" in the very same CLI command, then you can also do it like in the following command:
+
+.. code-block:: console
+
+    az ml job create --file 01-portoseguro-classif-job-single-dataset.yaml --workspace-name "your_workspace_name" --resource-group "your_resource_group_name" --subscription "XXXXXXXX-YOUR-SUBSCRIPTION-ID-XXXXXXXXXXX"
 
 Useful az commands
 ~~~~~~~~~~~~~~~~~~
