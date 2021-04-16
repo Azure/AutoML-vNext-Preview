@@ -44,8 +44,8 @@ The .YAML config below will train multiple models until it finds the best model 
 
 In the above .YAML config there are three parameters/assets that you'll need to prepare in advanced:
 
-- 1. job name: Initially it'll be "01-portoseguro-cli-classif-job-single-dataset-1", but every new job needs to have a different name provided/updated by you.
-- 2. target compute: You need to create a cluster in AML named "cpu-cluster" or similar and then update the .YAML config.
+- 1. job name: Initially it'll be as example "01-portoseguro-cli-classif-job-single-dataset-1", but every new job needs to have a different name provided/updated by you.
+- 2. target compute: You need to create a cluster in AML named "cpu-cluster" or similar name and then update the .YAML config.
 - 3. dataset: Such as "azureml:porto_seguro_safe_driver_single_dataset:1" - In this PRIVATE PREVIEW you need to manualy upload a dataset thorugh the AML UI, in advanced.
 
 How to upload a dataset to AML
@@ -78,18 +78,25 @@ If you want to specify those "defaults" in the very same CLI command, then you c
 
 .. code-block:: console
 
-    az ml job create --file 01-portoseguro-classif-job-single-dataset.yaml --workspace-name "your_workspace_name" --resource-group "your_resource_group_name" --subscription "XXXXXXXX-YOUR-SUBSCRIPTION-ID-XXXXXXXXXXX"
+    az ml job create --file 01-portoseguro-classif-job-single-dataset.yaml --workspace-name <your_workspace_name> --resource-group <your_resource_group_name> --subscription <XXXXXXXX-YOUR-SUBSCRIPTION-ID-XXXXXXXXXXX>
 
 You can also specify the Job's name as a CLI parameter so it'll override any job name specified in the .YAML config file, so you don't need to change the .YAML every time you create another run with the same .YAML (Since each Job's name need to be unique and cannot be repeated):
 
 .. code-block:: console
 
-    az ml job create --file 01-portoseguro-classif-job-single-dataset.yaml --name my-specific-job-name-02
+    az ml job create --file 01-portoseguro-classif-job-single-dataset.yaml --name <my-specific-job-name-02>
 
-Once the AutoML Job is created from the CLI, you can navigate to the Azure ML Workspace and check how the AutoML job is running:
+Once the AutoML Job is created from the CLI, you can navigate to the Azure ML Workspace and check how the AutoML job is running.
 
 .. image :: https://user-images.githubusercontent.com/1712635/115088200-8362c900-9ec4-11eb-986d-4aa7262125bb.png
     :alt: Checking out the AutoML Job/Run in AML Studio
+
+If you don't know where to find it in the AML UI, you can simply type the following and it'll open a browser and navigate to the specific AutoML job because of the parameter ``--web``:
+
+.. code-block:: bash
+
+    az ml job show --name 01-portoseguro-cli-classif-job-single-dataset-1 --web
+    
 
 
 Useful az commands
@@ -97,7 +104,7 @@ Useful az commands
 
 Login from CLI:
 
-``az login --tenant microsoft.onmicrosoft.com``
+``az login --tenant <your_tenant_name_such_us_microsoft.onmicrosoft.com>``
 
 List account's subscriptions with access:
 
@@ -109,7 +116,7 @@ Show current selected by default subscription:
 
 Set by default subscription:
 
-``az account set -s XXXXXXXX-YOUR-SUBSCRIPTION-ID-XXXXXXXXXXX``
+``az account set -s <XXXXXXXX-YOUR-SUBSCRIPTION-ID-XXXXXXXXXXX>``
 
 Check defaults (resoruce group, location/region and workspace):
 
@@ -117,11 +124,11 @@ Check defaults (resoruce group, location/region and workspace):
 
 Set by default Resource Group:
 
-``az configure --defaults group=your_resource_group_name location=your_azure_region``
+``az configure --defaults group=<your_resource_group_name> location=<your_azure_region>``
 
 Set by default AML Workspace:
 
-``az configure --defaults workspace=your_workspace_name``
+``az configure --defaults workspace=<your_workspace_name>``
 
 
 Understanding the AutoML Job specification
