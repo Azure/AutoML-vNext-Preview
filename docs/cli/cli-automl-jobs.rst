@@ -125,7 +125,7 @@ Set by default AML Workspace:
 
 
 Understanding the AutoML Job specification
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------------------
 
 The following is the AutoMLJob specification YAML file for CLI version 0.0.65:
 
@@ -140,7 +140,7 @@ The reson for having "AutoMLCommon.yaml" as shared parameters file is because th
         
 
 Other AutoML training examples
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------------
 
 - Classification task with train/validation split by size/%
 
