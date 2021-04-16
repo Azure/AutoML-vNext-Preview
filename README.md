@@ -1,33 +1,24 @@
-# Project
+# PRIVATE PREVIEW: Azure Machine Learning Automated ML in DevPlat 2.0 
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+> Welcome to the PRIVATE PREVIEW of **Azure Machine Learning Automated ML for the Azure ML 2.0 developer experience (DevPlat 2.0)**
+> AutoML in the 2.0 developer platform will provide first class API/CLI/SDK support for automated model training.
+> This is an early PREVIEW, still not announced and not supported publicly so it's defined as PRIVATE from that point of view, although anyone can access to it. 
 
-As the maintainer of this project, please make a few updates:
+## Scope
 
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
+Azure AutoML in DevPlat 2.0 provides the following main feature areas:
 
-## Contributing
+- **CLI (Common-Line Interface)** support for AutoML
+- **REST APIs** for AutoML
+- **AML Python SDK 2.0** for AutoML (will be available in next previews)
 
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
+## Prerequisites
 
-When you submit a pull request, a CLA bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
+1. An Azure subscription. If you don't have an Azure subscription, [create a free account](https://aka.ms/AMLFree) before you begin.
 
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
-## Trademarks
+# CLI support for AutoML
 
-This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft 
-trademarks or logos is subject to and must follow 
-[Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
-Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
-Any use of third-party trademarks or logos are subject to those third-party's policies.
+# REST API support for AutoML
+
+# Python SDK 2.0 support for AutoML
