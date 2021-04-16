@@ -24,7 +24,7 @@ Azure AutoML in DevPlat 2.0 provides the following main feature areas:
 
 ## Prerequisites
 
-1. An Azure subscription. If you don't have an Azure subscription, [create a free account](https://aka.ms/AMLFree) before you begin.
+- An Azure subscription. If you don't have an Azure subscription, [create a free account](https://aka.ms/AMLFree) before you begin.
 
 
 # CLI support for AutoML
