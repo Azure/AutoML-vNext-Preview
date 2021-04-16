@@ -1,7 +1,7 @@
 Installation of Azure ML CLI 
 ============================
 
-You can install *azure.ml* on Linux, MacOS, and Windows for several interfaces.
+You can install *azure ml CLI* on Linux, MacOS, and Windows for several interfaces.
 
 Command Line Interface (CLI)
 ----------------------------
