@@ -1,0 +1,16 @@
+$schema: http://json-schema.org/draft-07/schema#
+$id: http://azureml/sdk-2-0/AutoMLJob.yaml
+
+title: AutoMLJob specification
+description: 'A Job that can run AutoML code.
+  It exposes all the properties of the AutoML service'
+type: object
+properties:
+  $include:
+    $ref: AutoMLCommon.yaml#/properties Job.yaml#/properties
+  type:
+    const: automl_job
+  compute:
+    $ref: 'Job.yaml#/definitions/compute'
+    
+additionalProperties: false
