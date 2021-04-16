@@ -48,20 +48,46 @@ For the above example, you can download the dataset .csv file from this HTTP URL
 
 https://azmlworkshopdata.blob.core.windows.net/safedriverdata/porto_seguro_safe_driver_prediction_train.csv
 
-![image](https://user-images.githubusercontent.com/1712635/115085742-e1d97880-9ebf-11eb-9dfd-272741dcd588.png)
-
 .. image :: https://user-images.githubusercontent.com/1712635/115085742-e1d97880-9ebf-11eb-9dfd-272741dcd588.png
     :alt: AML Dataset already uploaded into a Workspace
 
-This AutoML job can be executed by running the following CLI command (after setting your compute name in the YAML above):
+Then, the AutoML job can be executed by running the following CLI command (after setting your specific compute name, such as "cpu-cluster" in the YAML above):
 
 .. code-block:: console
 
     az ml job create --file 01-portoseguro-classif-job-single-dataset.yaml
 
 
+Useful az commands
+~~~~~~~~~~~~~~~~~~
 
+Login from CLI:
 
+``az login --tenant microsoft.onmicrosoft.com``
+
+List account's subscriptions with access:
+
+``az account list --output table``
+
+Show current selected by default subscription:
+
+``az account show --output table``
+
+Set by default subscription:
+
+``az account set -s XXXXXXXX-YOUR-SUBSCRIPTION-ID-XXXXXXXXXXX``
+
+Check defaults (resoruce group, location/region and workspace):
+
+``az configure``
+
+Set by default Resource Group:
+
+``az configure --defaults group=your_resource_group_name location=your_azure_region``
+
+Set by default AML Workspace:
+
+``az configure --defaults workspace=your_workspace_name``
 
 
 
@@ -69,7 +95,7 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 Understanding a job specification
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The following is a fully fleshed out job specification YAML file:
 
