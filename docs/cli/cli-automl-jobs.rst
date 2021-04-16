@@ -77,6 +77,12 @@ You can also specify the Job's name as a CLI parameter so it'll override any job
 
     az ml job create --file 01-portoseguro-classif-job-single-dataset.yaml --name my-specific-job-name
 
+Once the AutoML Job is created from the CLI, you can navigate to the Azure ML Workspace and check how the AutoML job is running:
+
+.. image :: https://user-images.githubusercontent.com/1712635/115088200-8362c900-9ec4-11eb-986d-4aa7262125bb.png
+    :alt: Checking out the AutoML Job/Run in AML Studio
+
+
 Useful az commands
 ~~~~~~~~~~~~~~~~~~
 
