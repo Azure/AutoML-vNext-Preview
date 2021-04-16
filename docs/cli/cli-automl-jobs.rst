@@ -48,6 +48,7 @@ For the above example, you can download the dataset .csv file from this HTTP URL
 
 https://azmlworkshopdata.blob.core.windows.net/safedriverdata/porto_seguro_safe_driver_prediction_train.csv
 
+![image](https://user-images.githubusercontent.com/1712635/115085742-e1d97880-9ebf-11eb-9dfd-272741dcd588.png)
 
 This AutoML job can be executed by running the following CLI command (after setting your compute name in the YAML above):
 
