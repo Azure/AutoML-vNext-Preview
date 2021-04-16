@@ -12,11 +12,33 @@ A user can execute a job via the CLI by executing an `az ml job create` command.
 Create your first AutoML job with the CLI
 -----------------------------------------
 
-The below example uses the command job similar to previous sections but using a specific .YAML configuration specially made for AutoML jobs. 
-The .YAML config below will train multiple models until it finds the best model under the configuration settings (.YAML config file) provided to AutoML.
+The below example uses the command job using a specific .YAML configuration specially made for AutoML jobs. 
+The .YAML config below will train multiple models until it finds the best model based on the configuration settings (.YAML config file) provided to AutoML.
 
-.. literalinclude:: ../../examples/AutoML/classification/01-portoseguro-classif-job-single-dataset.yaml
-   :language: yaml
+.. code-block:: yaml
+
+   type: automl_job
+   name: 01-portoseguro-cli-classif-job-single-dataset-1
+   experiment_name: Portoseguro-Classification-CLI-Tests
+   compute:
+     target: azureml:cpu-cluster
+   general:
+     task: classification
+     primary_metric: AUC_weighted
+     enable_model_explainability: true
+   limits:
+     job_timeout_minutes: 2400
+     max_total_trials: 100
+     max_concurrent_trials: 5
+     enable_early_termination: true
+   data:
+     training:
+       dataset: azureml:porto_seguro_safe_driver_single_dataset:1
+       target_column_name: target
+     validation:
+       n_cross_validations: 5
+   featurization:
+     featurization_config: auto
 
 In order to reference the input dataset, for this PRIVATE PREVIEW only, you need to first upload the dataset into your Azure ML Workspace, then reference to it from the .YAML. In next previews, you will also be able to directly provide a local path to a dataset file and it'll be uploaded automatically to Azure ML.
 
