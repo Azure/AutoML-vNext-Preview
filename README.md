@@ -29,11 +29,29 @@ Azure AutoML in DevPlat 2.0 provides the following main feature areas:
 
 # CLI support for AutoML
 
+## Install Azure CLI and setup the Azure ML extension:
+
+Follow this quick start doc for the setup:
+
+[How to install the CLI and setup the Azure ML extension](/docs/cli/cli-installation.rst)
+
+AutoML job/run creationg with the CLI is also based on .YAML config files that you as a user can create by specifying the multiple AutoML settings in that config file.
+
+## Train AutoML Models (Create AutoML Job) with the CLI
+
+In order to learn how to use the CLI to create AutoML jobs, follow this quick start doc:
+
+[Train AutoML Models (Create AutoML Job) with the CLI](/docs/cli/cli-automl-jobs.rst)
+
+
+
 # REST API support for AutoML
+
+(TBD)
 
 # Python SDK 2.0 support for AutoML
 
-
+(TBD)
 
 
 ## Contributing
