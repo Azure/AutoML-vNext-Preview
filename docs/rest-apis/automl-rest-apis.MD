@@ -8,3 +8,6 @@ Follow the next steps to get started with AutoML by using the REST APIs:
     a.	Use regression_machinedata_train.csv and regression_machinedata_valid.csv from [this folder with dataset files](/datasets/regression/regression_machinedata_sample), for train/validation data.
 4. **Create a compute cluster** to use for your training job in your workspace, select the appropriate configuration for virtual machine size, for testing purposes STANDARD_DS3_V2 should suffice, and you can have for instance 4 nodes in cluster.
     ![image](https://user-images.githubusercontent.com/1712635/115306947-65dc6c00-a11d-11eb-8455-867c85e5e82c.png)
+5.	**Use Postman webclient** or desktop client and import this collection: https://www.getpostman.com/collections/cd0c5a9f5836b675918c
+    ![image](https://user-images.githubusercontent.com/1712635/115307303-db483c80-a11d-11eb-98a3-758e6518ab64.png)
+6. **Import the file “EnvironmentVariables.postman_globals”** file from the same folder where this .MD document is placed.
