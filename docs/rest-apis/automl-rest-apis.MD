@@ -24,4 +24,11 @@ Follow the next steps to get started with AutoML by using the REST APIs:
 10.	**Get this token and set it in “authToken” global variable.**
 11.	Now **update the dataset name in the Body of Create AutoML job** (Use the same name that you used while creating the tabular dataset in step 3 above).
      ![image](https://user-images.githubusercontent.com/1712635/115308900-59a5de00-a120-11eb-847f-93a6502959ed.png)
-13.	12.	Now you can click on Create AutoML job and hit send.
+12.	**Create the AutoML Job: **Now you can click on Create AutoML job and hit send.
+     ![image](https://user-images.githubusercontent.com/1712635/115309107-a7bae180-a120-11eb-9b9a-69c84498c8ff.png) 
+13.	**Get Job Status:** Assuming the previous step returned Http: 201, you can get the job status using “Get AutoML job”. Please remember to replace with the Run ID of job you just submitted. 
+     ![image](https://user-images.githubusercontent.com/1712635/115309490-3891bd00-a121-11eb-82fe-cb948348715f.png)
+     
+     
+
+     
