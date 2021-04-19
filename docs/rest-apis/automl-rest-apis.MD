@@ -10,4 +10,18 @@ Follow the next steps to get started with AutoML by using the REST APIs:
     ![image](https://user-images.githubusercontent.com/1712635/115306947-65dc6c00-a11d-11eb-8455-867c85e5e82c.png)
 5.	**Use Postman webclient** or desktop client and import this collection: https://www.getpostman.com/collections/cd0c5a9f5836b675918c
     ![image](https://user-images.githubusercontent.com/1712635/115307303-db483c80-a11d-11eb-98a3-758e6518ab64.png)
-6. **Import the file “EnvironmentVariables.postman_globals”** file from the same folder where this .MD document is placed.
+6. **Import the file “EnvironmentVariables.postman_globals”** file from the same folder where this .MD document is placed. Note that you might need to either clone this repo or download the files needed.
+    ![image](https://user-images.githubusercontent.com/1712635/115307786-95d83f00-a11e-11eb-825d-60e65186264d.png)
+7. **Ensure you edit the global values** and populate respective values in each field appropriately including the values for subscriptionId, resourceGroup, workspaceName, compute, region etc. related to your environment.
+    ![image](https://user-images.githubusercontent.com/1712635/115308156-244cc080-a11f-11eb-893a-429ceead759f.png)
+8.	Now you need to have Azure CLI installed in order to get the auth token.- [Install the Azure CLI | Microsoft Docs](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
+9.	Once you have installed Azure CLI, you can use command like this to get the auth token:
+
+    `az account get-access-token`
+    
+    ![image](https://user-images.githubusercontent.com/1712635/115308735-09c71700-a120-11eb-9153-db47406ffa07.png)
+    
+10.	**Get this token and set it in “authToken” global variable.**
+11.	Now **update the dataset name in the Body of Create AutoML job** (Use the same name that you used while creating the tabular dataset in step 3 above).
+     ![image](https://user-images.githubusercontent.com/1712635/115308900-59a5de00-a120-11eb-847f-93a6502959ed.png)
+13.	12.	Now you can click on Create AutoML job and hit send.
