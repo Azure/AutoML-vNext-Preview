@@ -14,7 +14,7 @@ Azure AutoML CLI currently supports these three ML tasks:
 - Regression
 - Time Series Forecasting 
 
-## Scope for AutoML in 2.0
+## Scope for AutoML in 2.0 versions
 
 Azure AutoML in DevPlat 2.0 provides the following main feature areas:
 
