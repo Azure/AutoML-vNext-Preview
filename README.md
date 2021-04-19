@@ -62,7 +62,14 @@ These APIs are in v2.0 the same REST APIs consumed by the CLI and Python SDK cli
 
 ## Contributing
 
-We welcome contributions and suggestions! Please see the [contributing guidelines](CONTRIBUTING.md) for details.
+We welcome contributions and suggestions! 
+
+### Issues and feedback
+
+All forms of feedback are welcome through this repo's issues: 
+https://github.com/Azure/automl-devplat2-preview/issues
+
+Please see the [contributing guidelines](CONTRIBUTING.md) for further details.
 
 ## Code of Conduct
 
