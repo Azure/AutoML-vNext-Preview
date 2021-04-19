@@ -47,7 +47,12 @@ In order to learn how to use the CLI to create AutoML jobs, follow this quick st
 
 # REST API support for AutoML
 
-(TBD) - Need to add information. (TBD)
+The Azure Machine Learning REST APIs allow you to develop client applications developed on any platform and language that use REST calls to work with the service. 
+These APIs are in v2.0 the same REST APIs consumed by the CLI and Python SDK clients.
+
+- [Getting Started: Create and Get an AutoMLJob using REST APIs](/docs/rest-apis/automl-rest-apis.MD)
+
+- [Other Azure ML REST APIS to complement your end-to-end scenarios](/docs/rest-apis/aml-rest-apis.MD)
 
 
 # Python SDK 2.0 support for AutoML
