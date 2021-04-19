@@ -26,9 +26,11 @@ Follow the next steps to get started with AutoML by using the REST APIs:
      ![image](https://user-images.githubusercontent.com/1712635/115308900-59a5de00-a120-11eb-847f-93a6502959ed.png)
 12.	**Create the AutoML Job: **Now you can click on Create AutoML job and hit send.
      ![image](https://user-images.githubusercontent.com/1712635/115309107-a7bae180-a120-11eb-9b9a-69c84498c8ff.png) 
-13.	**Get Job Status:** Assuming the previous step returned Http: 201, you can get the job status using “Get AutoML job”. Please remember to replace with the Run ID of job you just submitted. 
+13.	**Get Job Status thorugh HTTP:** Assuming the previous step returned Http: 201, you can get the job status using “Get AutoML job”. Please remember to replace with the Run ID of job you just submitted. 
      ![image](https://user-images.githubusercontent.com/1712635/115309490-3891bd00-a121-11eb-82fe-cb948348715f.png)
      
-     
+14.	**Monitor Jib status from the UI:** You should also be able to go to the Experiments UI page and monitor how the AutoML Job is progressing:
+
+     ![image](https://user-images.githubusercontent.com/1712635/115310072-0d5b9d80-a122-11eb-8979-96b6921f6b6b.png)
 
      
