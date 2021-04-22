@@ -2,4 +2,4 @@ Download dataset file from:
 
 File name: porto_seguro_safe_driver_prediction_validation_dataset.csv
 
-Download URL: https://azmlworkshopdata.blob.core.windows.net/safedriverdata/porto_seguro_safe_driver_prediction_validation_dataset.csv
+Download URL: https://automluipublicstorage.blob.core.windows.net/automl-devplat2-sample-datasets/classification/porto_seguro_safe_driver_prediction/porto_seguro_safe_driver_prediction_validation_dataset.csv
