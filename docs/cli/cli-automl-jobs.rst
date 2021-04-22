@@ -53,9 +53,7 @@ How to upload a dataset to AML
 
 In order to reference the input dataset above ("azureml:porto_seguro_safe_driver_single_dataset:1"), for this PRIVATE PREVIEW only, you first need to upload the dataset into your Azure ML Workspace, then reference to it from the .YAML as done above. In next previews, you will also be able to directly provide a local path to a dataset filename (i.e. a local .csv file) and it'll be uploaded automatically to Azure ML Workspace.
 
-For the above example, you can download the dataset .csv file from this HTTP URL and then manually upload it as an AML Dataset in your workspace with the name "porto_seguro_safe_driver_single_dataset": 
-
-https://azmlworkshopdata.blob.core.windows.net/safedriverdata/porto_seguro_safe_driver_prediction_train.csv
+For the above example, you can [download the dataset .csv file from this HTTP URL](https://automluipublicstorage.blob.core.windows.net/automl-devplat2-sample-datasets/classification/porto_seguro_safe_driver_prediction/porto_seguro_safe_driver_prediction_single_dataset.csv) and then manually upload it as an AML Dataset in your workspace with the name "porto_seguro_safe_driver_single_dataset": 
 
 .. image :: https://user-images.githubusercontent.com/1712635/115085742-e1d97880-9ebf-11eb-9dfd-272741dcd588.png
     :alt: AML Dataset already uploaded into a Workspace
