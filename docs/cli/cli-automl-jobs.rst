@@ -144,26 +144,26 @@ But most AutoML settings are in "AutoMLCommon.yaml" since "AutoMLJob.yaml" only 
 The reson for having "AutoMLCommon.yaml" as shared parameters file is because there's another derived schema named "AutoMLComponent" which will be used for integration into Azure ML Pipelines. 
         
 
-Other AutoML training examples
-------------------------------
+Other AutoML training examples available in this repo
+-----------------------------------------------------
 
 - Classification task with train/validation split by size/%
 
 .. code-block:: bash
 
-    az ml job create --file examples/TBD ******************
+    az ml job create --file examples/cli/classification/02-portoseguro-classif-job-split-train-validation.yaml
 
-- Classification task with specific train AML dataset and validation AML dataset
+- Classification task with specific train AML dataset file and validation AML dataset file
 
 .. code-block:: bash
 
-    az ml job create --file examples/TBD ******************
+    az ml job create --file examples/cli/classification/03-portoseguro-classif-job-train-validation-datasets.yaml
     
-- Classification task allowing only certain algorithms (whitelisting algos)
+- Classification task allowing only certain algorithms (whitelisting and blacklisting algos)
 
 .. code-block:: bash
 
-    az ml job create --file examples/TBD ******************
+    az ml job create --file examples/cli/classification/04-portoseguro-classif-job-single-dataset-whiteblacklist.yaml
 
 Monitor a job
 -------------
