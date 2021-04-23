@@ -1,0 +1,22 @@
+type: automl_job
+name: 01-regression-machinedata-job-train-validation-datasets-100
+experiment_name: Regression-machine-data-CLI-Tests
+compute:
+  target: azureml:cpu-cluster
+general:
+  task: regression
+  primary_metric: r2_score
+  enable_model_explainability: true
+limits:
+  job_timeout_minutes: 2400
+  max_total_trials: 20
+  max_concurrent_trials: 5
+  enable_early_termination: true
+data:
+  training:
+    dataset: azureml:regression_machinedata_train:1
+    target_column_name: ERP
+  validation:
+    dataset: azureml:regression_machinedata_valid:1
+featurization:
+  featurization_config: auto
