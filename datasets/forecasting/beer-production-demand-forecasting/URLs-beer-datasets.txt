@@ -1,0 +1,12 @@
+
+SINGLE/FULL Dataset:
+https://automluipublicstorage.blob.core.windows.net/automl-devplat2-sample-datasets/forecasting/beer-production-demand-forecasting/beer-data-single-train-and-validation.csv
+
+TRAIN Dataset:
+https://automluipublicstorage.blob.core.windows.net/automl-devplat2-sample-datasets/forecasting/beer-production-demand-forecasting/beer-data-train.csv
+
+VALIDATION Dataset:
+https://automluipublicstorage.blob.core.windows.net/automl-devplat2-sample-datasets/forecasting/beer-production-demand-forecasting/beer-data-valid.csv
+
+TEST Dataset:
+https://automluipublicstorage.blob.core.windows.net/automl-devplat2-sample-datasets/forecasting/beer-production-demand-forecasting/beer-data-test.csv
