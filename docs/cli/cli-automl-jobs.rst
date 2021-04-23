@@ -147,23 +147,58 @@ The reson for having "AutoMLCommon.yaml" as shared parameters file is because th
 Other AutoML training examples available in this repo
 -----------------------------------------------------
 
-- Classification task with train/validation split by size/%
+The related dataset files can be download from URLs specified in the folder:
+
+https://github.com/Azure/automl-devplat2-preview/tree/main/datasets
+
+
+Classification ML task
+~~~~~~~~~~~~~~~~~~~~~~
+
+- Classification task with train/validation split by size (%)
 
 .. code-block:: bash
 
-    az ml job create --file examples/cli/classification/02-portoseguro-classif-job-split-train-validation.yaml
+    az ml job create --file examples/cli/classification/portoseguro-classification-task/02-portoseguro-classif-job-split-train-validation.yaml
 
 - Classification task with specific train AML dataset file and validation AML dataset file
 
 .. code-block:: bash
 
-    az ml job create --file examples/cli/classification/03-portoseguro-classif-job-train-validation-datasets.yaml
+    az ml job create --file examples/cli/classification/portoseguro-classification-task/03-portoseguro-classif-job-train-validation-datasets.yaml
     
 - Classification task allowing only certain algorithms (whitelisting and blacklisting algos)
 
 .. code-block:: bash
 
-    az ml job create --file examples/cli/classification/04-portoseguro-classif-job-single-dataset-whiteblacklist.yaml
+    az ml job create --file examples/cli/classification/portoseguro-classification-task/04-portoseguro-classif-job-single-dataset-whiteblacklist.yaml
+    
+    
+Regression ML task
+~~~~~~~~~~~~~~~~~~
+
+- Regression task with specific train AML dataset and validation AML dataset 
+
+.. code-block:: bash
+
+    az ml job create --file examples/cli/regression/regression_machinedata/01-regression-machinedata-job-train-validation-datasets.yaml
+
+
+Time Series Forcasting ML task
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Time Series Forecasting task with single/full dataset (Will use cross-validation):
+
+.. code-block:: bash
+
+    az ml job create --file examples/cli/forecasting/beer-production-demand-forecasting/01-beer-forecasting-job-single-dataset-cpu.yaml
+
+- Time Series Forecasting task with specific train AML dataset and validation AML dataset
+
+.. code-block:: bash
+
+    az ml job create --file examples/cli/forecasting/beer-production-demand-forecasting/02-beer-forecasting-job-train-validation-datasets-cpu.yaml
+
 
 Monitor a job
 -------------
