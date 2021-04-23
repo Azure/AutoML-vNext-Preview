@@ -15,7 +15,7 @@ Create your first AutoML job with the CLI
 The below example uses the command job using a specific .YAML configuration specially made for AutoML jobs. 
 The .YAML config below will train multiple models until it finds the best model based on the configuration settings (.YAML config file) provided to AutoML.
 
-``Example .YAML: /examples/cli/classification/01-portoseguro-classif-job-single-dataset.yaml``
+``Example .YAML: /examples/cli/classification/portoseguro-classification-task/01-portoseguro-classif-job-single-dataset.yaml``
 
 .. code-block:: yaml
 
