@@ -1,0 +1,7 @@
+
+
+TRAIN DATASET:
+https://automluipublicstorage.blob.core.windows.net/automl-devplat2-sample-datasets/classification/newsgroups_text-dnn-classification/newsgroups_train_data.csv
+
+TEST DATASET:
+https://automluipublicstorage.blob.core.windows.net/automl-devplat2-sample-datasets/classification/newsgroups_text-dnn-classification/newsgroups_test_data.csv
