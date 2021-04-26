@@ -1,7 +1,7 @@
-# Private Preview: AutoML in Azure ML 2.0 developer experience (DevPlat 2.0)
+# AutoML Private Preview (vNext)
 
-> Welcome to the PRIVATE PREVIEW of **Azure Machine Learning Automated ML for the Azure ML 2.0 developer experience (DevPlat 2.0)**
-> AutoML in the 2.0 developer platform will provide first class API/CLI/SDK support for automated model training.
+> Welcome to the PRIVATE PREVIEW of **Azure Machine Learning Automated ML for the Azure ML vNext developer experience**
+> AutoML in vNext developer platform will provide first class API/CLI/SDK support for automated model training.
 > This is an early PREVIEW, still not announced and not supported publicly so it's defined as PRIVATE from that point of view, although anyone can access to it.
 
 Automated Machine Learning, also referred to as Automated ML or AutoML, is the process of automating the time consuming, iterative tasks of machine learning model development. It allows data scientists, analysts, and developers to quickly and easily build ML models with high scale, efficiency, and productivity all while sustaining model quality.
@@ -14,13 +14,13 @@ Azure AutoML CLI currently supports these three ML tasks:
 - Regression
 - Time Series Forecasting 
 
-## Scope for AutoML in 2.0 versions
+## Scope for AutoML in vNext versions
 
-Azure AutoML in DevPlat 2.0 provides the following main feature areas:
+Azure AutoML in vNext provides the following main feature areas:
 
 - **CLI (Common-Line Interface)** support for AutoML
 - **REST APIs** for AutoML
-- **AML Python SDK 2.0** for AutoML (will be available in next previews)
+- **AML Python SDK vNext** for AutoML (will be available in next previews)
 
 ## Prerequisites
 
@@ -55,7 +55,7 @@ These APIs are in v2.0 the same REST APIs consumed by the CLI and Python SDK cli
 - [Other Azure ML REST APIS to complement your end-to-end scenarios](/docs/rest-apis/aml-rest-apis.MD)
 
 
-# Python SDK 2.0 support for AutoML
+# Python SDK vNext support for AutoML
 
 (TBD) - Will be available in next previews, not in the 1st Private Preview (April/May 2021) for AutomML but later.
 
