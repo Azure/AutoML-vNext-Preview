@@ -18,7 +18,7 @@ properties:
         description: The type of ML task to run. Values can be 'classification', 'regression', or 'forecasting' depending on the type of automated ML problem to solve.
       primary_metric:
         oneOf:
-          - enum: ['root_mean_squared_error', 'accuracy', 'mean_absolute_error', 'AUC_weighted', 'log_loss', 'r2_score', 'recall_score_macro', 'precision_score_macro', 'confusion_matrix', 'matthews_correlation', 'f1_score_micro', 'recall_score_weighted', 'predicted_true', 'recall_score_micro', 'precision_score_weighted', 'mean_average_precision', 'root_mean_squared_log_error', 'explained_variance', 'average_precision_score_macro', 'mean_absolute_percentage_error', 'f1_score_weighted', 'weighted_accuracy', 'normalized_median_absolute_error', 'AUC_macro', 'balanced_accuracy', 'spearman_correlation', 'normalized_mean_absolute_error', 'norm_macro_recall', 'residuals', 'forecast_mean_absolute_percentage_error', 'average_precision_score_micro', 'AUC_micro', 'average_precision_score_weighted', 'forecast_residuals', 'normalized_root_mean_squared_error', 'normalized_root_mean_squared_log_error', 'f1_score_macro', 'accuracy_table', 'median_absolute_error', 'precision_score_micro']
+          - enum: ['AUC_weighted', 'accuracy', 'norm_macro_recall', 'average_precision_score_weighted', 'precision_score_weighted', 'spearman_correlation', 'normalized_root_mean_squared_error', 'r2_score', 'normalized_mean_absolute_error', 'normalized_root_mean_squared_log_error']
           - {$ref: '#definitions/InputValuePlaceholder'}
         description: The metric that Automated Machine Learning will optimize for model selection. Automated Machine Learning collects more metrics than it can optimize.
       enable_model_explainability:
@@ -51,7 +51,6 @@ properties:
       trial_timeout_minutes:
         $ref: '#/definitions/IntegerOrPlaceholder'
         description: Maximum time in minutes that each trial (child job) can run for before it terminates. If not specified, a value of 1 month or 43200 minutes is used.
-
       
   data:
     additionalProperties: false
@@ -62,15 +61,8 @@ properties:
           dataset:
             $ref: '#definitions/InputDataDefinition'
             description: The data to be used within the experiment. It should contain both training feature columns and a target column. the parameter main_data must always be provided
-          target_column_name:
-            $ref: '#/definitions/StringOrPlaceholder'
-            description: The name of the column to target for predictions. It must always be specified. This parameter is applicable to 'dataset', 'validation_dataset' and 'test_dataset'.
-          weight_column_name:
-            $ref: '#/definitions/StringOrPlaceholder'
-            description: The name of the sample weight column. Automated ML supports a weighted column as an input, causing rows in the data to be weighted up or down. If the input data doesn't have column names, column indices can be used instead, expressed as integers.
         required:
-        - dataset
-        - target_column_name
+        - dataset        
 
       validation:
         additionalProperties: false
@@ -78,12 +70,33 @@ properties:
           dataset:
             $ref: '#definitions/InputDataDefinition'
             description: The validation data to be used within the experiment. It should contain both training features and label column (optionally a sample weights column). If 'validation_dataset' is specified, then 'dataset' and 'target_column_name' parameters must be specified.
-          validation_dataset_size:
+          validation_data_size:
             $ref: '#/definitions/NumberOrPlaceholder'
             description: What fraction of the data to hold out for validation when user validation data is not specified. This should be between 0.0 and 1.0 non-inclusive.
           n_cross_validations:
             $ref: '#/definitions/IntegerOrPlaceholder'
             description: How many cross validations to perform when user validation data is not specified.
+          cv_split_column_names:
+            $ref: '#/definitions/ArrayOfStrings'
+            description: Columns to use for CVSPlit data.
+      
+      test:
+        additionalProperties: False
+        properties:
+          dataset:
+            $ref: '#definitions/InputDataDefinition'
+            description: The test data to be used within the experiment.
+          test_data_size:
+            $ref: '#/definitions/NumberOrPlaceholder'
+            description: What fraction of the data to hold out for test when user test dataset is not specified. This should be between 0.0 and 1.0 non-inclusive.
+      target_column_name:
+        $ref: '#/definitions/StringOrPlaceholder'
+          description: The name of the column to target for predictions. It must always be specified. This parameter is applicable to 'dataset', 'validation_dataset' and 'test_dataset'.
+      weight_column_name:
+        $ref: '#/definitions/StringOrPlaceholder'
+          description: The name of the sample weight column. Automated ML supports a weighted column as an input, causing rows in the data to be weighted up or down. If the input data doesn't have column names, column indices can be used instead, expressed as integers.
+      required:        
+        - target_column_name
 
   featurization:
     additionalProperties: false
@@ -119,6 +132,21 @@ properties:
       enable_dnn_training:
         $ref: '#/definitions/BooleanOrPlaceholder'
         description: If True, this parameter enables DNN based training like when using ForecastTCN neural network model. Default value is False.
+      enable_onnx_compatible_models:
+        $ref: '#/definitions/BooleanOrPlaceholder'
+        description: Flag for enabling onnx compatible models.
+      enable_stack_ensemble:
+        $ref: '#/definitions/BooleanOrPlaceholder'
+        description: Flag to enable stack ensemble.
+      enable_vote_ensemble:
+        $ref: '#/definitions/BooleanOrPlaceholder'
+        description: Flag to enable voting ensemble.
+      ensemble_model_download_timeout_minutes:
+        $ref: '#/definitions/NumberOrPlaceholder'
+        description: During VotingEnsemble and StackEnsemble model generation, multiple fitted models from the previous child runs are downloaded. The default value is 5 minutes for downloading these models in parallel and there is no maximum timeout limit. Configure this parameter with a higher value than 300 secs, if more time is needed.
+      stack_ensemble_settings:
+        $ref: '#/definitions/stack_ensemble_settings'
+
 
   best_model_output:
     $ref: '#/definitions/OutputDataDefinition'
@@ -162,45 +190,8 @@ definitions:
         '.*': {type: string}
         }
       transformer_params:
-        type: object  
-        description: A dictionary of transformer and corresponding customization parameters.
-        properties:
-          imputer:      
-            type: array
-            additionalItems: false
-            items:
-              oneOf:
-              - type: object
-                properties: 
-                  fields:
-                    type: array
-                    items: {type: string}
-                  strategy:
-                    const: 'constant'
-                  fill_value: {type: number}
-                additionalProperties: false
-              - type: object
-                properties:
-                  strategy:
-                    enum: ['median', 'ffill', 'mean', 'most_frequent']
-                  fields:
-                    type: array
-                    items: {type: string}
-                additionalProperties: false
-          hash_one_hot_encoder:      
-            type: array
-            additionalItems: false
-            items:
-              - type: object
-                properties: 
-                  fields:
-                    type: array
-                    items: {type: string}
-                  number_of_bits: {type: number}
-                additionalProperties: false
-          tfidf:      
-            type: object     
-        additionalProperties: false
+        $ref: 'Job.yaml#/definitions/ArrayOfTransformerParamters'
+  
   forecasting_config:
     description: Parameters needed to train Forecasting models in Azure Machine Learning.
     type: object
@@ -224,7 +215,29 @@ definitions:
       time_series_id_column_names:
         $ref: '#/definitions/StringListOrString'
         description: The names of columns used to group a timeseries. It can be used to create multiple series. If time_series_id_column_names is not defined, the data set is assumed to be one time-series.
- 
+      frequency:
+        type: string
+        description: Forecast frequency.
+      feature_lags:
+        type: string
+        description: Flag for generating lags for the numeric features with 'auto' or None.
+      seasonality:
+        type: string
+        description: Set time series seasonality as an integer multiple of the series frequency. If seasonality is set to 'auto', it will be inferred. If set to null, the time series is assumed non-seasonal which is equivalent to seasonality=1
+      short_series_handling_config:
+        enum: ['auto', 'pad', 'drop']
+        type: string
+        description: The metric that Automated Machine Learning will optimize for model selection. Automated Machine Learning collects more metrics than it can optimize.
+      use_stl:
+        type: string
+        description: Configure STL Decomposition of the time-series target column. use_stl can take three values- null (default) - no stl decomposition, 'season' - only generate season component and season_trend - generate both season and trend components.
+      target_aggregate_function:
+        type: string
+        description: The function to be used to aggregate the time series target column to conform to a user specified frequency. If the target_aggregation_function is set, but the freq parameter is not set, the error is raised. The possible target aggregation functions are- "sum", "max", "min" and "mean".
+      validate_parameters:
+        type: string
+        description: Flag to indicate whether or no validate parameters.     
+           
   IntegerListOrIntegerOrString:
     oneOf:
     - {$ref: '#definitions/ArrayOfIntegers'}
@@ -243,6 +256,10 @@ definitions:
   ArrayOfStrings:
     type: array
     items: {$ref: '#/definitions/StringOrPlaceholder'}
+  
+  ArrayOfTransformerParamters:
+    type: array
+    items: {$ref: '#/definitions/tranformer_parameters'}
 
   NumberOrPlaceholder:
     oneOf:
@@ -289,3 +306,39 @@ definitions:
       $outputValue: {description: Name of the output., type: string}
     required: [$outputValue]
     type: object
+
+  StackEnsembleSettings:
+    properties:
+      stack_meta_learner_type:
+        enum: [LogisticRegression, LogisticRegressionCV, LightGBMClassifier, ElasticNet, ElasticNetCV, LightGBMRegressor, LinearRegression]
+        type: string
+        description: The country/region used to generate holiday features. These should be ISO 3166 two-letter country/region code, for example 'US' or 'GB'. 
+      stack_meta_learner_train_percentage:
+        type: '#/definitions/NumberOrPlaceholder'
+        description: The desired maximum forecast horizon in units of time-series frequency. The default value is 1. Units are based on the time interval of your training data, e.g., monthly, weekly that the forecaster should predict out.
+      stack_meta_learner_kwargs:
+        type: object
+        description: Optional parameters to pass to the initializer of the meta-learner. These parameters and parameter types mirror the parameters and parameter types from the corresponding model constructor, and are forwarded to the model constructor.
+        patternProperties: {
+        '.*': {type: string}
+        }
+
+  TransformerParamters:
+    properties:
+      name:
+        type: string
+        description: Transformer name "Imputer"/"HotOneEncoder"/"tfidf"
+      fields:
+        type: '#/definitions/ArrayOfStrings'
+        description: The desired maximum forecast horizon in units of time-series frequency. The default value is 1. Units are based on the time interval of your training data, e.g., monthly, weekly that the forecaster should predict out.
+      strategy:
+        enum: ['median', 'ffill', 'mean', 'most_frequent']
+        type: string
+      fill_value:
+        $ref: '#/definitions/NumberOrPlaceholder'
+      kwargs_input:
+        type: object
+        description: Optional parameters to pass to the constructor of the transformer.
+        patternProperties: {
+        '.*': {type: string}
+        }
