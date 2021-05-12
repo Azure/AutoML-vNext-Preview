@@ -66,6 +66,14 @@ properties:
 
       validation:
         additionalProperties: false
+        target_column_name:
+          $ref: '#/definitions/StringOrPlaceholder'
+          description: The name of the column to target for predictions. It must always be specified. This parameter is applicable to 'dataset', 'validation_dataset' and 'test_dataset'.
+        weight_column_name:
+          $ref: '#/definitions/StringOrPlaceholder'
+          description: The name of the sample weight column. Automated ML supports a weighted column as an input, causing rows in the data to be weighted up or down. If the input data doesn't have column names, column indices can be used instead, expressed as integers.
+        required:        
+          - target_column_name
         properties:
           dataset:
             $ref: '#definitions/InputDataDefinition'
@@ -89,14 +97,7 @@ properties:
           test_data_size:
             $ref: '#/definitions/NumberOrPlaceholder'
             description: What fraction of the data to hold out for test when user test dataset is not specified. This should be between 0.0 and 1.0 non-inclusive.
-      target_column_name:
-        $ref: '#/definitions/StringOrPlaceholder'
-          description: The name of the column to target for predictions. It must always be specified. This parameter is applicable to 'dataset', 'validation_dataset' and 'test_dataset'.
-      weight_column_name:
-        $ref: '#/definitions/StringOrPlaceholder'
-          description: The name of the sample weight column. Automated ML supports a weighted column as an input, causing rows in the data to be weighted up or down. If the input data doesn't have column names, column indices can be used instead, expressed as integers.
-      required:        
-        - target_column_name
+      
 
   featurization:
     additionalProperties: false
@@ -145,7 +146,7 @@ properties:
         $ref: '#/definitions/NumberOrPlaceholder'
         description: During VotingEnsemble and StackEnsemble model generation, multiple fitted models from the previous child runs are downloaded. The default value is 5 minutes for downloading these models in parallel and there is no maximum timeout limit. Configure this parameter with a higher value than 300 secs, if more time is needed.
       stack_ensemble_settings:
-        $ref: '#/definitions/stack_ensemble_settings'
+        $ref: '#/definitions/StackEnsembleSettings'
 
 
   best_model_output:
@@ -190,7 +191,7 @@ definitions:
         '.*': {type: string}
         }
       transformer_params:
-        $ref: 'Job.yaml#/definitions/ArrayOfTransformerParamters'
+        $ref: 'Job.yaml#/definitions/ArrayOfTransformerParameters'
   
   forecasting_config:
     description: Parameters needed to train Forecasting models in Azure Machine Learning.
@@ -257,9 +258,9 @@ definitions:
     type: array
     items: {$ref: '#/definitions/StringOrPlaceholder'}
   
-  ArrayOfTransformerParamters:
+  ArrayOfTransformerParameters:
     type: array
-    items: {$ref: '#/definitions/tranformer_parameters'}
+    items: {$ref: '#/definitions/TransformerParameters'}
 
   NumberOrPlaceholder:
     oneOf:
@@ -323,7 +324,7 @@ definitions:
         '.*': {type: string}
         }
 
-  TransformerParamters:
+  TransformerParameters:
     properties:
       name:
         type: string
