@@ -29,14 +29,15 @@ The .YAML config below will train multiple models until it finds the best model 
      primary_metric: AUC_weighted
      enable_model_explainability: true
    limits:
-     job_timeout_minutes: 2400
-     max_total_trials: 100
+     timeout_minutes: 60
+     trial_timeout_minutes: 30
+     max_total_trials: 20
      max_concurrent_trials: 5
      enable_early_termination: true
    data:
+     target_column_name: target
      training:
-       dataset: azureml:porto_seguro_safe_driver_single_dataset:1
-       target_column_name: target
+       dataset: azureml:porto_seguro_safe_driver_single_dataset:1       
      validation:
        n_cross_validations: 5
    featurization:
