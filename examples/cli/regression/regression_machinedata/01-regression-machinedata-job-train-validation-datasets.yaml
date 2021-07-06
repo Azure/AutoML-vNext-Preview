@@ -13,6 +13,7 @@ limits:
   max_total_trials: 20
   max_concurrent_trials: 5
   enable_early_termination: true
+  exit_score: 0.0020
 data:
   target_column_name: ERP
   training:
@@ -40,3 +41,15 @@ featurization:
       - fields: ["ModelName"]
         parameters:
           number_of_bits: 3
+training:
+    enable_dnn_training: false
+    enable_stack_ensemble: true
+    enable_vote_ensemble: false
+    stack_ensemble_settings:
+        stack_meta_learner_train_percentage: 0.1
+        stack_meta_learner_type: lightgbmregressor
+properties:
+    property1: value1
+    property2: "value2"
+tags:
+    tag1: tagValue1
