@@ -1,22 +1,23 @@
+$schema: https://azuremlsdk2.blob.core.windows.net/development/autoMLJob.schema.json
 type: automl_job
-name: 04-portoseguro-cli-classif-job-single-dataset-whiteblacklist-05
+name: classification-portoseguro-04
 experiment_name: Portoseguro-Classification-CLI-Tests
 compute:
   target: azureml:cpu-cluster
 general:
   task: classification
-  primary_metric: AUC_weighted
+  primary_metric: auc_weighted
   enable_model_explainability: true
 limits:
-  job_timeout_minutes: 2400
+  timeout_minutes: 120
   max_total_trials: 10
   max_concurrent_trials: 5
   enable_early_termination: true
-  job_exit_score: 0.63
+  exit_score: 0.63
 data:
+  target_column_name: target
   training:
     dataset: azureml:porto_seguro_safe_driver_single_dataset:1
-    target_column_name: target
   validation:
     n_cross_validations: 5
 featurization:

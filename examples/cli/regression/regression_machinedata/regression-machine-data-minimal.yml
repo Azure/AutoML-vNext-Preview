@@ -1,0 +1,13 @@
+$schema: https://azuremlsdk2.blob.core.windows.net/development/autoMLJob.schema.json
+type: automl_job
+name: machine-data-regression-minimal-01
+experiment_name: machine_data_regression
+general:
+    task: regression
+    primary_metric: normalized_root_mean_squared_error
+compute:
+  target: azureml:cpu-cluster
+data:
+    target_column_name: ERP
+    training:
+        dataset: azureml:machineData_train_dataset:1

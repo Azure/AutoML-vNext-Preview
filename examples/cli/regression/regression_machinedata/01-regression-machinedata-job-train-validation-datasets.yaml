@@ -1,5 +1,6 @@
+$schema: https://azuremlsdk2.blob.core.windows.net/development/autoMLJob.schema.json
 type: automl_job
-name: 01-regression-machinedata-job-train-validation-datasets-100
+name: regression-machinedata-01
 experiment_name: Regression-machine-data-CLI-Tests
 compute:
   target: azureml:cpu-cluster
@@ -8,15 +9,34 @@ general:
   primary_metric: r2_score
   enable_model_explainability: true
 limits:
-  job_timeout_minutes: 2400
+  timeout_minutes: 60
   max_total_trials: 20
   max_concurrent_trials: 5
   enable_early_termination: true
 data:
+  target_column_name: ERP
   training:
-    dataset: azureml:regression_machinedata_train:1
-    target_column_name: ERP
+    dataset: azureml:machineData_train_dataset:1    
   validation:
-    dataset: azureml:regression_machinedata_valid:1
+    dataset: azureml:machineData_valid_dataset:1
 featurization:
-  featurization_config: auto
+  enable_dnn_featurization: true
+  featurization_config:
+    blocked_transformers: [LabelEncoder, WordEmbedding]
+    column_purposes:
+      CPWVOL5: CategoricalHash
+      MYCT: Numeric
+      VendorName: CategoricalHash
+    transformer_params:
+      Imputer:
+      - fields: ["MMIN"]
+        parameters:
+          strategy: constant
+          fill_value: 0
+      - fields: ["CHMIN"]
+        parameters:
+          strategy: median
+      hash_one_hot_encoder:
+      - fields: ["ModelName"]
+        parameters:
+          number_of_bits: 3

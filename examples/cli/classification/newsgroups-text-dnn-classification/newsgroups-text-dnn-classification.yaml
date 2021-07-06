@@ -1,21 +1,23 @@
+$schema: https://azuremlsdk2.blob.core.windows.net/development/autoMLJob.schema.json
 type: automl_job
-name: 01-newsgroups-test-dnn-classif-job-single-dataset-110
+name: newsgroups-text-dnn-classification-01
 experiment_name: Newsgroups-test-dnn-classif-CLI-Tests
 compute:
-  target: azureml:dnntext-cluster
+  target: azureml:gpu-cluster
 general:
   task: classification
   primary_metric: accuracy
   enable_model_explainability: true
 limits:
-  job_timeout_minutes: 2400
+  timeout_minutes: 60
+  trial_timeout_minutes: 30
   max_total_trials: 10
-  max_concurrent_trials: 2
+  max_concurrent_trials: 4
   enable_early_termination: true
 data:
+  target_column_name: "y"
   training:
     dataset: azureml:newsgroups_train_data:1
-    target_column_name: y
   validation:
     dataset: azureml:newsgroups_validation_data:1
 featurization:
