@@ -1,5 +1,6 @@
+$schema: https://azuremlsdk2.blob.core.windows.net/development/autoMLJob.schema.json
 type: automl_job
-name: 01-cli-beer-forecasting-job-single-dataset-cpu-100
+name: forecasting-beer-production-01
 experiment_name: Beer-Forecasting-CLI-Tests
 compute:
   target: azureml:cpu-cluster
@@ -8,14 +9,14 @@ general:
   primary_metric: normalized_root_mean_squared_error
   enable_model_explainability: true
 limits:
-  job_timeout_minutes: 120
+  timeout_minutes: 120
   max_total_trials: 15
   max_concurrent_trials: 4
   enable_early_termination: true
 data:
+  target_column_name: BeerProduction
   training:
-    dataset: azureml:beer-single-dataset:1
-    target_column_name: BeerProduction
+    dataset: azureml:beer-single-dataset:1    
   validation:
     n_cross_validations: 5
 featurization:
