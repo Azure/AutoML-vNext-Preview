@@ -23,14 +23,17 @@ Follow the next steps to get started with AutoML by using the REST APIs:
     
 10.	**Get this token and set it in “authToken” global variable.**
 11.	Now **update the dataset name in the Body of Create AutoML job** (Use the same name that you used while creating the tabular dataset in step 3 above).
-     ![image](https://user-images.githubusercontent.com/1712635/115308900-59a5de00-a120-11eb-847f-93a6502959ed.png)
-12.	**Create the AutoML Job: **Now you can click on Create AutoML job and hit send.
-     ![image](https://user-images.githubusercontent.com/1712635/115309107-a7bae180-a120-11eb-9b9a-69c84498c8ff.png) 
+     ![image](https://user-images.githubusercontent.com/109864/134089284-c7144da2-5b2e-40c1-bfd8-a9adee52d5bb.png)
+12.	**Create the AutoML Job:** Now you can click on Create AutoML job and hit send.
+     ![image](https://user-images.githubusercontent.com/109864/134089413-d6fd4053-b6af-48c2-970c-e42f89120b19.png)
 13.	**Get Job Status thorugh HTTP:** Assuming the previous step returned Http: 201, you can get the job status using “Get AutoML job”. Please remember to replace with the Run ID of job you just submitted. 
-     ![image](https://user-images.githubusercontent.com/1712635/115309490-3891bd00-a121-11eb-82fe-cb948348715f.png)
+     ![image](https://user-images.githubusercontent.com/109864/134089914-1fa8525a-e200-475c-8278-5a3e0072854f.png)
      
 14.	**Monitor Jib status from the UI:** You should also be able to go to the Experiments UI page and monitor how the AutoML Job is progressing:
-
      ![image](https://user-images.githubusercontent.com/1712635/115310072-0d5b9d80-a122-11eb-8979-96b6921f6b6b.png)
+15. **How to get latest AutoMLJob spec:** Given we are in private preview it is possible that there are some changes in the AutoMLJob schema which gets rolled out and you get bad request exception from service. Please use following link to get the latest AutoMLJob schema and update your request body appropriately.
+https://eastus.api.azureml.ms/mferp/swagger/index.html?urls.primaryName=Azure%20Machine%20Learning%20ManagementFrontEnd%202020-09-01-preview
+
+![image](https://user-images.githubusercontent.com/109864/134090350-e50668b3-bda9-4328-8927-f826101d5ce5.png)
 
      
