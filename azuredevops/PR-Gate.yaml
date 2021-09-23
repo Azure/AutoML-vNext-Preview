@@ -1,0 +1,22 @@
+pr:
+- main
+
+trigger: none # No CI build
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+jobs:
+- job: RunTests
+  displayName: Run Tests
+  pool:
+    vmImage: ubuntu-latest
+  steps:
+  - checkout: self
+      fetchDepth: 1
+      clean: true
+
+  - task: UsePythonVersion@0
+    displayName: 'Use Python 3.6'
+    inputs:
+      versionSpec: '3.6'
