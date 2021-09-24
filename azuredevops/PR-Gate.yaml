@@ -39,4 +39,14 @@ jobs:
       scriptLocation: scriptPath
       scriptPath: scripts/Install-SDKv2.ps1
       failOnStandardError: false
+  
+  - task: AzureCLI@2
+    displayName: Obtain Workspace
+    inputs:
+      azureSubscription: '$(SubscriptionName)'
+      scriptType: pscore
+      scriptLocation: scriptPath
+      scriptPath: scripts/Obtain-Workspace.ps1
+      failOnStandardError: true
+
         
