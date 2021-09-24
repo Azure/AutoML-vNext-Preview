@@ -84,7 +84,9 @@ function Create-EpochWorkspace(
 
     ConvertTo-Yaml $ws_data | Out-File -FilePath $workspaceYAML -Encoding ascii
 
+    Set-PSDebug -Trace 1
     az group create --location $location --name $rg_name --tags $createdTag=$epoch_secs
+    Write-Host "Resource group created"
     $ws = az ml workspace create --resource-group $rg_name --file $workspaceYAML | ConvertFrom-Json
     return $ws
 }
