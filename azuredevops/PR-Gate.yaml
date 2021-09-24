@@ -1,3 +1,7 @@
+variables:
+- name: SubscriptionName
+  value: 'INFRA Project Vienna INT (589c7ae9-223e-45e3-a191-98433e0821a9)'
+
 pr:
 - main
 
@@ -26,3 +30,14 @@ jobs:
       pip install --upgrade pip setuptools
     failOnStderr: true
     displayName: Install pip & setuptools
+
+  - task: AzureCLI@2
+    displayName: Do something Azure
+    inputs:
+      azureSubscription: '$(SubscriptionName)'
+      scriptType: pscore
+      scriptLocation: inlineScript
+      failOnStandardError: false
+      inlineScript: |
+        echo "##[section]Running a command"
+        az account list
