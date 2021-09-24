@@ -7,20 +7,39 @@ $purposeTagKey="workspacePurpose"
 $purposeTagValue="Automated Tests for DPv2"
 $workspaceYAML="workspace.yaml"
 
-function Get-RecentWorkspaces(
+function Get-RecentResourceGroups(
     [int]$min_epoch
 )
 {
+    Write-Host "Searching for recent resource groups"
     Write-Host "Minimum Epoch: $min_epoch"
     # Would be nice to do this server-side
-    $all_workspaces = az ml workspace list | ConvertFrom-Json
+    $all_groups = az group list | ConvertFrom-Json
 
 
-    $filtered_workspaces = $all_workspaces | Where-Object {$_.name.contains($baseName) -and $_.tags.$createdTag -gt $min_epoch}
+    $filtered_groups = $all_groups.Where({$_.name.contains($baseName) -and $_.tags.$createdTag -gt $min_epoch})
 
-    return $filtered_workspaces
+    return $filtered_groups
 }
 
+function Get-WorkspaceFromResourceGroup(
+    [string]$resource_group_name
+)
+{
+    Write-Host "Checking resource group $resource_group_name"
+    $workspaces = az ml workspace list --resource-group $resource_group_name | ConvertFrom-Json
+
+    $filtered_workspaces = $workspaces.Where({$_.name.contains($baseName)})
+
+    if($filtered_workspaces.count -gt 0)
+    {
+        $workspace = $workspaces[0]
+    } else {
+        throw "Resource Group did not contain workspace with name starting with $baseName"
+    }
+
+    return $workspace
+}
 
 function Get-EpochSecs
 {
@@ -37,6 +56,8 @@ function Create-EpochWorkspace(
     $rg_name = "$basename-rg-$epoch_secs"
     $ws_name = "$basename$epoch_secs"
 
+    Write-Host "Creating workspace $ws_name in resource group $rg_name"
+
     $ws_data = @{}
     $ws_data['name']=$ws_name
     $ws_data['tags'] = @{}
@@ -47,16 +68,27 @@ function Create-EpochWorkspace(
     ConvertTo-Yaml $ws_data | Out-File -FilePath $workspaceYAML -Encoding ascii
 
     az group create --location $location --name $rg_name --tags $createdTag=$epoch_secs
-    az ml workspace create --resource-group $rg_name --file $workspaceYAML
-    az configure --defaults group=$rg_name workspace=$ws_name
+    $ws = az ml workspace create --resource-group $rg_name --file $workspaceYAML | ConvertFrom-Json
+    return $ws
 }
 
 # Install-Module powershell-yaml -Scope CurrentUser
 
 $epoch_secs = Get-EpochSecs
 
-# Create-EpochWorkspace -epoch_secs $epoch_secs
+$window_seconds = 1*3600
 
-$ws_list = Get-RecentWorkspaces($epoch_secs-24*3600)
-Write-Host $ws_list
+$rg_list = Get-RecentResourceGroups($epoch_secs-$window_seconds)
+if($rg_list.count -gt 0)
+{
+    Write-Host "Found $($rg_list.count) suitable resource groups"
+    $target_rg = $rg_list[0].name
+
+    $workspace = Get-WorkspaceFromResourceGroup($target_rg)
+} else {
+    Write-Host "No recent workspace"
+    $workspace = Create-EpochWorkspace($epoch_secs)
+}
+
+Write-Host $workspace
 
