@@ -36,6 +36,7 @@ jobs:
     inputs:
       azureSubscription: '$(SubscriptionName)'
       scriptType: pscore
-      scriptLocation: scripts/Install-SDKv2.ps1
+      scriptLocation: scriptPath
+      scriptPath: scripts/Install-SDKv2.ps1
       failOnStandardError: false
         
