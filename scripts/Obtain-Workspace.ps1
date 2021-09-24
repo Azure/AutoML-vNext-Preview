@@ -6,6 +6,7 @@ $ownerTeamTagValue="AML Intelligence"
 $purposeTagKey="workspacePurpose"
 $purposeTagValue="Automated Tests for DPv2"
 $workspaceYAML="workspace.yaml"
+$window_seconds = 1*1800
 
 function Get-RecentResourceGroups(
     [int]$min_epoch
@@ -18,6 +19,22 @@ function Get-RecentResourceGroups(
 
 
     $filtered_groups = $all_groups.Where({$_.name.contains($baseName) -and $_.tags.$createdTag -gt $min_epoch})
+
+    return $filtered_groups
+}
+
+
+function Get-OldResourceGroups(
+    [int]$max_epoch
+)
+{
+    Write-Host "Searching for older resource groups"
+    Write-Host "Maximum Epoch: $max_epoch"
+    # Would be nice to do this server-side
+    $all_groups = az group list | ConvertFrom-Json
+
+
+    $filtered_groups = $all_groups.Where({$_.name.contains($baseName) -and $_.tags.$createdTag -lt $max_epoch})
 
     return $filtered_groups
 }
@@ -76,8 +93,6 @@ function Create-EpochWorkspace(
 
 $epoch_secs = Get-EpochSecs
 
-$window_seconds = 1*3600
-
 $rg_list = Get-RecentResourceGroups($epoch_secs-$window_seconds)
 if($rg_list.count -gt 0)
 {
@@ -92,3 +107,16 @@ if($rg_list.count -gt 0)
 
 Write-Host $workspace
 
+Write-Host "Checking for old resource groups"
+$old_rg_list =Get-OldResourceGroups($epoch_secs-2*$window_seconds)
+if( $old_rg_list.count -gt 0)
+{
+    Write-Host "Found $($old_rg_list.count) resource groups to clean up"
+    foreach( $rg in $old_rg_list)
+    {
+        Write-Host "Cleaning up $($rg.name)"
+        az group delete --name $rg.name --yes
+    }
+} else {
+    Write-Host "No old resource groups found"
+}
