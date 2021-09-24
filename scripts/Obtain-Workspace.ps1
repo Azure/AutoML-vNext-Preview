@@ -2,9 +2,9 @@ $baseName="amlisdkv2"
 $location="WestUS"
 $createdTag="createdAt"
 $ownerTeamTagKey="owningTeam"
-$ownerTeamTagValue="AML Intelligence"
+$ownerTeamTagValue="AML_Intelligence"
 $purposeTagKey="workspacePurpose"
-$purposeTagValue="Automated Tests for DPv2"
+$purposeTagValue="Automated_Tests_for_DPv2"
 $workspaceYAML="workspace.yaml"
 $window_seconds = 1*1800
 
