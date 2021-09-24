@@ -32,12 +32,10 @@ jobs:
     displayName: Install pip & setuptools
 
   - task: AzureCLI@2
-    displayName: Do something Azure
+    displayName: Install AzureML CLI v2
     inputs:
       azureSubscription: '$(SubscriptionName)'
       scriptType: pscore
-      scriptLocation: inlineScript
+      scriptLocation: scripts/Install-SDKv2.ps1
       failOnStandardError: false
-      inlineScript: |
-        echo "##[section]Running a command"
-        az account list
+        
