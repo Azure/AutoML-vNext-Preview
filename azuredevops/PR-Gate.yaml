@@ -1,6 +1,10 @@
 variables:
 - name: SubscriptionName
   value: 'INFRA Project Vienna INT (589c7ae9-223e-45e3-a191-98433e0821a9)'
+- name: ConfigFileDirectory
+  value: configFiles
+- name: ConfigFileArtifact
+  value: WorkspaceConfiguration
 
 pr:
 - main
@@ -53,5 +57,16 @@ jobs:
       scriptLocation: scriptPath
       scriptPath: scripts/Obtain-Workspace.ps1
       failOnStandardError: false # Since the new CLI writes stuff there
+
+  - powershell: |
+      mkdir $(ConfigFileDirectory)
+      cp workspace.yaml $(ConfigFileDirectory)
+      cp config.json $(ConfigFileDirectory)
+    displayName: Copy config files to separate directory
+
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: $(ConfigFileDirectory)
+      artifactName: $(ConfigFileArtifact)
 
         
