@@ -20,3 +20,9 @@ jobs:
     displayName: 'Use Python 3.6'
     inputs:
       versionSpec: '3.6'
+
+  - script: |
+      echo "##[section]Upgrading pip and setuptools..."
+      pip install --upgrade pip setuptools
+    failOnStderr: true
+    displayName: Install pip & setuptools
