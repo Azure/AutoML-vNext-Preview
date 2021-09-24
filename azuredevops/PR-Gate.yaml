@@ -32,7 +32,7 @@ jobs:
     displayName: Install pip & setuptools
 
   - powershell: |
-      Install-Module powershell-yaml -Scope CurrentUser -AcceptLicense
+      Install-Module powershell-yaml -Scope CurrentUser --yes
     displayName: Install YAML extension for Powershell
 
   - task: AzureCLI@2
