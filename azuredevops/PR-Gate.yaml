@@ -33,7 +33,7 @@ jobs:
 
   - powershell: |
       Set-PSDebug -Trace 2
-      Install-Module powershell-yaml -Scope CurrentUser --yes
+      Install-Module powershell-yaml -Scope CurrentUser
     displayName: Install YAML extension for Powershell
 
   - task: AzureCLI@2
