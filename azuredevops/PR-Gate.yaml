@@ -32,8 +32,8 @@ jobs:
     displayName: Install pip & setuptools
 
   - powershell: |
-      Set-PSDebug -Trace 2
-      Install-Module powershell-yaml -Scope CurrentUser
+      Set-PSDebug -Trace 1
+      Install-Module powershell-yaml -Scope CurrentUser -Force
     displayName: Install YAML extension for Powershell
 
   - task: AzureCLI@2
