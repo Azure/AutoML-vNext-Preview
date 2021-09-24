@@ -52,6 +52,6 @@ jobs:
       scriptType: pscore
       scriptLocation: scriptPath
       scriptPath: scripts/Obtain-Workspace.ps1
-      failOnStandardError: true
+      failOnStandardError: false # Since the new CLI writes stuff there
 
         
