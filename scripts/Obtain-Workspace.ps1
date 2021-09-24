@@ -6,7 +6,7 @@ $ownerTeamTagValue="AML_Intelligence"
 $purposeTagKey="workspacePurpose"
 $purposeTagValue="Automated_Tests_for_DPv2"
 $workspaceYAML="workspace.yaml"
-$window_seconds = 1*1800
+$window_seconds = 1*30
 
 function Get-RecentResourceGroups(
     [int]$min_epoch
@@ -90,9 +90,32 @@ function Create-EpochWorkspace(
     return $ws
 }
 
+function Create-ConfigJson(
+    $workspace
+)
+{
+    $parts = $workspace.storage_account.split('/')
+    $sub_id = $parts[2]
+    $rg_name = $parts[4]
+    Write-Host "Extracted subscription: $sub_id"
+    Write-Host "Extract resource group: $rg_name"
+
+    $json_config = @{}
+    $json_config["subscription_id"] = $sub_id
+    $json_config["resource_group"] = $rg_name
+    $json_config["workspace_name"] = $workspace.name
+
+    ConvertTo-Json $json_config | Out-File -FilePath 'config.json' -Encoding ascii
+}
+
 # Install-Module powershell-yaml -Scope CurrentUser
 
 $epoch_secs = Get-EpochSecs
+
+
+Write-Host
+Write-Host "Creating workspace if one not found"
+Write-Host
 
 $rg_list = Get-RecentResourceGroups($epoch_secs-$window_seconds)
 if($rg_list.count -gt 0)
@@ -106,9 +129,22 @@ if($rg_list.count -gt 0)
     $workspace = Create-EpochWorkspace($epoch_secs)
 }
 
+Write-Host
+Write-Host "Workspace information"
+Write-Host
 Write-Host $workspace
+Write-Host
 
+Write-Host
+Write-Host "Creating config.json"
+Write-Host
+
+Create-ConfigJson($workspace)
+
+Write-Host
 Write-Host "Checking for old resource groups"
+Write-Host
+
 $old_rg_list =Get-OldResourceGroups($epoch_secs-2*$window_seconds)
 if( $old_rg_list.count -gt 0)
 {
