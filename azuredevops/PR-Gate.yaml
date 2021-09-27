@@ -69,4 +69,12 @@ jobs:
       targetPath: $(ConfigFileDirectory)
       artifactName: $(ConfigFileArtifact)
 
+  - task: AzureCLI@2
+    displayName: Create Compute
+    inputs:
+      azureSubscription: '$(SubscriptionName)'
+      scriptType: pscore
+      scriptLocation: scriptPath
+      scriptPath: scripts/Create-Compute.ps1
+      failOnStandardError: false # Since the new CLI writes stuff there
         
