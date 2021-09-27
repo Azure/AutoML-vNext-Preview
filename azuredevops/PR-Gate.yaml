@@ -1,0 +1,80 @@
+variables:
+- name: SubscriptionName
+  value: 'INFRA Project Vienna INT (589c7ae9-223e-45e3-a191-98433e0821a9)'
+- name: ConfigFileDirectory
+  value: configFiles
+- name: ConfigFileArtifact
+  value: WorkspaceConfiguration
+
+pr:
+- main
+
+trigger: none # No CI build
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+jobs:
+- job: RunTests
+  displayName: Run Tests
+  pool:
+    vmImage: ubuntu-latest
+  steps:
+  - checkout: self
+    fetchDepth: 1
+    clean: true
+
+  - task: UsePythonVersion@0
+    displayName: 'Use Python 3.6'
+    inputs:
+      versionSpec: '3.6'
+
+  - script: |
+      echo "##[section]Upgrading pip and setuptools..."
+      pip install --upgrade pip setuptools
+    failOnStderr: true
+    displayName: Install pip & setuptools
+
+  - powershell: |
+      Set-PSDebug -Trace 0
+      Install-Module powershell-yaml -Scope CurrentUser -Force
+    displayName: Install YAML extension for Powershell
+
+  - task: AzureCLI@2
+    displayName: Install AzureML CLI v2
+    inputs:
+      azureSubscription: '$(SubscriptionName)'
+      scriptType: pscore
+      scriptLocation: scriptPath
+      scriptPath: scripts/Install-SDKv2.ps1
+      failOnStandardError: false
+  
+  - task: AzureCLI@2
+    displayName: Obtain Workspace
+    inputs:
+      azureSubscription: '$(SubscriptionName)'
+      scriptType: pscore
+      scriptLocation: scriptPath
+      scriptPath: scripts/Obtain-Workspace.ps1
+      failOnStandardError: false # Since the new CLI writes stuff there
+
+  - powershell: |
+      mkdir $(ConfigFileDirectory)
+      cp workspace.yaml $(ConfigFileDirectory)
+      cp config.json $(ConfigFileDirectory)
+    displayName: Copy config files to separate directory
+
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: $(ConfigFileDirectory)
+      artifactName: $(ConfigFileArtifact)
+
+  - task: AzureCLI@2
+    displayName: Create Compute
+    inputs:
+      azureSubscription: '$(SubscriptionName)'
+      scriptType: pscore
+      scriptLocation: scriptPath
+      scriptPath: scripts/Create-Compute.ps1
+      failOnStandardError: false # Since the new CLI writes stuff there
+        

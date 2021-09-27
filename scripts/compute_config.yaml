@@ -1,0 +1,8 @@
+name: cpucluster
+type: amlcompute
+
+size: Standard_DS2_v2
+
+min_instances: 0
+max_instances: 2
+idle_time_before_scale_down: 100
