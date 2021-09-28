@@ -3,6 +3,11 @@
         "responsibleai-environment.yaml"
     ],
     "components" : [
-        "component_register_model.yaml"
+        "component_register_model.yaml",
+        "component_causal.yaml",
+        "component_counterfactual.yaml",
+        "component_error_analysis.yaml",
+        "component_explain.yaml",
+        "component_model_analysis.yaml"
     ]
 }
