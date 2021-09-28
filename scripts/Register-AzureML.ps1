@@ -79,3 +79,5 @@ foreach ($component_file in $reg_config.components){
     Register-Component -workspace_config $ws -component_config $component_config  -base_directory $component_directory -component_file $component_file
     Write-Host
 }
+Write-Host
+Write-Host "Component registration complete"
