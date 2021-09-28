@@ -1,0 +1,13 @@
+name: aml-rai-environment
+channels:
+  - conda-forge
+dependencies:
+  - python=3.6
+  - pip=20.0.2
+  - pip:
+    - pandas
+    - scikit-learn
+    - responsibleai
+    - mlflow
+    - azureml-mlflow
+    - azureml-responsibleai
