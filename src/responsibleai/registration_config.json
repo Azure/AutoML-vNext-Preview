@@ -1,0 +1,5 @@
+{
+    "environments" : [
+        "responsibleai-environment.yaml"
+    ]
+}
