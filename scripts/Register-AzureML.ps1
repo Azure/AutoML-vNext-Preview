@@ -57,6 +57,34 @@ function Register-Component(
     az ml component create --resource-group $workspace_config.resource_group --workspace $workspace_config.workspace_name --file $temp_file
 }
 
+function Register-Dataset(
+    $workspace_config,
+    $component_config,
+    [string]$base_directory,
+    $data_info
+)
+{
+    Push-Location $base_directory
+    try {      
+        python $data_info.script
+
+        foreach($data_yaml in $data_info.data_yamls)
+        {
+            $full_path = Join-Path -Path $base_directory -ChildPath $data_yaml
+            $temp_file = Join-Path -Path $base_directory -ChildPath "$data_yaml.updated"
+
+            Write-Host "Updating version in $data_yaml"
+            Replace-StringInFile -input_file $full_path -output_file $temp_file -target_string 'VERSION_REPLACEMENT_STRING' -replace_string $component_config.version
+
+            Write-Host "Registering $temp_file"
+            az ml data create --resource-group $workspace_config.resource_group --workspace $workspace_config.workspace_name --file $temp_file
+        }
+    }
+    finally {
+        Pop-Location
+    }
+}
+
 # Enable all the commands
 $Env:AZURE_ML_CLI_PRIVATE_FEATURES_ENABLED=$true
 
@@ -87,3 +115,8 @@ foreach ($component_file in $reg_config.components){
 }
 Write-Host
 Write-Host "Component registration complete"
+
+# Register the datasets
+foreach ($data_item in $reg_config.data){
+    Register-Dataset -workspace_config $ws -component_config $component_config  -base_directory $component_directory -data_info $data_item
+}

@@ -1,0 +1,13 @@
+{
+    "environments": [],
+    "components": [],
+    "data": [
+        {
+            "script" : "fetch_adult.py",
+            "data_yamls": [
+                "data_adult_test.yaml",
+                "data_adult_train.yaml"
+            ]
+        }
+    ]
+}

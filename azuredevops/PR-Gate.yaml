@@ -44,6 +44,10 @@ jobs:
     displayName: Install pip & setuptools
 
   - powershell: |
+      pip install -r requirement-dev.txt
+    displayName: Install pip requirements
+
+  - powershell: |
       Set-PSDebug -Trace 0
       Install-Module powershell-yaml -Scope CurrentUser -Force
     displayName: Install YAML extension for Powershell
@@ -95,4 +99,15 @@ jobs:
       scriptPath: scripts/Register-AzureML.ps1
       arguments:
         src/responsibleai/registration_config.json
+      failOnStandardError: false # Since the new CLI writes stuff there
+
+  - task: AzureCLI@2
+    displayName: Register Adult Dataset
+    inputs:
+      azureSubscription: '$(SubscriptionName)'
+      scriptType: pscore
+      scriptLocation: scriptPath
+      scriptPath: scripts/Register-AzureML.ps1
+      arguments:
+        test/data/adult/registration_config.json
       failOnStandardError: false # Since the new CLI writes stuff there
