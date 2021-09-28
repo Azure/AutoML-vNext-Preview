@@ -8,8 +8,8 @@ az extension remove -n ml
 # Add the new one
 az extension add -n ml -y
 
-# Check the commands
-az ml -h
-
 # Upgrade to latest version
 az extension update -n ml
+
+# Check the commands
+az ml -h
