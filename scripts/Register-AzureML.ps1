@@ -57,15 +57,20 @@ function Register-Component(
     az ml component create --resource-group $workspace_config.resource_group --workspace $workspace_config.workspace_name --file $temp_file
 }
 
+# Enable all the commands
+$Env:AZURE_ML_CLI_PRIVATE_FEATURES_ENABLED=$true
+
+# Read in the configuration files
 $ws = Read-JsonConfig('config.json')
 $component_config = Read-JsonConfig('component_config.json')
 $reg_config = Read-JsonConfig($path_to_registration_json)
 
-
+# Figure out the target directory
 $component_directory = [System.IO.Path]::GetDirectoryName($path_to_registration_json)
 Write-Host "Directory containing components: $component_directory"
 Write-Host
 
+# Register the environments
 foreach ($env_file in $reg_config.environments) {
     Write-Host "Registering environment $env_file"
     Register-Environment -workspace_config $ws -component_config $component_config  -base_directory $component_directory -environment_file $env_file
@@ -74,6 +79,7 @@ foreach ($env_file in $reg_config.environments) {
 Write-Host
 Write-Host "Environment registration complete"
 
+# Register the components
 foreach ($component_file in $reg_config.components){
     Write-Host "Registering component $component_file"
     Register-Component -workspace_config $ws -component_config $component_config  -base_directory $component_directory -component_file $component_file
