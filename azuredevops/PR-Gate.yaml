@@ -86,3 +86,13 @@ jobs:
       scriptPath: scripts/Create-Compute.ps1
       failOnStandardError: false # Since the new CLI writes stuff there
         
+  - task: AzureCLI@2
+    displayName: Register Responsible AI Components
+    inputs:
+      azureSubscription: '$(SubscriptionName)'
+      scriptType: pscore
+      scriptLocation: scriptPath
+      scriptPath: scripts/Register-AzureML.ps1
+      arguments:
+        - src/responsibleai/registration_config.json
+      failOnStandardError: false # Since the new CLI writes stuff there
