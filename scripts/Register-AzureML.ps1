@@ -68,6 +68,8 @@ function Register-Dataset(
     try {      
         python $data_info.script
 
+        ls
+
         foreach($data_yaml in $data_info.data_yamls)
         {
             $full_path = Join-Path -Path $base_directory -ChildPath $data_yaml

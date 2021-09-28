@@ -3,6 +3,7 @@ from sklearn.model_selection import train_test_split
 
 
 X, y = shap.datasets.adult()
+print("Data fetched")
 target_feature = "income"
 y = [1 if y_i else 0 for y_i in y]
 
@@ -14,5 +15,6 @@ data_train, data_test = train_test_split(
 )
 
 # Don't write out the row indices to the CSV.....
+print("Saving to files")
 data_train.to_parquet("adult_train.parquet", index=False)
 data_test.to_parquet("adult_test.parquet", index=False)
