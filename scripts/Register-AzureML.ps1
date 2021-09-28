@@ -68,13 +68,12 @@ function Register-Dataset(
     try {
         Write-Host "Running script $($data_info.script)"
         python $data_info.script
-
-        ls
+        Write-Host "Script completed"
 
         foreach($data_yaml in $data_info.data_yamls)
         {
-            $full_path = Join-Path -Path $base_directory -ChildPath $data_yaml
-            $temp_file = Join-Path -Path $base_directory -ChildPath "$data_yaml.updated"
+            $full_path = $data_yaml
+            $temp_file = "$data_yaml.updated"
 
             Write-Host "Updating version in $data_yaml"
             Replace-StringInFile -input_file $full_path -output_file $temp_file -target_string 'VERSION_REPLACEMENT_STRING' -replace_string $component_config.version
