@@ -9,9 +9,6 @@ from azureml.core import Run
 import mlflow
 import mlflow.sklearn
 
-import pandas as pd
-from sklearn.linear_model import LogisticRegression
-
 # Based on example:
 # https://docs.microsoft.com/en-us/azure/machine-learning/how-to-train-cli
 # which references
