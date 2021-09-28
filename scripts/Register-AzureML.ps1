@@ -65,7 +65,8 @@ function Register-Dataset(
 )
 {
     Push-Location $base_directory
-    try {      
+    try {
+        Write-Host "Running script $($data_info.script)"
         python $data_info.script
 
         ls
