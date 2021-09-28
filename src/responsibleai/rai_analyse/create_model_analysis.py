@@ -159,7 +159,7 @@ def main(args):
 
     _logger.info("Saving JSON for tool components")
     output_dict = {Constants.MA_RUN_ID_KEY: str(my_run.id)}
-    output_file = os.path.join(args.output_path, Constants.SURROGATE_FILENAME)
+    output_file = os.path.join(args.output_path, Constants.MODEL_ANALYSIS_PARENT_FILENAME)
     with open(output_file, "w") as of:
         json.dump(output_dict, of)
 

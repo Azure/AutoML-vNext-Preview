@@ -6,7 +6,7 @@ type: command_component
 inputs:
   comment:
     type: string
-  surrogacy_info:
+  model_analysis_info:
     type: path
 
 code:
@@ -17,4 +17,4 @@ environment: azureml:AML-RAI-Environment:VERSION_REPLACEMENT_STRING
 command: >-
   python create_explanation.py
   --comment '${{inputs.comment}}'
-  --surrogacy_info ${{inputs.surrogacy_info}}
+  --model_analysis_info ${{inputs.model_analysis_info}}

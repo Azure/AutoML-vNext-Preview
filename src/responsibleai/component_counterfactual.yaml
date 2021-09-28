@@ -6,7 +6,7 @@ type: command_component
 inputs:
   comment:
     type: string
-  surrogacy_info:
+  model_analysis_info:
     type: path
   total_CFs:
     type: integer
@@ -38,7 +38,7 @@ environment: azureml:AML-RAI-Environment:VERSION_REPLACEMENT_STRING
 command: >-
   python create_counterfactual.py
   --comment '${{inputs.comment}}'
-  --surrogacy_info ${{inputs.surrogacy_info}}
+  --model_analysis_info ${{inputs.model_analysis_info}}
   --total_CFs ${{inputs.total_CFs}}
   --method ${{inputs.method}}
   --desired_class ${{inputs.desired_class}}

@@ -6,7 +6,7 @@ type: command_component
 inputs:
   comment:
     type: string
-  surrogacy_info:
+  model_analysis_info:
     type: path
   max_depth:
     type: integer
@@ -26,7 +26,7 @@ environment: azureml:AML-RAI-Environment:VERSION_REPLACEMENT_STRING
 command: >-
   python create_error_analysis.py
   --comment '${{inputs.comment}}'
-  --surrogacy_info ${{inputs.surrogacy_info}}
+  --model_analysis_info ${{inputs.model_analysis_info}}
   --max_depth ${{inputs.max_depth}}
   --num_leaves ${{inputs.num_leaves}}
   --filter_features '${{inputs.filter_features}}'

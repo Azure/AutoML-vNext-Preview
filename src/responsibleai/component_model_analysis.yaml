@@ -25,7 +25,7 @@ inputs:
   categorical_column_names:
     type: string # Optional[List[str]]
 outputs:
-  surrogacy_info:
+  model_analysis_info:
     type: path
 code:
   local_path: ./rai_analyse/
@@ -42,4 +42,4 @@ command: >-
   --datastore_name ${{inputs.datastore_name}}
   --maximum_rows_for_test_dataset ${{inputs.maximum_rows_for_test_dataset}}
   --categorical_column_names '${{inputs.categorical_column_names}}'
-  --output_path ${{outputs.surrogacy_info}}
+  --output_path ${{outputs.model_analysis_info}}

@@ -6,7 +6,7 @@ type: command_component
 inputs:
   comment:
     type: string
-  surrogacy_info:
+  model_analysis_info:
     type: path
   treatment_features:
     type: string # JSON encoded list
@@ -58,7 +58,7 @@ environment: azureml:AML-RAI-Environment:VERSION_REPLACEMENT_STRING
 command: >-
   python create_causal.py
   --comment '${{inputs.comment}}'
-  --surrogacy_info ${{inputs.surrogacy_info}}
+  --model_analysis_info ${{inputs.model_analysis_info}}
   --treatment_features '${{inputs.treatment_features}}'
   --heterogeneity_features '${{inputs.heterogeneity_features}}'
   --nuisance_model ${{inputs.nuisance_model}}

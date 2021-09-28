@@ -19,7 +19,7 @@ def parse_args():
     # setup arg parser
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--surrogacy_info", type=str, required=True)
+    parser.add_argument("--model_analysis_info", type=str, required=True)
     parser.add_argument("--comment", type=str, required=True)
     parser.add_argument("--max_depth", type=int)
     parser.add_argument("--num_leaves", type=int)
@@ -34,13 +34,13 @@ def parse_args():
 
 def main(args):
     # Load the surrogacy info
-    surrogacy_file = os.path.join(args.surrogacy_info, Constants.SURROGATE_FILENAME)
+    surrogacy_file = os.path.join(args.model_analysis_info, Constants.MODEL_ANALYSIS_PARENT_FILENAME)
     with open(surrogacy_file, "r") as si:
-        surrogate = json.load(si)
-    _logger.info("Surrogate info: {0}".format(surrogate))
+        model_analysis_parent = json.load(si)
+    _logger.info("Model_analysis_parent info: {0}".format(model_analysis_parent))
 
     ws = Run.get_context().experiment.workspace
-    model_analysis_run = Run.get(ws, surrogate[Constants.MA_RUN_ID_KEY])
+    model_analysis_run = Run.get(ws, model_analysis_parent[Constants.MA_RUN_ID_KEY])
 
     req = ErrorAnalysisRequest(
         max_depth=args.max_depth, num_leaves=args.num_leaves, filter_features=args.filter_features, comment=args.comment
