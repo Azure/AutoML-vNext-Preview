@@ -3,4 +3,4 @@ name: AML-RAI-Environment
 version: VERSION_REPLACEMENT_STRING
 docker:
   image: mcr.microsoft.com/azureml/openmpi3.1.2-ubuntu18.04
-conda_file: file:conda-envs/python-aml-rai.yaml
+conda_file: file:conda_envs/python-aml-rai.yaml

@@ -26,13 +26,15 @@ function Replace-StringInFile(
 function Register-Environment(
     $workspace_config,
     $component_config,
+    [string]$base_directory,
     [string]$environment_file
 )
 {
-    $temp_file = "$environment_file.updated"
+    $full_path = Join-Path -Path $base_directory -ChildPath $environment_file
+    $temp_file = Join-Path -Path $base_directory -ChildPath "$environment_file.updated"
 
     Write-Host "Updating version in $environment_file"
-    Replace-StringInFile -input_file $environment_file -output_file $temp_file -target_string 'VERSION_REPLACEMENT_STRING' -replace_string $component_config.version
+    Replace-StringInFile -input_file $full_path -output_file $temp_file -target_string 'VERSION_REPLACEMENT_STRING' -replace_string $component_config.version
     
     Write-Host "Registering $temp_file"
     az ml environment create --resource-group $workspace_config.resource_group --workspace $workspace_config.workspace_name --file $temp_file
@@ -45,11 +47,7 @@ $reg_config = Read-JsonConfig($path_to_registration_json)
 
 $component_directory = [System.IO.Path]::GetDirectoryName($path_to_registration_json)
 Write-Host "Directory containing components: $component_directory"
-Push-Location $component_directory
 
 foreach ($env_file in $reg_config.environments) {
-    Register-Environment -workspace_config $ws -component_config $component_config -environment_file $env_file
+    Register-Environment -workspace_config $ws -component_config $component_config  -base_directory $component_directory -environment_file $env_file
 }
-
-
-Pop-Location
