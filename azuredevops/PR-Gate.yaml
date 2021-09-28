@@ -94,5 +94,5 @@ jobs:
       scriptLocation: scriptPath
       scriptPath: scripts/Register-AzureML.ps1
       arguments:
-        - src/responsibleai/registration_config.json
+        src/responsibleai/registration_config.json
       failOnStandardError: false # Since the new CLI writes stuff there
