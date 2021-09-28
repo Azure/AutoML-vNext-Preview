@@ -1,5 +1,8 @@
 {
     "environments" : [
         "responsibleai-environment.yaml"
+    ],
+    "components" : [
+        "component_register_model.yaml"
     ]
 }
