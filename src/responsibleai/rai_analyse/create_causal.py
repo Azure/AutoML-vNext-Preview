@@ -48,9 +48,9 @@ def parse_args():
 
 
 def main(args):
-    # Load the surrogacy info
-    surrogacy_file = os.path.join(args.model_analysis_info, Constants.MODEL_ANALYSIS_PARENT_FILENAME)
-    with open(surrogacy_file, "r") as si:
+    # Load the model_analysis_parent info
+    model_analysis_parent_file = os.path.join(args.model_analysis_info, Constants.MODEL_ANALYSIS_PARENT_FILENAME)
+    with open(model_analysis_parent_file, "r") as si:
         model_analysis_parent = json.load(si)
     _logger.info("Model_analysis_parent info: {0}".format(model_analysis_parent))
 
