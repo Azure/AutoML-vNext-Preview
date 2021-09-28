@@ -11,5 +11,8 @@ az extension add -n ml -y
 # Upgrade to latest version
 az extension update -n ml
 
+# Enable all the commands
+$Env:AZURE_ML_CLI_PRIVATE_FEATURES_ENABLED=$true
+
 # Check the commands
 az ml -h
