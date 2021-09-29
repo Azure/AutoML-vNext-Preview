@@ -1,3 +1,7 @@
+# ---------------------------------------------------------
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# ---------------------------------------------------------
+
 class Constants:
     MODEL_ID_KEY = "model_id"
     MODEL_INFO_FILENAME = "model_info.json"
