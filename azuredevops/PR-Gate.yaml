@@ -111,3 +111,14 @@ jobs:
       arguments:
         test/data/adult/registration_config.json
       failOnStandardError: false # Since the new CLI writes stuff there
+
+  - task: AzureCLI@2
+    displayName: Register Test-only components
+    inputs:
+      azureSubscription: '$(SubscriptionName)'
+      scriptType: pscore
+      scriptLocation: scriptPath
+      scriptPath: scripts/Register-AzureML.ps1
+      arguments:
+        test/components/registration_config.json
+      failOnStandardError: true
