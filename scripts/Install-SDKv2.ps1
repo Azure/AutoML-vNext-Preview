@@ -1,3 +1,7 @@
+# ---------------------------------------------------------
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# ---------------------------------------------------------
+
 # Instructions from:
 # https://docs.microsoft.com/en-us/azure/machine-learning/how-to-configure-cli
 

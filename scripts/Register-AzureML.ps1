@@ -1,3 +1,36 @@
+# ---------------------------------------------------------
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# ---------------------------------------------------------
+
+# Registers environments, components and datasets
+#
+# The AzureML objects to be registered are specified in a
+# JSON file passed on the command line
+#
+# {
+#     "environments": [env_file.yaml],
+#     "components": [component_file.yaml],
+#     "data": [
+#         {
+#             "script" : "data_fetch.py",
+#             "data_yamls": [
+#                 "data_1.yaml",
+#                 "data_2.yaml"
+#             ]
+#         }
+#     ]
+# }
+#
+# The 'environments' and 'components' keys are for lists of filenames
+# to be registered as each. Before registration, these will have the
+# VERSION_REPLACEMENT_STRING replaced by the value specified in the
+# top level component_config.json (created by Obtain-Workspace.ps1)
+#
+# Datasets are slightly more involved. First, the specified script is run in the
+# same directory as the JSON file from the command line.
+# Then the YAMLs are processed for VERSION_REPLACEMENT_STRING, and
+# registered as datasets
+
 param (
         [string]$path_to_registration_json
 )

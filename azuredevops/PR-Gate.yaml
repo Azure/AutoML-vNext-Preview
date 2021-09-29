@@ -1,3 +1,7 @@
+# ---------------------------------------------------------
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# ---------------------------------------------------------
+
 variables:
 - name: SubscriptionName
   value: 'INFRA Project Vienna INT (589c7ae9-223e-45e3-a191-98433e0821a9)'
