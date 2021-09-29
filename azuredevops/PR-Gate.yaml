@@ -74,6 +74,7 @@ jobs:
       mkdir $(ConfigFileDirectory)
       cp workspace.yaml $(ConfigFileDirectory)
       cp config.json $(ConfigFileDirectory)
+      cp component_config.json $(ConfigFileDirectory)
     displayName: Copy config files to separate directory
 
   - task: PublishPipelineArtifact@1
