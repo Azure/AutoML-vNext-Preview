@@ -121,4 +121,4 @@ jobs:
       scriptPath: scripts/Register-AzureML.ps1
       arguments:
         test/components/registration_config.json
-      failOnStandardError: true
+      failOnStandardError: false # Since the new CLI writes stuff there
