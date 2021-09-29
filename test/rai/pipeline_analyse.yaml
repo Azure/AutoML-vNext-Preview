@@ -15,7 +15,7 @@ outputs:
   my_model_directory:
     data:
       datastore: azureml:workspaceblobstore
-  surrogate_info:
+  ma_info:
     data:
       datastore: azureml:workspaceblobstore
   model_info:
@@ -62,21 +62,21 @@ jobs:
       datastore_name: workspaceblobstore
       categorical_column_names: '["Race", "Sex", "Workclass", "Marital Status", "Country", "Occupation"]'
     outputs:
-      surrogacy_info: ${{outputs.surrogate_info}}
+      model_analysis_info: ${{outputs.ma_info}}
 
   explain_01:
     type: component_job
     component: azureml:AzureMLModelAnalysisExplanation:VERSION_REPLACEMENT_STRING
     inputs:
       comment: Some random string
-      surrogacy_info: ${{jobs.create-ma-job.outputs.surrogacy_info}}
+      model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_info}}
 
   causal_01:
     type: component_job
     component: azureml:AzureMLModelAnalysisCausal:VERSION_REPLACEMENT_STRING
     inputs:
       comment: Some causal comment
-      surrogacy_info: ${{jobs.create-ma-job.outputs.surrogacy_info}}
+      model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_info}}
       treatment_features: '["Age", "Sex"]'
 
   counterfactual_01:
@@ -84,7 +84,7 @@ jobs:
     component: azureml:AzureMLModelAnalysisCounterfactual:VERSION_REPLACEMENT_STRING
     inputs:
       comment: A counterfactual comment
-      surrogacy_info: ${{jobs.create-ma-job.outputs.surrogacy_info}}
+      model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_info}}
       total_CFs: 10
       desired_class: opposite
 
@@ -93,4 +93,4 @@ jobs:
     component: azureml:AzureMLModelAnalysisErrorAnalysis:VERSION_REPLACEMENT_STRING
     inputs:
       comment: A comment analysing errors
-      surrogacy_info: ${{jobs.create-ma-job.outputs.surrogacy_info}}
+      model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_info}}
