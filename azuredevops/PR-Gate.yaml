@@ -39,9 +39,9 @@ jobs:
 
   - script: |
       echo "##[section]Upgrading pip and setuptools..."
-      pip install --upgrade pip setuptools
+      pip install --upgrade pip setuptools wheel
     failOnStderr: true
-    displayName: Install pip & setuptools
+    displayName: Install pip etc.
 
   - powershell: |
       pip install -r requirement-dev.txt
