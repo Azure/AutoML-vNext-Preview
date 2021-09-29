@@ -122,3 +122,20 @@ jobs:
       arguments:
         test/components/registration_config.json
       failOnStandardError: false # Since the new CLI writes stuff there
+
+  - task: AzureCLI@2
+    displayName: Run tests
+    inputs:
+      azureSubscription: '$(SubscriptionName)'
+      addSpnToEnvironment: true
+      scriptType: pscore
+      scriptLocation: scriptPath
+      scriptPath: scripts/Run-Tests.ps1
+      failOnStandardError: false # Since the new CLI writes stuff there
+
+  - task: PublishTestResults@2
+    displayName: Publish Test Results
+    inputs:
+      testResultsFormat: JUnit
+      testResultsFiles: '**/junit.xml'
+      searchFolder: '$(System.DefaultWorkingDirectory)'
