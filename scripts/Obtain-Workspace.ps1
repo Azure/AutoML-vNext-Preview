@@ -1,3 +1,16 @@
+# ---------------------------------------------------------
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# ---------------------------------------------------------
+
+# Obtains a workspace for running tests
+# If a workspace younger than window_seconds exists, it will be reused
+# If not, a fresh workspace will be created
+# Most of the tracking it actually done through the parent resource groups
+
+# This also produces two JSON files used by subsequent scripts:
+# config.json -> A regular workspace config JSON file
+# component_config.json -> Specifies the version of everything to upload (as epoch_seconds)
+
 $baseName="amlisdkv2"
 $location="WestUS"
 $createdTag="createdAt"
@@ -108,6 +121,16 @@ function Create-ConfigJson(
     ConvertTo-Json $json_config | Out-File -FilePath 'config.json' -Encoding ascii
 }
 
+function Create-ComponentConfigJson(
+    [int]$epoch_secs
+)
+{
+    $json_config = @{}
+    $json_config['version'] = $epoch_secs
+
+    ConvertTo-Json $json_config | Out-File -FilePath 'component_config.json' -Encoding ascii
+}
+
 # Install-Module powershell-yaml -Scope CurrentUser
 
 $epoch_secs = Get-EpochSecs
@@ -140,6 +163,12 @@ Write-Host "Creating config.json"
 Write-Host
 
 Create-ConfigJson($workspace)
+
+Write-Host
+Write-Host "Creating component_config.json"
+Write-Host
+
+Create-ComponentConfigJson($epoch_secs)
 
 Write-Host
 Write-Host "Checking for old resource groups"

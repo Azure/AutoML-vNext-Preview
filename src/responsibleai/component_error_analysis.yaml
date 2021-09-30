@@ -1,0 +1,32 @@
+name: AzureMLModelAnalysisErrorAnalysis
+display_name: ErrorAnalysis with azureml-responsibleai
+version: VERSION_REPLACEMENT_STRING
+type: command_component
+
+inputs:
+  comment:
+    type: string
+  model_analysis_info:
+    type: path
+  max_depth:
+    type: integer
+    default: 3
+  num_leaves:
+    type: integer
+    default: 31
+  filter_features:
+    type: string
+    default: 'null'
+
+code:
+  local_path: ./rai_analyse/
+
+environment: azureml:AML-RAI-Environment:VERSION_REPLACEMENT_STRING
+
+command: >-
+  python create_error_analysis.py
+  --comment '${{inputs.comment}}'
+  --model_analysis_info ${{inputs.model_analysis_info}}
+  --max_depth ${{inputs.max_depth}}
+  --num_leaves ${{inputs.num_leaves}}
+  --filter_features '${{inputs.filter_features}}'

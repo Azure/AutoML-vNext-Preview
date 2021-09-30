@@ -1,0 +1,20 @@
+name: AzureMLModelAnalysisExplanation
+display_name: Explanation with azureml-responsibleai
+version: VERSION_REPLACEMENT_STRING
+type: command_component
+
+inputs:
+  comment:
+    type: string
+  model_analysis_info:
+    type: path
+
+code:
+  local_path: ./rai_analyse/
+
+environment: azureml:AML-RAI-Environment:VERSION_REPLACEMENT_STRING
+
+command: >-
+  python create_explanation.py
+  --comment '${{inputs.comment}}'
+  --model_analysis_info ${{inputs.model_analysis_info}}

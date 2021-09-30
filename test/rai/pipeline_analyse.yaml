@@ -1,0 +1,96 @@
+name: AML_RAI_Analysis_VERSION_REPLACEMENT_STRING
+experiment_name: AML_RAI_VERSION_REPLACEMENT_STRING
+type: pipeline_job
+
+inputs:
+  target_column_name: income
+  my_training_data:
+    data: azureml:Adult_Train_PQ
+    mode: mount
+  my_test_data:
+    data: azureml:Adult_Test_PQ
+    mode: mount
+
+outputs:
+  my_model_directory:
+    data:
+      datastore: azureml:workspaceblobstore
+  ma_info:
+    data:
+      datastore: azureml:workspaceblobstore
+  model_info:
+    data:
+      datastore: azureml:workspaceblobstore
+
+defaults:
+  component_job:
+    datastore: azureml:workspaceblobstore
+    compute:
+      target: azureml:cpucluster
+    environment: azureml:AML-RAI-Environment:VERSION_REPLACEMENT_STRING
+
+jobs:
+  train-model-job:
+    type: component_job
+    component: azureml:TrainForRAI:VERSION_REPLACEMENT_STRING
+    inputs:
+      training_data: ${{inputs.my_training_data}}
+      target_column_name: ${{inputs.target_column_name}}
+    outputs:
+      model_output: ${{outputs.my_model_directory}}
+
+  register-model-job:
+    type: component_job
+    component: azureml:RegisterModel:VERSION_REPLACEMENT_STRING
+    inputs:
+      model_input_path: ${{jobs.train-model-job.outputs.model_output}}
+      model_base_name: component_registered_lr_01
+    outputs:
+      model_info_output_path: ${{outputs.model_info}}
+
+  create-ma-job:
+    type: component_job
+    component: azureml:AzureMLModelAnalysis:VERSION_REPLACEMENT_STRING
+    inputs:
+      title: Experimenting again once more and again
+      task_type: classification
+      model_info_path: ${{jobs.register-model-job.outputs.model_info_output_path}}
+      train_dataset: ${{inputs.my_training_data}}
+      test_dataset: ${{inputs.my_test_data}}
+      target_column_name: ${{inputs.target_column_name}}
+      X_column_names: '["Age", "Workclass", "Education-Num", "Marital Status", "Occupation", "Relationship", "Race", "Sex", "Capital Gain", "Capital Loss", "Hours per week", "Country"]'
+      datastore_name: workspaceblobstore
+      categorical_column_names: '["Race", "Sex", "Workclass", "Marital Status", "Country", "Occupation"]'
+    outputs:
+      model_analysis_info: ${{outputs.ma_info}}
+
+  explain_01:
+    type: component_job
+    component: azureml:AzureMLModelAnalysisExplanation:VERSION_REPLACEMENT_STRING
+    inputs:
+      comment: Some random string
+      model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_info}}
+
+  causal_01:
+    type: component_job
+    component: azureml:AzureMLModelAnalysisCausal:VERSION_REPLACEMENT_STRING
+    inputs:
+      comment: Some causal comment
+      model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_info}}
+      treatment_features: '["Age", "Sex"]'
+
+  counterfactual_01:
+    type: component_job
+    component: azureml:AzureMLModelAnalysisCounterfactual:VERSION_REPLACEMENT_STRING
+    inputs:
+      comment: A counterfactual comment
+      model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_info}}
+      total_CFs: 10
+      desired_class: opposite
+
+  error_analysis_01:
+    type: component_job
+    component: azureml:AzureMLModelAnalysisErrorAnalysis:VERSION_REPLACEMENT_STRING
+    inputs:
+      comment: A comment analysing errors
+      model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_info}}

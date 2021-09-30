@@ -1,3 +1,9 @@
+# ---------------------------------------------------------
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# ---------------------------------------------------------
+
+# Uses a config.json to get the workspace information
+
 Write-Host
 Write-Host "Reading config.json"
 Write-Host

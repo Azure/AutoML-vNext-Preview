@@ -1,3 +1,7 @@
+# ---------------------------------------------------------
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# ---------------------------------------------------------
+
 variables:
 - name: SubscriptionName
   value: 'INFRA Project Vienna INT (589c7ae9-223e-45e3-a191-98433e0821a9)'
@@ -10,6 +14,14 @@ pr:
 - main
 
 trigger: none # No CI build
+
+schedules:
+- cron: "0 10 * * *" # Time is UTC
+  displayName: Nightly Build
+  branches:
+    include:
+      - main
+  always: true
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -31,9 +43,13 @@ jobs:
 
   - script: |
       echo "##[section]Upgrading pip and setuptools..."
-      pip install --upgrade pip setuptools
+      pip install --upgrade pip setuptools wheel
     failOnStderr: true
-    displayName: Install pip & setuptools
+    displayName: Install pip etc.
+
+  - powershell: |
+      pip install -r requirement-dev.txt
+    displayName: Install pip requirements
 
   - powershell: |
       Set-PSDebug -Trace 0
@@ -62,6 +78,7 @@ jobs:
       mkdir $(ConfigFileDirectory)
       cp workspace.yaml $(ConfigFileDirectory)
       cp config.json $(ConfigFileDirectory)
+      cp component_config.json $(ConfigFileDirectory)
     displayName: Copy config files to separate directory
 
   - task: PublishPipelineArtifact@1
@@ -78,3 +95,52 @@ jobs:
       scriptPath: scripts/Create-Compute.ps1
       failOnStandardError: false # Since the new CLI writes stuff there
         
+  - task: AzureCLI@2
+    displayName: Register Responsible AI Components
+    inputs:
+      azureSubscription: '$(SubscriptionName)'
+      scriptType: pscore
+      scriptLocation: scriptPath
+      scriptPath: scripts/Register-AzureML.ps1
+      arguments:
+        src/responsibleai/registration_config.json
+      failOnStandardError: false # Since the new CLI writes stuff there
+
+  - task: AzureCLI@2
+    displayName: Register Adult Dataset
+    inputs:
+      azureSubscription: '$(SubscriptionName)'
+      scriptType: pscore
+      scriptLocation: scriptPath
+      scriptPath: scripts/Register-AzureML.ps1
+      arguments:
+        test/data/adult/registration_config.json
+      failOnStandardError: false # Since the new CLI writes stuff there
+
+  - task: AzureCLI@2
+    displayName: Register Test-only components
+    inputs:
+      azureSubscription: '$(SubscriptionName)'
+      scriptType: pscore
+      scriptLocation: scriptPath
+      scriptPath: scripts/Register-AzureML.ps1
+      arguments:
+        test/components/registration_config.json
+      failOnStandardError: false # Since the new CLI writes stuff there
+
+  - task: AzureCLI@2
+    displayName: Run tests
+    inputs:
+      azureSubscription: '$(SubscriptionName)'
+      addSpnToEnvironment: true
+      scriptType: pscore
+      scriptLocation: scriptPath
+      scriptPath: scripts/Run-Tests.ps1
+      failOnStandardError: false # Since the new CLI writes stuff there
+
+  - task: PublishTestResults@2
+    displayName: Publish Test Results
+    inputs:
+      testResultsFormat: JUnit
+      testResultsFiles: '**/junit.xml'
+      searchFolder: '$(System.DefaultWorkingDirectory)'

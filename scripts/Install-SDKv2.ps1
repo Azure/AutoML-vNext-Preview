@@ -1,3 +1,7 @@
+# ---------------------------------------------------------
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# ---------------------------------------------------------
+
 # Instructions from:
 # https://docs.microsoft.com/en-us/azure/machine-learning/how-to-configure-cli
 
@@ -8,8 +12,11 @@ az extension remove -n ml
 # Add the new one
 az extension add -n ml -y
 
-# Check the commands
-az ml -h
-
 # Upgrade to latest version
 az extension update -n ml
+
+# Enable all the commands
+$Env:AZURE_ML_CLI_PRIVATE_FEATURES_ENABLED=$true
+
+# Check the commands
+az ml -h
