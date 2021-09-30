@@ -39,7 +39,7 @@ def main(args):
     current_experiment = Run.get_context().experiment
     tracking_uri = current_experiment.workspace.get_mlflow_tracking_uri()
     print("tracking_uri: {0}".format(tracking_uri))
-    # mlflow.set_tracking_uri(tracking_uri)
+    mlflow.set_tracking_uri(tracking_uri)
     # mlflow.set_experiment(current_experiment.name)
 
     print("Loading model")
