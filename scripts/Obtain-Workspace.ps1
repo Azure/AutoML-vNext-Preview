@@ -12,14 +12,14 @@
 # component_config.json -> Specifies the version of everything to upload (as epoch_seconds)
 
 $baseName="amlisdkv2"
-$location="WestCentralUS"
+$location="EastUS"
 $createdTag="createdAt"
 $ownerTeamTagKey="owningTeam"
 $ownerTeamTagValue="AML_Intelligence"
 $purposeTagKey="workspacePurpose"
 $purposeTagValue="Automated_Tests_for_DPv2"
 $workspaceYAML="workspace.yaml"
-$window_seconds = 24*36
+$window_seconds = 24*3600
 
 function Get-RecentResourceGroups(
     [int]$min_epoch
