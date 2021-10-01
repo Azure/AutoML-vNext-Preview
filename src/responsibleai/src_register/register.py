@@ -39,8 +39,8 @@ def main(args):
     current_experiment = Run.get_context().experiment
     tracking_uri = current_experiment.workspace.get_mlflow_tracking_uri()
     print("tracking_uri: {0}".format(tracking_uri))
-    mlflow.set_tracking_uri(tracking_uri)
-    mlflow.set_experiment(current_experiment.name)
+    # mlflow.set_tracking_uri(tracking_uri)
+    # mlflow.set_experiment(current_experiment.name)
 
     print("Loading model")
     mlflow_model = mlflow.sklearn.load_model(args.model_input_path)
@@ -64,12 +64,6 @@ def main(args):
 # run script
 if __name__ == "__main__":
     # add space in logs
-    print("*" * 60)
-    print("\n\n")
-
-    for k, _ in os.environ.items():
-        print(k)
-    
     print("*" * 60)
     print("\n\n")
 
