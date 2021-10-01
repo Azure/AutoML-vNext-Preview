@@ -1,7 +1,7 @@
 name: RegisterModel
 display_name: Register Model
 version: VERSION_REPLACEMENT_STRING
-type: command_component
+type: command
 is_deterministic: False
 inputs:
   model_input_path:

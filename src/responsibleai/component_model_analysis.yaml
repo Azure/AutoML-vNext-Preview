@@ -1,7 +1,7 @@
 name: AzureMLModelAnalysis
 display_name: Model Analysis with azureml-responsibleai
 version: VERSION_REPLACEMENT_STRING
-type: command_component
+type: command
 inputs:
   title:
     type: string

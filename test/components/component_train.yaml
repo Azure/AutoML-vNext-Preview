@@ -1,7 +1,7 @@
 name: TrainForRAI
 display_name: Train for RAI
 version: VERSION_REPLACEMENT_STRING
-type: command_component
+type: command
 inputs:
   training_data:
     type: path

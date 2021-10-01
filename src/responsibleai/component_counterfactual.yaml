@@ -1,7 +1,7 @@
 name: AzureMLModelAnalysisCounterfactual
 display_name: Counterfactual with azureml-responsibleai
 version: VERSION_REPLACEMENT_STRING
-type: command_component
+type: command
 
 inputs:
   comment:
