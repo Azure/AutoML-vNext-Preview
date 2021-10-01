@@ -12,7 +12,7 @@
 # component_config.json -> Specifies the version of everything to upload (as epoch_seconds)
 
 $baseName="amlisdkv2"
-$location="EastUS2"
+$location="WestCentralUS"
 $createdTag="createdAt"
 $ownerTeamTagKey="owningTeam"
 $ownerTeamTagValue="AML_Intelligence"
