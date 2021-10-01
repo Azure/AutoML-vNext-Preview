@@ -20,3 +20,6 @@ $Env:AZURE_ML_CLI_PRIVATE_FEATURES_ENABLED=$true
 
 # Check the commands
 az ml -h
+
+# Show the version
+az version
