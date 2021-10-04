@@ -32,7 +32,8 @@ def ml_client(workspace_config):
         workspace_config['subscription_id'],
         workspace_config['resource_group'],
         workspace_config['workspace_name'],
-        logging_enable=True
+        logging_enable=True,
+        debug=True
     )
 
     return client
