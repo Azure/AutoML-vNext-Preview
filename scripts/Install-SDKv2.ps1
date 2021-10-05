@@ -13,7 +13,7 @@ az extension remove -n ml
 Write-Host
 Write-Host "Installing new ml extension"
 # az extension add -n ml -y
-az extension add --source https://azuremlsdktestpypi.blob.core.windows.net/wheels/sdk-cli-v2/ml-0.0.17_october_cand-py3-none-any.whl --yes
+az extension add --source https://azuremlsdktestpypi.blob.core.windows.net/wheels/sdk-cli-v2/ml-0.0.18_october_cand-py3-none-any.whl --yes
 
 # Upgrade to latest version
 # az extension update -n ml
