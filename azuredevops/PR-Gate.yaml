@@ -46,6 +46,7 @@ jobs:
       pip install --upgrade pip setuptools wheel
     failOnStderr: true
     displayName: Install pip etc.
+    condition: never()
 
   - powershell: |
       pip install -r requirement-dev.txt
