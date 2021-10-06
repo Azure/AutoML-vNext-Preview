@@ -1,3 +1,4 @@
+$schema: https://azuremlschemas.azureedge.net/preview/commandComponent.schema.json
 name: AzureMLModelAnalysisCausal
 display_name: Causal with azureml-responsibleai
 version: VERSION_REPLACEMENT_STRING
