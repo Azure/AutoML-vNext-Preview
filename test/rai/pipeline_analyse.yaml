@@ -89,3 +89,4 @@ jobs:
     inputs:
       comment: A comment analysing errors
       model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_info}}
+      filter_features: 'null'
