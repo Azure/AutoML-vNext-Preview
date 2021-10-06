@@ -46,7 +46,7 @@ jobs:
       pip install --upgrade pip setuptools wheel
     failOnStderr: true
     displayName: Install pip etc.
-    condition: never()
+    enabled: false # Having trouble with latest pip and SDK wheels
 
   - powershell: |
       pip install -r requirement-dev.txt
