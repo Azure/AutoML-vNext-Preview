@@ -9,6 +9,8 @@ variables:
   value: configFiles
 - name: ConfigFileArtifact
   value: WorkspaceConfiguration
+- name: CullOldWorkspaces
+  value: true
 
 pr:
 - main
@@ -73,6 +75,8 @@ jobs:
       scriptLocation: scriptPath
       scriptPath: scripts/Obtain-Workspace.ps1
       failOnStandardError: false # Since the new CLI writes stuff there
+    env:
+      CullOldWorkspaces: $(CullOldWorkspaces)
 
   - powershell: |
       mkdir $(ConfigFileDirectory)
