@@ -11,6 +11,8 @@ variables:
   value: WorkspaceConfiguration
 - name: CullOldWorkspaces
   value: true
+- name: WorkspaceLocation
+  value: EastUS
 
 pr:
 - main
@@ -77,6 +79,7 @@ jobs:
       failOnStandardError: false # Since the new CLI writes stuff there
     env:
       CullOldWorkspaces: $(CullOldWorkspaces)
+      WorkspaceLocation: $(WorkspaceLocation)
 
   - powershell: |
       mkdir $(ConfigFileDirectory)

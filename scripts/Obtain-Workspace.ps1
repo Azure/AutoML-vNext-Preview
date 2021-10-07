@@ -12,7 +12,7 @@
 # component_config.json -> Specifies the version of everything to upload (as epoch_seconds)
 
 $baseName = "amlisdkv2"
-$location = "WestUS"
+$location = $env:WorkspaceLocation
 $createdTag = "createdAt"
 $ownerTeamTagKey = "owningTeam"
 $ownerTeamTagValue = "AML_Intelligence"
@@ -20,7 +20,7 @@ $purposeTagKey = "workspacePurpose"
 $purposeTagValue = "Automated_Tests_for_DPv2"
 $workspaceYAML = "workspace.yaml"
 $window_seconds = 24 * 36
-$cullWorkspaces = $Env:CullWorkspaces
+$cullWorkspaces = $env:CullWorkspaces
 
 function Get-RecentResourceGroups(
     [int]$min_epoch
@@ -82,7 +82,7 @@ function Create-EpochWorkspace(
     $rg_name = "$basename-rg-$epoch_secs"
     $ws_name = "$basename$epoch_secs"
 
-    Write-Host "Creating workspace $ws_name in resource group $rg_name"
+    Write-Host "Creating workspace $ws_name in resource group $rg_name in region $location"
 
     $ws_data = @{}
     $ws_data['name'] = $ws_name
