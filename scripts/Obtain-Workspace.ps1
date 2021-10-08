@@ -5,7 +5,8 @@
 # Obtains a workspace for running tests
 # If a workspace younger than window_seconds exists, it will be reused
 # If not, a fresh workspace will be created
-# Most of the tracking it actually done through the parent resource groups
+# Most of the tracking is actually done through the parent resource groups
+# If cullWorkspaces is set, then workspaces older than 2*window_seconds are deleted
 
 # This also produces two JSON files used by subsequent scripts:
 # config.json -> A regular workspace config JSON file
@@ -20,16 +21,17 @@ $purposeTagKey = "workspacePurpose"
 $purposeTagValue = "Automated_Tests_for_DPv2"
 $workspaceYAML = "workspace.yaml"
 $window_seconds = $env:WORKSPACE_WINDOW_SECONDS
-$cullWorkspaces = $env:OLD_WORKSPACES -eq "Cull"
+$cullWorkspaces = $env:OLD_WORKSPACES_HANDLING -eq "Cull"
 
 function Get-RecentResourceGroups(
     [int]$min_epoch
 ) {
+    # Returns resource groups created after the time specified by min_epoch
+    # Uses the createdTag for this purpose
     Write-Host "Searching for recent resource groups"
     Write-Host "Minimum Epoch: $min_epoch"
     # Would be nice to do this server-side
     $all_groups = az group list | ConvertFrom-Json
-
 
     $filtered_groups = $all_groups.Where({ $_.name.contains($baseName) -and $_.tags.$createdTag -gt $min_epoch })
 
@@ -40,11 +42,12 @@ function Get-RecentResourceGroups(
 function Get-OldResourceGroups(
     [int]$max_epoch
 ) {
+    # Returns resource groups created before the time specified by max_epoch
+    # Uses the createdTag for this purpose
     Write-Host "Searching for older resource groups"
     Write-Host "Maximum Epoch: $max_epoch"
     # Would be nice to do this server-side
     $all_groups = az group list | ConvertFrom-Json
-
 
     $filtered_groups = $all_groups.Where({ $_.name.contains($baseName) -and $_.tags.$createdTag -lt $max_epoch })
 
@@ -129,6 +132,23 @@ function Create-ComponentConfigJson(
 
 $epoch_secs = Get-EpochSecs
 
+if ( $cullWorkspaces ) {
+    Write-Host "Checking for old resource groups ($cullWorkspaces)"
+    Write-Host 
+    $old_rg_list = Get-OldResourceGroups($epoch_secs - 2 * $window_seconds)
+    if ( $old_rg_list.count -gt 0) {
+        Write-Host "Found $($old_rg_list.count) resource groups to clean up"
+        foreach ( $rg in $old_rg_list) {
+            Write-Host "Cleaning up $($rg.name)"
+            az group delete --name $rg.name --yes
+        }
+    }
+    else {
+        Write-Host "No old resource groups found"
+    }
+} else {
+    Write-Host "Skipping old resource group check ($cullWorkspaces)"
+}
 
 Write-Host
 Write-Host "Creating workspace if one not found"
@@ -164,23 +184,3 @@ Write-Host
 
 Create-ComponentConfigJson($epoch_secs)
 
-
-
-Write-Host
-if ( $cullWorkspaces ) {
-    Write-Host "Checking for old resource groups ($cullWorkspaces)"
-    Write-Host 
-    $old_rg_list = Get-OldResourceGroups($epoch_secs - 2 * $window_seconds)
-    if ( $old_rg_list.count -gt 0) {
-        Write-Host "Found $($old_rg_list.count) resource groups to clean up"
-        foreach ( $rg in $old_rg_list) {
-            Write-Host "Cleaning up $($rg.name)"
-            az group delete --name $rg.name --yes
-        }
-    }
-    else {
-        Write-Host "No old resource groups found"
-    }
-} else {
-    Write-Host "Skipping old resource group check ($cullWorkspaces)"
-}
