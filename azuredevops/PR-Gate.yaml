@@ -21,7 +21,7 @@ parameters:
     - WestUS
 - name: workspaceWindowSeconds
   displayName: Workspace Active Window (seconds)
-  type: integer
+  type: number
   default: 86400
 
 variables:
