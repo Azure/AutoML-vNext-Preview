@@ -55,7 +55,7 @@ function Get-WorkspaceFromResourceGroup(
     [string]$resource_group_name
 ) {
     Write-Host "Checking resource group $resource_group_name"
-    $workspaces = az ml workspace list --resource-group $resource_group_name | ConvertFrom-Json
+    $workspaces = az ml workspace list --resource-group $resource_group_name --output json | ConvertFrom-Json
 
     $filtered_workspaces = $workspaces.Where({ $_.name.contains($baseName) })
 
