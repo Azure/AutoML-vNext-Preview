@@ -133,7 +133,7 @@ function Create-ComponentConfigJson(
 $epoch_secs = Get-EpochSecs
 
 if ( $cullWorkspaces ) {
-    Write-Host "Checking for old resource groups ($cullWorkspaces)"
+    Write-Host "Checking for old resource groups"
     Write-Host 
     $old_rg_list = Get-OldResourceGroups($epoch_secs - 2 * $window_seconds)
     if ( $old_rg_list.count -gt 0) {
@@ -147,7 +147,7 @@ if ( $cullWorkspaces ) {
         Write-Host "No old resource groups found"
     }
 } else {
-    Write-Host "Skipping old resource group check ($cullWorkspaces)"
+    Write-Host "Skipping old resource group check"
 }
 
 Write-Host
