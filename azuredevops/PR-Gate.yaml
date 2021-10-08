@@ -11,7 +11,7 @@ parameters:
     - Cull
     - Keep
 - name: workspaceLocation
-  display: Workspace Location
+  displayName: Workspace Location
   type: string
   default: EastUS
   values:
