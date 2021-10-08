@@ -28,7 +28,7 @@ function Get-RecentResourceGroups(
     Write-Host "Searching for recent resource groups"
     Write-Host "Minimum Epoch: $min_epoch"
     # Would be nice to do this server-side
-    $all_groups = az group list | ConvertFrom-Json
+    $all_groups = az group list --output json | ConvertFrom-Json
 
 
     $filtered_groups = $all_groups.Where({ $_.name.contains($baseName) -and $_.tags.$createdTag -gt $min_epoch })
