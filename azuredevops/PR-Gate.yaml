@@ -17,7 +17,7 @@ parameters:
   values:
     - CentralUSEUAP
     - EastUS
-    - EastUSEUAP
+    - EastUS2EUAP
     - WestUS
 - name: workspaceWindowSeconds
   displayName: Workspace Active Window (seconds)
