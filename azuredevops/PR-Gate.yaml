@@ -19,6 +19,10 @@ parameters:
     - EastUS
     - EastUSEUAP
     - WestUS
+- name: workspaceWindowSeconds
+  displayName: Workspace Active Window (seconds)
+  type: int
+  default: 86400
 
 variables:
 - name: SubscriptionName
@@ -94,6 +98,7 @@ jobs:
     env:
       OLD_WORKSPACES: ${{parameters.oldWorkspaces}}
       WORKSPACE_LOCATION: ${{parameters.workspaceLocation}}
+      WORKSPACE_WINDOW_SECONDS: ${{parameters.workspaceWindowSeconds}}
 
   - powershell: |
       mkdir $(ConfigFileDirectory)
