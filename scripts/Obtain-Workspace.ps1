@@ -20,7 +20,7 @@ $purposeTagKey = "workspacePurpose"
 $purposeTagValue = "Automated_Tests_for_DPv2"
 $workspaceYAML = "workspace.yaml"
 $window_seconds = 24 * 36
-$cullWorkspaces = $env:CULL_OLD_WORKSPACES
+$cullWorkspaces = $env:OLD_WORKSPACES -eq "Cull"
 
 function Get-RecentResourceGroups(
     [int]$min_epoch

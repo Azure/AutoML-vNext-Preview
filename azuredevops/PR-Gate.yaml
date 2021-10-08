@@ -2,6 +2,24 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # ---------------------------------------------------------
 
+parameters:
+- name: oldWorkspaces
+  displayName: How to handle old workspaces
+  type: string
+  default: Cull
+  values:
+    - Cull
+    - Keep
+- name: workspaceLocation
+  display: Workspace Location
+  type: string
+  default: EastUS
+  values:
+    - CentralUSEUAP
+    - EastUS
+    - EastUSEUAP
+    - WestUS
+
 variables:
 - name: SubscriptionName
   value: 'INFRA Project Vienna INT (589c7ae9-223e-45e3-a191-98433e0821a9)'
@@ -9,10 +27,6 @@ variables:
   value: configFiles
 - name: ConfigFileArtifact
   value: WorkspaceConfiguration
-- name: CullOldWorkspaces
-  value: true
-- name: WorkspaceLocation
-  value: EastUS
 
 pr:
 - main
@@ -78,8 +92,8 @@ jobs:
       scriptPath: scripts/Obtain-Workspace.ps1
       failOnStandardError: false # Since the new CLI writes stuff there
     env:
-      CULL_OLD_WORKSPACES: $(CullOldWorkspaces)
-      WORKSPACE_LOCATION: $(WorkspaceLocation)
+      OLD_WORKSPACES: ${{parameters.oldWorkspaces}}
+      WORKSPACE_LOCATION: ${{parameters.workspaceLocation}}
 
   - powershell: |
       mkdir $(ConfigFileDirectory)
