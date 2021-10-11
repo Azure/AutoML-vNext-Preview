@@ -17,9 +17,11 @@ inputs:
   nuisance_model:
     type: string # Enum
     default: linear
+    enum: ['linear', 'automl']
   heterogeneity_model:
     type: string # Enum
     default: linear
+    enum: ['linear', 'automl']
   alpha:
     type: number
     default: 0.05
