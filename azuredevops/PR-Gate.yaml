@@ -2,6 +2,36 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # ---------------------------------------------------------
 
+parameters:
+  # Defines workspace lifetime
+  # Workspaces are used for workspaceWindowSeconds
+  # and optionally deleted after another
+  # workspaceWindowSeconds have elapsed
+- name: workspaceWindowSeconds
+  displayName: Workspace Active Window (seconds)
+  type: number
+  default: 86400
+  # Specifies whether to remove workspaces
+  # older than 2*worksapceWindowSeconds
+- name: oldWorkspaceHandling
+  displayName: How to handle old workspaces
+  type: string
+  default: Cull
+  values:
+    - Cull
+    - Keep
+  # Specifies the region in which to create
+  # any new workspace
+- name: workspaceLocation
+  displayName: Workspace Location
+  type: string
+  default: EastUS
+  values:
+    - CentralUSEUAP
+    - EastUS
+    - EastUS2EUAP
+    - WestUS
+
 variables:
 - name: SubscriptionName
   value: 'INFRA Project Vienna INT (589c7ae9-223e-45e3-a191-98433e0821a9)'
@@ -74,6 +104,10 @@ jobs:
       scriptLocation: scriptPath
       scriptPath: scripts/Obtain-Workspace.ps1
       failOnStandardError: false # Since the new CLI writes stuff there
+    env:
+      OLD_WORKSPACES_HANDLING: ${{parameters.oldWorkspaceHandling}}
+      WORKSPACE_LOCATION: ${{parameters.workspaceLocation}}
+      WORKSPACE_WINDOW_SECONDS: ${{parameters.workspaceWindowSeconds}}
 
   - powershell: |
       mkdir $(ConfigFileDirectory)
