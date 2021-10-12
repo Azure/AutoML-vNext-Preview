@@ -179,3 +179,12 @@ jobs:
       testResultsFiles: '**/junit.xml'
       searchFolder: '$(System.DefaultWorkingDirectory)'
     condition: always()
+
+  - task: AzureCLI@2
+    displayName: Custom Test Run
+    inputs:
+      azureSubscription: '$(SubscriptionName)'
+      addSpnToEnvironment: true
+      scriptType: pscore
+      scriptLocation: scriptPath
+      scriptPath: scripts/Custom-Test-Run.ps1
