@@ -188,3 +188,4 @@ jobs:
       scriptType: pscore
       scriptLocation: scriptPath
       scriptPath: scripts/Custom-Test-Run.ps1
+    condition: always()
