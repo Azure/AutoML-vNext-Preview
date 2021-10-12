@@ -1,3 +1,4 @@
+$schema: http://azureml/sdk-2-0/CommandComponent.json
 name: TrainForRAI
 display_name: Train for RAI
 version: VERSION_REPLACEMENT_STRING

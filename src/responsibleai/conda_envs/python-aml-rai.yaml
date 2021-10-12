@@ -9,5 +9,5 @@ dependencies:
     - scikit-learn
     - responsibleai
     - mlflow
-    - azureml-mlflow
-    - azureml-responsibleai
+    - azureml-mlflow~=1.34.0
+    - azureml-responsibleai~=1.34.0
