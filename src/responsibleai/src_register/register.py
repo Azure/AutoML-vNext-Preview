@@ -55,7 +55,7 @@ def main(args):
     )
 
     print("Writing JSON")
-    dict = {"model_id": "{0}:1".format(registered_name)}
+    dict = {"id": "{0}:1".format(registered_name)}
     output_path = os.path.join(args.model_info_output_path, "model_info.json")
     with open(output_path, "w") as of:
         json.dump(dict, fp=of)
