@@ -23,7 +23,7 @@ from azureml.responsibleai.tools.model_analysis._init_utilities import (
     _check_dataframe_size,
     create_analysis_asset,
 )
-from azureml.responsibleai.tools.model_analysis._constants import (
+from azureml.responsibleai.tools._common.constants import (
     AnalysisTypes,
     PropertyKeys,
 )
