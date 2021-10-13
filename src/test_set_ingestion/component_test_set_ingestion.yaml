@@ -1,0 +1,34 @@
+$schema: http://azureml/sdk-2-0/CommandComponent.json
+name: AzureMLTestSetIngestion
+display_name: Test and evaluate metrics on a model.
+version: VERSION_REPLACEMENT_STRING
+type: command_component
+inputs:
+  model_uri:
+    type: string
+  task_type:
+    type: string
+    default: classification
+    enum: ['classification', 'regression', 'forecasting']
+  train_dataset:
+    type: path
+    default: 'null'
+  test_dataset:
+    type: path
+  target_column_name:
+    type: string
+  automl-run-id:
+    type: string
+    default: 'null'
+
+code:
+  local_path: ./tsi_code/
+environment: azureml:AzureML-AutoML-DNN:85  # TODO: fetch latest prod env
+command: >-
+  python model_test.py
+  --task_type ${{inputs.task_type}}
+  --train_dataset ${{inputs.train_dataset}}
+  --test_dataset ${{inputs.test_dataset}}
+  --target_column_name ${{inputs.target_column_name}}
+  --automl-run-id ${{inputs.automl-run-id}}
+  --model-uri ${{inputs.model_uri}}

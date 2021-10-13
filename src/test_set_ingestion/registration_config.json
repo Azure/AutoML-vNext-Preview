@@ -1,0 +1,10 @@
+{
+    "environments" : [
+        "responsibleai-environment.yaml"
+    ],
+    "components" : [
+        "../common/component_register_model.yaml",
+        "component_test_set_ingestion.yaml"
+    ],
+    "data" : []
+}
