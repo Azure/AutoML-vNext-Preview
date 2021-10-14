@@ -12,10 +12,10 @@ _logger = logging.getLogger(__file__)
 logging.basicConfig(level=logging.INFO)
 
 class TestRAI:
-    def test_pipeline_from_yaml(self, ml_client, component_config):
+    def test_classification_pipeline_from_yaml(self, ml_client, component_config):
         current_dir = pathlib.Path(__file__).parent.absolute()
-        pipeline_file = current_dir / "pipeline_analyse.yaml"
-        pipeline_processed_file = "pipeline_analyse.processed.yaml"
+        pipeline_file = current_dir / "pipeline_adult_analyse.yaml"
+        pipeline_processed_file = "pipeline_adult_analyse.processed.yaml"
 
         replacements = {
             'VERSION_REPLACEMENT_STRING': str(component_config['version'])
