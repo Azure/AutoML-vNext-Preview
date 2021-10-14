@@ -23,5 +23,5 @@ command: >-
   --training_data ${{inputs.training_data}}
   --target_column_name ${{inputs.target_column_name}}
   --categorical_features '${{inputs.categorical_features}}'
-  --continuous_features '${{inputs.continuous_features'
+  --continuous_features '${{inputs.continuous_features}}'
   --model_output ${{outputs.model_output}}
