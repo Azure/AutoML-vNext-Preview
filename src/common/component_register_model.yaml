@@ -13,7 +13,7 @@ outputs:
     type: path
 code:
   local_path: ./src_register/
-environment: azureml:AML-RAI-Environment:VERSION_REPLACEMENT_STRING
+environment: azureml:AzureML-Minimal:62
 command: >-
   python register.py
   --model_input_path ${{inputs.model_input_path}}

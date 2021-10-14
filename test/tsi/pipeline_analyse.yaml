@@ -31,7 +31,7 @@ defaults:
 
 jobs:
   train-model-job:
-    type: automl_job
+    type: automl_component
     general:
       task: classification
       primary_metric: average_precision_score_weighted
@@ -74,6 +74,7 @@ jobs:
       task_type: classification
       test_dataset: ${{inputs.my_test_data}}
       target_column_name: ${{inputs.target_column_name}}
+      model_uri: ${{outputs.model_info}}
       automl-run-id: jobs.train-model-job.name
     outputs:
       model_analysis_info: ${{outputs.ma_info}}
