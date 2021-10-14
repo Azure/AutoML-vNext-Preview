@@ -9,7 +9,8 @@ import os
 
 from azureml.core import Run
 import azureml.responsibleai
-from azureml.responsibleai.tools.model_analysis._requests import CounterfactualRequest, RequestDTO
+from azureml.responsibleai.tools.model_analysis._requests.counterfactual_request import CounterfactualRequest
+from azureml.responsibleai.tools.model_analysis._requests.request_dto import RequestDTO
 from azureml.responsibleai.tools.model_analysis._compute_dto import ComputeDTO
 from azureml.responsibleai.tools.model_analysis._utilities import _run_all_and_upload
 
