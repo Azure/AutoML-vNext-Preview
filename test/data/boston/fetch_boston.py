@@ -1,8 +1,8 @@
-import sklearn
 import pandas as pd
+from sklearn.datasets import load_boston
 from sklearn.model_selection import train_test_split
 
-data = sklearn.datasets.load_boston()
+data = load_boston()
 target_feature = 'y'
 continuous_features = data.feature_names
 data_df = pd.DataFrame(data.data, columns=data.feature_names)
