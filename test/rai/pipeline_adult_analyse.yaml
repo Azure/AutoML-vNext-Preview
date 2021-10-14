@@ -32,7 +32,7 @@ defaults:
 jobs:
   train-model-job:
     type: component_job
-    component: azureml:TrainForRAI:VERSION_REPLACEMENT_STRING
+    component: azureml:TrainLogisticRegressionForRAI:VERSION_REPLACEMENT_STRING
     inputs:
       training_data: ${{inputs.my_training_data}}
       target_column_name: ${{inputs.target_column_name}}
