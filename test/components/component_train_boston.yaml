@@ -1,0 +1,27 @@
+$schema: http://azureml/sdk-2-0/CommandComponent.json
+name: TrainBostonForRAI
+display_name: Train on Boston Dataset for RAI
+version: VERSION_REPLACEMENT_STRING
+type: command_component
+inputs:
+  training_data:
+    type: path
+  target_column_name:
+    type: string
+  continuous_features:
+    type: string
+  categorical_features:
+    type: string
+outputs:
+  model_output:
+    type: path
+code:
+  local_path: ./src_boston/
+environment: azureml:AML-RAI-Environment:VERSION_REPLACEMENT_STRING
+command: >-
+  python train.py
+  --training_data ${{inputs.training_data}}
+  --target_column_name ${{inputs.target_column_name}}
+  --categorical_features '${{inputs.categorical_features}}'
+  --continuous_features '${{inputs.continuous_features'
+  --model_output ${{outputs.model_output}}
