@@ -77,9 +77,9 @@ def main(args):
     train_dataset = pd.read_parquet(args.training_data)
 
     # Drop the labeled column to get the training set.
-    X_train = train_dataset.drop_columns(
+    X_train = train_dataset.drop(
         columns=[args.target_column_name]).to_pandas_dataframe()
-    y_train = train_dataset.keep_columns(
+    y_train = train_dataset.keep(
         columns=[args.target_column_name], validate=True).to_pandas_dataframe().values
 
     continuous_features = args.continuous_features
