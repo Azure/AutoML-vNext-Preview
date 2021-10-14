@@ -7,175 +7,182 @@ parameters:
   # Workspaces are used for workspaceWindowSeconds
   # and optionally deleted after another
   # workspaceWindowSeconds have elapsed
-- name: workspaceWindowSeconds
-  displayName: Workspace Active Window (seconds)
-  type: number
-  default: 86400
-  # Specifies whether to remove workspaces
-  # older than 2*worksapceWindowSeconds
-- name: oldWorkspaceHandling
-  displayName: How to handle old workspaces
-  type: string
-  default: Cull
-  values:
-    - Cull
-    - Keep
-  # Specifies the region in which to create
-  # any new workspace
-- name: workspaceLocation
-  displayName: Workspace Location
-  type: string
-  default: EastUS
-  values:
-    - CentralUSEUAP
-    - EastUS
-    - EastUS2EUAP
-    - WestUS
+  - name: workspaceWindowSeconds
+    displayName: Workspace Active Window (seconds)
+    type: number
+    default: 86400
+    # Specifies whether to remove workspaces
+    # older than 2*worksapceWindowSeconds
+  - name: oldWorkspaceHandling
+    displayName: How to handle old workspaces
+    type: string
+    default: Cull
+    values:
+      - Cull
+      - Keep
+    # Specifies the region in which to create
+    # any new workspace
+  - name: workspaceLocation
+    displayName: Workspace Location
+    type: string
+    default: EastUS
+    values:
+      - CentralUSEUAP
+      - EastUS
+      - EastUS2EUAP
+      - WestUS
 
 variables:
-- name: SubscriptionName
-  value: 'INFRA Project Vienna INT (589c7ae9-223e-45e3-a191-98433e0821a9)'
-- name: ConfigFileDirectory
-  value: configFiles
-- name: ConfigFileArtifact
-  value: WorkspaceConfiguration
+  - name: SubscriptionName
+    value: "INFRA Project Vienna INT (589c7ae9-223e-45e3-a191-98433e0821a9)"
+  - name: ConfigFileDirectory
+    value: configFiles
+  - name: ConfigFileArtifact
+    value: WorkspaceConfiguration
 
 pr:
-- main
+  - main
 
 trigger: none # No CI build
 
 schedules:
-- cron: "0 10 * * *" # Time is UTC
-  displayName: Nightly Build
-  branches:
-    include:
-      - main
-  always: true
+  - cron: "0 10 * * *" # Time is UTC
+    displayName: Nightly Build
+    branches:
+      include:
+        - main
+    always: true
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: "ubuntu-latest"
 
 jobs:
-- job: RunTests
-  displayName: Run Tests
-  pool:
-    vmImage: ubuntu-latest
-  steps:
-  - checkout: self
-    fetchDepth: 1
-    clean: true
+  - job: RunTests
+    displayName: Run Tests
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - checkout: self
+        fetchDepth: 1
+        clean: true
 
-  - task: UsePythonVersion@0
-    displayName: 'Use Python 3.6'
-    inputs:
-      versionSpec: '3.6'
+      - task: UsePythonVersion@0
+        displayName: "Use Python 3.6"
+        inputs:
+          versionSpec: "3.6"
 
-  - script: |
-      echo "##[section]Upgrading pip and setuptools..."
-      pip install --upgrade pip setuptools wheel
-    failOnStderr: true
-    displayName: Install pip etc.
+      - script: |
+          echo "##[section]Upgrading pip and setuptools..."
+          pip install --upgrade pip setuptools wheel
+        failOnStderr: true
+        displayName: Install pip etc.
 
-  - powershell: |
-      pip install -r requirement-dev.txt
-    displayName: Install pip requirements
+      - powershell: |
+          pip install -r requirement-dev.txt
+        displayName: Install pip requirements
 
-  - powershell: |
-      Set-PSDebug -Trace 0
-      Install-Module powershell-yaml -Scope CurrentUser -Force
-    displayName: Install YAML extension for Powershell
+      - powershell: |
+          Set-PSDebug -Trace 0
+          Install-Module powershell-yaml -Scope CurrentUser -Force
+        displayName: Install YAML extension for Powershell
 
-  - task: AzureCLI@2
-    displayName: Install AzureML CLI v2
-    inputs:
-      azureSubscription: '$(SubscriptionName)'
-      scriptType: pscore
-      scriptLocation: scriptPath
-      scriptPath: scripts/Install-SDKv2.ps1
-      failOnStandardError: false
-  
-  - task: AzureCLI@2
-    displayName: Obtain Workspace
-    inputs:
-      azureSubscription: '$(SubscriptionName)'
-      scriptType: pscore
-      scriptLocation: scriptPath
-      scriptPath: scripts/Obtain-Workspace.ps1
-      failOnStandardError: false # Since the new CLI writes stuff there
-    env:
-      OLD_WORKSPACES_HANDLING: ${{parameters.oldWorkspaceHandling}}
-      WORKSPACE_LOCATION: ${{parameters.workspaceLocation}}
-      WORKSPACE_WINDOW_SECONDS: ${{parameters.workspaceWindowSeconds}}
+      - task: AzureCLI@2
+        displayName: Install AzureML CLI v2
+        inputs:
+          azureSubscription: "$(SubscriptionName)"
+          scriptType: pscore
+          scriptLocation: scriptPath
+          scriptPath: scripts/Install-SDKv2.ps1
+          failOnStandardError: false
 
-  - powershell: |
-      mkdir $(ConfigFileDirectory)
-      cp workspace.yaml $(ConfigFileDirectory)
-      cp config.json $(ConfigFileDirectory)
-      cp component_config.json $(ConfigFileDirectory)
-    displayName: Copy config files to separate directory
+      - task: AzureCLI@2
+        displayName: Obtain Workspace
+        inputs:
+          azureSubscription: "$(SubscriptionName)"
+          scriptType: pscore
+          scriptLocation: scriptPath
+          scriptPath: scripts/Obtain-Workspace.ps1
+          failOnStandardError: false # Since the new CLI writes stuff there
+        env:
+          OLD_WORKSPACES_HANDLING: ${{parameters.oldWorkspaceHandling}}
+          WORKSPACE_LOCATION: ${{parameters.workspaceLocation}}
+          WORKSPACE_WINDOW_SECONDS: ${{parameters.workspaceWindowSeconds}}
 
-  - task: PublishPipelineArtifact@1
-    inputs:
-      targetPath: $(ConfigFileDirectory)
-      artifactName: $(ConfigFileArtifact)
+      - powershell: |
+          mkdir $(ConfigFileDirectory)
+          cp workspace.yaml $(ConfigFileDirectory)
+          cp config.json $(ConfigFileDirectory)
+          cp component_config.json $(ConfigFileDirectory)
+        displayName: Copy config files to separate directory
 
-  - task: AzureCLI@2
-    displayName: Create Compute
-    inputs:
-      azureSubscription: '$(SubscriptionName)'
-      scriptType: pscore
-      scriptLocation: scriptPath
-      scriptPath: scripts/Create-Compute.ps1
-      failOnStandardError: false # Since the new CLI writes stuff there
-        
-  - task: AzureCLI@2
-    displayName: Register Responsible AI Components
-    inputs:
-      azureSubscription: '$(SubscriptionName)'
-      scriptType: pscore
-      scriptLocation: scriptPath
-      scriptPath: scripts/Register-AzureML.ps1
-      arguments:
-        src/responsibleai/registration_config.json
-      failOnStandardError: false # Since the new CLI writes stuff there
+      - task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: $(ConfigFileDirectory)
+          artifactName: $(ConfigFileArtifact)
 
-  - task: AzureCLI@2
-    displayName: Register Adult Dataset
-    inputs:
-      azureSubscription: '$(SubscriptionName)'
-      scriptType: pscore
-      scriptLocation: scriptPath
-      scriptPath: scripts/Register-AzureML.ps1
-      arguments:
-        test/data/adult/registration_config.json
-      failOnStandardError: false # Since the new CLI writes stuff there
+      - task: AzureCLI@2
+        displayName: Create Compute
+        inputs:
+          azureSubscription: "$(SubscriptionName)"
+          scriptType: pscore
+          scriptLocation: scriptPath
+          scriptPath: scripts/Create-Compute.ps1
+          failOnStandardError: false # Since the new CLI writes stuff there
 
-  - task: AzureCLI@2
-    displayName: Register Test-only components
-    inputs:
-      azureSubscription: '$(SubscriptionName)'
-      scriptType: pscore
-      scriptLocation: scriptPath
-      scriptPath: scripts/Register-AzureML.ps1
-      arguments:
-        test/components/registration_config.json
-      failOnStandardError: false # Since the new CLI writes stuff there
+      - task: AzureCLI@2
+        displayName: Register Responsible AI Components
+        inputs:
+          azureSubscription: "$(SubscriptionName)"
+          scriptType: pscore
+          scriptLocation: scriptPath
+          scriptPath: scripts/Register-AzureML.ps1
+          arguments: src/responsibleai/registration_config.json
+          failOnStandardError: false # Since the new CLI writes stuff there
 
-  - task: AzureCLI@2
-    displayName: Run tests
-    inputs:
-      azureSubscription: '$(SubscriptionName)'
-      addSpnToEnvironment: true
-      scriptType: pscore
-      scriptLocation: scriptPath
-      scriptPath: scripts/Run-Tests.ps1
-      failOnStandardError: false # Since the new CLI writes stuff there
+      - task: AzureCLI@2
+        displayName: Register Adult Dataset
+        inputs:
+          azureSubscription: "$(SubscriptionName)"
+          scriptType: pscore
+          scriptLocation: scriptPath
+          scriptPath: scripts/Register-AzureML.ps1
+          arguments: test/data/adult/registration_config.json
+          failOnStandardError: false # Since the new CLI writes stuff there
 
-  - task: PublishTestResults@2
-    displayName: Publish Test Results
-    inputs:
-      testResultsFormat: JUnit
-      testResultsFiles: '**/junit.xml'
-      searchFolder: '$(System.DefaultWorkingDirectory)'
-    condition: always()
+      - task: AzureCLI@2
+        displayName: Register Boston Dataset
+        inputs:
+          azureSubscription: "$(SubscriptionName)"
+          scriptType: pscore
+          scriptLocation: scriptPath
+          scriptPath: scripts/Register-AzureML.ps1
+          arguments: test/data/boston/registration_config.json
+          failOnStandardError: false # Since the new CLI writes stuff there
+
+      - task: AzureCLI@2
+        displayName: Register Test-only components
+        inputs:
+          azureSubscription: "$(SubscriptionName)"
+          scriptType: pscore
+          scriptLocation: scriptPath
+          scriptPath: scripts/Register-AzureML.ps1
+          arguments: test/components/registration_config.json
+          failOnStandardError: false # Since the new CLI writes stuff there
+
+      - task: AzureCLI@2
+        displayName: Run tests
+        inputs:
+          azureSubscription: "$(SubscriptionName)"
+          addSpnToEnvironment: true
+          scriptType: pscore
+          scriptLocation: scriptPath
+          scriptPath: scripts/Run-Tests.ps1
+          failOnStandardError: false # Since the new CLI writes stuff there
+
+      - task: PublishTestResults@2
+        displayName: Publish Test Results
+        inputs:
+          testResultsFormat: JUnit
+          testResultsFiles: "**/junit.xml"
+          searchFolder: "$(System.DefaultWorkingDirectory)"
+        condition: always()

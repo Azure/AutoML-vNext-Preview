@@ -1,0 +1,13 @@
+{
+    "environments": [],
+    "components": [],
+    "data": [
+        {
+            "script" : "fetch_boston.py",
+            "data_yamls": [
+                "data_boston_test.yaml",
+                "data_boston_train.yaml"
+            ]
+        }
+    ]
+}
