@@ -141,6 +141,17 @@ jobs:
       failOnStandardError: false # Since the new CLI writes stuff there
 
   - task: AzureCLI@2
+    displayName: Register TSI Components
+    inputs:
+      azureSubscription: '$(SubscriptionName)'
+      scriptType: pscore
+      scriptLocation: scriptPath
+      scriptPath: scripts/Register-AzureML.ps1
+      arguments:
+        src/test_set_ingestion/registration_config.json
+      failOnStandardError: false # Since the new CLI writes stuff there
+
+  - task: AzureCLI@2
     displayName: Register Adult Dataset
     inputs:
       azureSubscription: '$(SubscriptionName)'
