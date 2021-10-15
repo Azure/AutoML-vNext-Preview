@@ -62,7 +62,7 @@ jobs:
       target_column_name: ${{inputs.target_column_name}}
       X_column_names: '["CRIM", "ZN", "INDUS", "CHAS", "NOX", "RM", "AGE","DIS", "RAD", "TAX", "PTRATIO", "B", "LSTAT"]'
       datastore_name: workspaceblobstore
-      categorical_column_names: '["CRIM", "ZN", "INDUS", "CHAS", "NOX", "RM", "AGE","DIS", "RAD", "TAX", "PTRATIO", "B", "LSTAT"]'
+      categorical_column_names: '[]'
     outputs:
       model_analysis_info: ${{outputs.ma_info}}
 
