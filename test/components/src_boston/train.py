@@ -2,8 +2,6 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # ---------------------------------------------------------
 
-"""Sample train script for azureml-responisbleai notebooks."""
-
 import argparse
 import json
 import os
@@ -82,8 +80,6 @@ def main(args):
         columns=[args.target_column_name])
 
     continuous_features = args.continuous_features
-    #continuous_features=       ['CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE',
-    #     'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT']
     categorical_features = args.categorical_features
 
     pipeline = get_regression_model_pipeline(
