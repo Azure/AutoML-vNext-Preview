@@ -1,3 +1,4 @@
+$schema: http://azureml/sdk-2-0/PipelineJob.json
 name: AML_TSI_Analysis_VERSION_REPLACEMENT_STRING
 experiment_name: AML_TSI_VERSION_REPLACEMENT_STRING
 type: pipeline_job
@@ -31,30 +32,27 @@ defaults:
 
 jobs:
   train-model-job:
-    type: automl_component
-    general:
+    component:
+      type: autotrain_component
+      id: azureml://AutoTrain
+    inputs:
       task: classification
       primary_metric: average_precision_score_weighted
       log_verbosity: info
-    limits:
       timeout_minutes: 15
       max_concurrent_trials: 6
       enable_early_termination: true
       trial_timeout_minutes: 15
-    data:
       training:
         dataset: ${{inputs.my_training_data}}
       validation:
         validation_data_size: 0.3
       target_column_name: ${{inputs.target_column_name}}
-    featurization:
       featurization_config: auto
-    training:
       enable_dnn_training: true
-    compute:
       target: azureml:cpucluster
-    properties:
-      _automl_internal_save_mlflow: 'True'
+      properties:
+        _automl_internal_save_mlflow: 'True'
     outputs:
       model_output: ${{outputs.my_model_directory}}
 
@@ -75,6 +73,6 @@ jobs:
       test_dataset: ${{inputs.my_test_data}}
       target_column_name: ${{inputs.target_column_name}}
       model_uri: ${{outputs.model_info}}
-      automl-run-id: jobs.train-model-job.name
+      automl-run-id: ${{jobs.train-model-job.name}}
     outputs:
       model_analysis_info: ${{outputs.ma_info}}
