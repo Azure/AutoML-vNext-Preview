@@ -60,7 +60,7 @@ jobs:
     component: azureml:RegisterModel:VERSION_REPLACEMENT_STRING
     inputs:
       model_input_path: ${{jobs.train-model-job.outputs.model_output}}
-      model_base_name: component_registered_lr_01
+      model_base_name: automl_tsi_test_VERSION_REPLACEMENT_STRING
     outputs:
       model_info_output_path: ${{outputs.model_info}}
 
