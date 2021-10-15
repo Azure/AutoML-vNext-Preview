@@ -78,9 +78,9 @@ def main(args):
 
     # Drop the labeled column to get the training set.
     X_train = train_dataset.drop(
-        columns=[args.target_column_name]).to_pandas_dataframe()
+        columns=[args.target_column_name])
     y_train = train_dataset.keep(
-        columns=[args.target_column_name], validate=True).to_pandas_dataframe().values
+        columns=[args.target_column_name], validate=True).values
 
     continuous_features = args.continuous_features
  #       ['CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE',
