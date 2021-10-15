@@ -1,3 +1,4 @@
+$schema: http://azureml/sdk-2-0/PipelineJob.json
 name: AML_RAI_Analysis_VERSION_REPLACEMENT_STRING
 experiment_name: AML_RAI_VERSION_REPLACEMENT_STRING
 type: pipeline_job
