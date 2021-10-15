@@ -1,4 +1,3 @@
-$schema: http://azureml/sdk-2-0/PipelineJob.json
 name: AML_TSI_Analysis_VERSION_REPLACEMENT_STRING
 experiment_name: AML_TSI_VERSION_REPLACEMENT_STRING
 type: pipeline_job
