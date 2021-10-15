@@ -77,14 +77,13 @@ def main(args):
     train_dataset = pd.read_parquet(args.training_data)
 
     # Drop the labeled column to get the training set.
+    y_train = train_dataset[args.target_column_name]
     X_train = train_dataset.drop(
         columns=[args.target_column_name])
-    y_train = train_dataset.keep(
-        columns=[args.target_column_name], validate=True).values
 
     continuous_features = args.continuous_features
- #       ['CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE',
- #        'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT']
+    #continuous_features=       ['CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE',
+    #     'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT']
     categorical_features = args.categorical_features
 
     pipeline = get_regression_model_pipeline(
