@@ -33,7 +33,7 @@ function Get-RecentResourceGroups(
     # Would be nice to do this server-side
     $all_groups = az group list --output json | ConvertFrom-Json
 
-    $filtered_groups = $all_groups.Where({ $_.name.contains($baseName) -and $_.tags.$createdTag -gt $min_epoch })
+    $filtered_groups = $all_groups.Where({ $_.name.contains($baseName) -and $_.tags.$createdTag -gt $min_epoch -and $_.location -eq $location})
 
     return $filtered_groups
 }
