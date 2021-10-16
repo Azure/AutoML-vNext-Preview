@@ -35,25 +35,31 @@ jobs:
       type: autotrain_component
       id: azureml://AutoTrain
     inputs:
-      task: classification
-      primary_metric: average_precision_score_weighted
-      log_verbosity: info
-      timeout_minutes: 15
-      max_concurrent_trials: 6
-      enable_early_termination: true
-      trial_timeout_minutes: 15
-      training:
-        dataset: ${{inputs.my_training_data}}
-      validation:
-        validation_data_size: 0.3
-      target_column_name: ${{inputs.target_column_name}}
-      featurization_config: auto
-      enable_dnn_training: true
-      target: azureml:cpucluster
-      properties:
-        _automl_internal_save_mlflow: 'True'
-    outputs:
-      model_output: ${{outputs.my_model_directory}}
+      general:
+        task: classification
+        primary_metric: average_precision_score_weighted
+        log_verbosity: info
+        limits:
+          timeout_minutes: 15
+          max_concurrent_trials: 6
+          enable_early_termination: true
+          trial_timeout_minutes: 15
+        data:
+          training:
+            dataset: ${{inputs.my_training_data}}
+          validation:
+            validation_data_size: 0.3
+          target_column_name: ${{inputs.target_column_name}}
+        featurization:
+          featurization_config: auto
+        training:
+          enable_dnn_training: true
+        compute:
+          target: azureml:cpucluster
+        properties:
+          _automl_internal_save_mlflow: 'True'
+      outputs:
+        model_output: ${{outputs.my_model_directory}}
 
   register-model-job:
     type: component_job
