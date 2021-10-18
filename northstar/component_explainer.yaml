@@ -1,0 +1,18 @@
+$schema: http://azureml/sdk-2-0/CommandComponent.json
+name: CreateExplainer
+display_name: Create Explainer
+version: 1
+type: command_component
+inputs:
+  model:
+    type: path
+  training_snapshot:
+    type: string
+outputs:
+  explainer:
+    type: path
+code:
+  local_path: ./src/
+environment: azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu:6
+command: >-
+  python simple_script.py

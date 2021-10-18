@@ -1,0 +1,6 @@
+$schema: http://azureml/sdk-2-0/Dataset.json
+name: TargetModel
+version: 1
+description: How a registered Model might appear in a pipeline
+datastore: azureml:workspaceblobstore
+local_path: ./data/random.csv
