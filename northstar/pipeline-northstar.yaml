@@ -1,0 +1,60 @@
+name: AML_Northstar
+experiment_name: AML_Northstar
+type: pipeline_job
+
+inputs:
+  target_model:
+    data: azureml:TargetModel
+    mode: mount
+  train_snapshot:
+    data: azureml:TrainingSnapshot
+    mode: mount
+  test_snapshot:
+    data: azureml:TestSnapshot
+    mode: mount
+
+outputs:
+  basic_explainer:
+    data:
+      datastore: azureml:workspaceblobstore
+  basic_local_explanation:
+    data:
+      datastore: azureml:workspaceblobstore
+  basic_global_explanation:
+    data:
+      datastore: azureml:workspaceblobstore
+
+
+defaults:
+  component_job:
+    datastore: azureml:workspaceblobstore
+    compute:
+      target: azureml:riedgartmp
+
+jobs:
+  create-basic-explainer:
+    type: component_job
+    component: azureml:CreateExplainer
+    inputs:
+      model: ${{inputs.target_model}}
+      training_snapshot: ${{inputs.train_snapshot}}
+    outputs:
+      explainer: ${{outputs.basic_explainer}}
+
+  create-basic-local-explanation:
+    type: component_job
+    component: azureml:CreateLocalExplanation
+    inputs:
+      explainer: ${{jobs.create-basic-explainer.outputs.explainer}}
+      data_snapshot: ${{inputs.test_snapshot}}
+    outputs:
+      local_explanation: ${{outputs.basic_local_explanation}}
+
+  create-basic-global-explanation:
+    type: component_job
+    component: azureml:CreateGlobalExplanation
+    inputs:
+      explainer: ${{jobs.create-basic-explainer.outputs.explainer}}
+      data_snapshot: ${{inputs.train_snapshot}}
+    outputs:
+      global_explanation: ${{outputs.basic_local_explanation}}

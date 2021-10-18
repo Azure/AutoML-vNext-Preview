@@ -1,15 +1,15 @@
 $schema: http://azureml/sdk-2-0/CommandComponent.json
-name: CreateExplainer
-display_name: Create Explainer
-version: 2
+name: CreateGlobalExplanation
+display_name: Create Global Explanation
+version: 1
 type: command_component
 inputs:
-  model:
+  explainer:
     type: path
-  training_snapshot:
+  data_snapshot:
     type: path
 outputs:
-  explainer:
+  global_explanation:
     type: path
 code:
   local_path: ./src/
