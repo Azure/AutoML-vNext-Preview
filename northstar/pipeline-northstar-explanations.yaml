@@ -1,5 +1,5 @@
-name: AML_Northstar
-experiment_name: AML_Northstar
+name: AML_Northstar_Explanations
+experiment_name: AML_Northstar_Explanations
 type: pipeline_job
 
 inputs:
@@ -23,6 +23,16 @@ outputs:
   basic_global_explanation:
     data:
       datastore: azureml:workspaceblobstore
+  shap_explainer:
+    data:
+      datastore: azureml:workspaceblobstore
+  shap_local_explanation:
+    data:
+      datastore: azureml:workspaceblobstore
+  shap_global_explanation:
+    data:
+      datastore: azureml:workspaceblobstore
+
 
 
 defaults:
@@ -57,4 +67,31 @@ jobs:
       explainer: ${{jobs.create-basic-explainer.outputs.explainer}}
       data_snapshot: ${{inputs.train_snapshot}}
     outputs:
-      global_explanation: ${{outputs.basic_local_explanation}}
+      global_explanation: ${{outputs.basic_global_explanation}}
+
+  create-shap-explainer:
+    type: component_job
+    component: azureml:CreateShapExplainer
+    inputs:
+      model: ${{inputs.target_model}}
+      training_snapshot: ${{inputs.train_snapshot}}
+    outputs:
+      explainer: ${{outputs.shap_explainer}}
+
+  create-shap-local-explanation:
+    type: component_job
+    component: azureml:CreateLocalExplanation
+    inputs:
+      explainer: ${{jobs.create-shap-explainer.outputs.explainer}}
+      data_snapshot: ${{inputs.test_snapshot}}
+    outputs:
+      local_explanation: ${{outputs.shap_local_explanation}}
+
+  create-shap-global-explanation:
+    type: component_job
+    component: azureml:CreateGlobalExplanation
+    inputs:
+      explainer: ${{jobs.create-shap-explainer.outputs.explainer}}
+      data_snapshot: ${{inputs.train_snapshot}}
+    outputs:
+      global_explanation: ${{outputs.shap_local_explanation}}
