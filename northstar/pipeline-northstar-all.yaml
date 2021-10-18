@@ -1,0 +1,85 @@
+name: AML_Northstar_All
+experiment_name: AML_Northstar_All
+type: pipeline_job
+
+inputs:
+  target_model:
+    data: azureml:TargetModel
+    mode: mount
+  train_snapshot:
+    data: azureml:TrainingSnapshot
+    mode: mount
+  test_snapshot:
+    data: azureml:TestSnapshot
+    mode: mount
+
+outputs:
+  shap_explainer:
+    data:
+      datastore: azureml:workspaceblobstore
+  shap_local_explanation:
+    data:
+      datastore: azureml:workspaceblobstore
+  shap_global_explanation:
+    data:
+      datastore: azureml:workspaceblobstore
+  counterfactual_generator:
+    data:
+      datastore: azureml:workspaceblobstore
+  counterfactual_output:
+    data:
+      datastore: azureml:workspaceblobstore
+
+
+defaults:
+  component_job:
+    datastore: azureml:workspaceblobstore
+    compute:
+      target: azureml:riedgartmp
+
+jobs:
+  create-shap-explainer:
+    type: component_job
+    component: azureml:CreateShapExplainer
+    inputs:
+      model: ${{inputs.target_model}}
+      training_snapshot: ${{inputs.train_snapshot}}
+    outputs:
+      explainer: ${{outputs.shap_explainer}}
+
+  create-shap-local-explanation:
+    type: component_job
+    component: azureml:CreateLocalExplanation
+    inputs:
+      explainer: ${{jobs.create-shap-explainer.outputs.explainer}}
+      data_snapshot: ${{inputs.test_snapshot}}
+    outputs:
+      local_explanation: ${{outputs.shap_local_explanation}}
+
+  create-shap-global-explanation:
+    type: component_job
+    component: azureml:CreateGlobalExplanation
+    inputs:
+      explainer: ${{jobs.create-shap-explainer.outputs.explainer}}
+      data_snapshot: ${{inputs.train_snapshot}}
+    outputs:
+      global_explanation: ${{outputs.shap_local_explanation}}
+
+  create-counterfactual-generator:
+    type: component_job
+    component: azureml:CreateCounterfactualGenerator
+    inputs:
+      model: ${{inputs.target_model}}
+      training_snapshot: ${{inputs.train_snapshot}}
+    outputs:
+      counterfactual_generator: ${{outputs.shap_explainer}}
+
+  generate-counterfactuals:
+    type: component_job
+    component: azureml:GenerateCounterfactuals
+    inputs:
+      counterfactual_generator: ${{jobs.create-counterfactual-generator.outputs.counterfactual_generator}}
+      test_snapshot: ${{inputs.test_snapshot}}
+    outputs:
+      counterfactuals: ${{outputs.counterfactual_output}}
+    

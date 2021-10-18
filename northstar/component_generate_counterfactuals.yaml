@@ -1,0 +1,18 @@
+$schema: http://azureml/sdk-2-0/CommandComponent.json
+name: GenerateCounterfactuals
+display_name: Generate counterfactual points
+version: 2
+type: command_component
+inputs:
+  counterfactual_generator:
+    type: path
+  test_snapshot:
+    type: path
+outputs:
+  counterfactuals:
+    type: path
+code:
+  local_path: ./src/
+environment: azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu:6
+command: >-
+  python simple_script.py
