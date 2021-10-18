@@ -29,6 +29,15 @@ outputs:
   counterfactual_output:
     data:
       datastore: azureml:workspaceblobstore
+  fairness_output_01:
+    data:
+      datastore: azureml:workspaceblobstore
+  fairness_output_02:
+    data:
+      datastore: azureml:workspaceblobstore
+  fairness_output_03:
+    data:
+      datastore: azureml:workspaceblobstore
 
 
 defaults:
@@ -82,4 +91,31 @@ jobs:
       test_snapshot: ${{inputs.test_snapshot}}
     outputs:
       counterfactuals: ${{outputs.counterfactual_output}}
+
+  fairness_01:
+    type: compmonen_job
+    component: azureml:FairnessStatistics
+    inputs:
+      model: ${{inputs.target_model}}
+      data_snapshot: ${{inputs.train_snapshot}}
+    outputs:
+      fairness_statistics: ${{outputs.fairness_output_01}}
+
+  fairness_02:
+    type: compmonen_job
+    component: azureml:FairnessStatistics
+    inputs:
+      model: ${{inputs.target_model}}
+      data_snapshot: ${{inputs.train_snapshot}}
+    outputs:
+      fairness_statistics: ${{outputs.fairness_output_02}}
+
+  fairness_03:
+    type: compmonen_job
+    component: azureml:FairnessStatistics
+    inputs:
+      model: ${{inputs.target_model}}
+      data_snapshot: ${{inputs.train_snapshot}}
+    outputs:
+      fairness_statistics: ${{outputs.fairness_output_03}}
     

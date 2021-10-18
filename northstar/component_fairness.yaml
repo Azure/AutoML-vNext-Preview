@@ -1,0 +1,18 @@
+$schema: http://azureml/sdk-2-0/CommandComponent.json
+name: FairnessStatistics
+display_name: Generate fairness statistics
+version: 1
+type: command_component
+inputs:
+  model:
+    type: path
+  data_snapshot:
+    type: path
+outputs:
+  fairness_statistics:
+    type: path
+code:
+  local_path: ./src/
+environment: azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu:6
+command: >-
+  python simple_script.py
