@@ -38,7 +38,7 @@ function Get-RecentResourceGroups(
     $filtered_groups = $all_groups.Where(
         { 
             $_.name.contains($baseName) -and
-            $_.tags.$createdTag -gt $min_epoch  -and
+            $_.tags.$createdTag -gt $min_epoch -and
             $_.location -eq $target_location
         }
     )
@@ -155,7 +155,8 @@ if ( $cullWorkspaces ) {
     else {
         Write-Host "No old resource groups found"
     }
-} else {
+}
+else {
     Write-Host "Skipping old resource group check"
 }
 
@@ -163,7 +164,7 @@ Write-Host
 Write-Host "Creating workspace if one not found"
 Write-Host
 
-$rg_list = Get-RecentResourceGroups($epoch_secs - $window_seconds, $location)
+$rg_list = Get-RecentResourceGroups( ($epoch_secs - $window_seconds), $location)
 if ($rg_list.count -gt 0) {
     Write-Host "Found $($rg_list.count) suitable resource groups"
     $target_rg = $rg_list[0].name
