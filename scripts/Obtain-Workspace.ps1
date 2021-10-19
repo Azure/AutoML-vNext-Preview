@@ -173,7 +173,7 @@ if ($rg_list.count -gt 0) {
 }
 else {
     Write-Host "No recent workspace"
-    $workspace = Create-EpochWorkspace($epoch_secs, $location)
+    $workspace = Create-EpochWorkspace -epoch_secs $epoch_secs -target_location $location
 }
 
 Write-Host
