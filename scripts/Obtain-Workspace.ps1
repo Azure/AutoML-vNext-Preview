@@ -164,7 +164,7 @@ Write-Host
 Write-Host "Creating workspace if one not found"
 Write-Host
 
-$rg_list = Get-RecentResourceGroups( ($epoch_secs - $window_seconds), $location)
+$rg_list = Get-RecentResourceGroups -min_epoch ($epoch_secs - $window_seconds) -target_location $location
 if ($rg_list.count -gt 0) {
     Write-Host "Found $($rg_list.count) suitable resource groups"
     $target_rg = $rg_list[0].name
