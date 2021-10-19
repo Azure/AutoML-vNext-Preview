@@ -67,9 +67,9 @@ jobs:
         clean: true
 
       - task: UsePythonVersion@0
-        displayName: "Use Python 3.6"
+        displayName: "Use Python 3.7"
         inputs:
-          versionSpec: "3.6"
+          versionSpec: "3.7"
 
       - script: |
           echo "##[section]Upgrading pip and setuptools..."
