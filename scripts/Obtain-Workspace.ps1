@@ -24,16 +24,24 @@ $window_seconds = $env:WORKSPACE_WINDOW_SECONDS
 $cullWorkspaces = $env:OLD_WORKSPACES_HANDLING -eq "Cull"
 
 function Get-RecentResourceGroups(
-    [int]$min_epoch
+    [int]$min_epoch,
+    [string]$target_location
 ) {
     # Returns resource groups created after the time specified by min_epoch
+    # and in target_location
     # Uses the createdTag for this purpose
     Write-Host "Searching for recent resource groups"
     Write-Host "Minimum Epoch: $min_epoch"
     # Would be nice to do this server-side
     $all_groups = az group list --output json | ConvertFrom-Json
 
-    $filtered_groups = $all_groups.Where({ $_.name.contains($baseName) -and $_.tags.$createdTag -gt $min_epoch })
+    $filtered_groups = $all_groups.Where(
+        { 
+            $_.name.contains($baseName) -and
+            $_.tags.$createdTag -gt $min_epoch -and
+            $_.location -eq $target_location
+        }
+    )
 
     return $filtered_groups
 }
@@ -80,12 +88,13 @@ function Get-EpochSecs {
 }
 
 function Create-EpochWorkspace(
-    [int]$epoch_secs
+    [int]$epoch_secs,
+    [string]$target_location
 ) {
     $rg_name = "$basename-rg-$epoch_secs"
     $ws_name = "$basename$epoch_secs"
 
-    Write-Host "Creating workspace $ws_name in resource group $rg_name in region $location"
+    Write-Host "Creating workspace $ws_name in resource group $rg_name in region $target_location"
 
     $ws_data = @{}
     $ws_data['name'] = $ws_name
@@ -96,7 +105,7 @@ function Create-EpochWorkspace(
 
     ConvertTo-Yaml $ws_data | Out-File -FilePath $workspaceYAML -Encoding ascii
 
-    az group create --location $location --name $rg_name --tags "$createdTag=$epoch_secs" --debug
+    az group create --location $target_location --name $rg_name --tags "$createdTag=$epoch_secs" --debug
     Write-Host "Resource group created"
     $ws = az ml workspace create --resource-group $rg_name --file $workspaceYAML | ConvertFrom-Json
     return $ws
@@ -146,7 +155,8 @@ if ( $cullWorkspaces ) {
     else {
         Write-Host "No old resource groups found"
     }
-} else {
+}
+else {
     Write-Host "Skipping old resource group check"
 }
 
@@ -154,7 +164,7 @@ Write-Host
 Write-Host "Creating workspace if one not found"
 Write-Host
 
-$rg_list = Get-RecentResourceGroups($epoch_secs - $window_seconds)
+$rg_list = Get-RecentResourceGroups -min_epoch ($epoch_secs - $window_seconds) -target_location $location
 if ($rg_list.count -gt 0) {
     Write-Host "Found $($rg_list.count) suitable resource groups"
     $target_rg = $rg_list[0].name
@@ -163,7 +173,7 @@ if ($rg_list.count -gt 0) {
 }
 else {
     Write-Host "No recent workspace"
-    $workspace = Create-EpochWorkspace($epoch_secs)
+    $workspace = Create-EpochWorkspace -epoch_secs $epoch_secs -target_location $location
 }
 
 Write-Host
