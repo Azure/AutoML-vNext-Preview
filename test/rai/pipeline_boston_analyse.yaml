@@ -1,15 +1,15 @@
-name: AML_RAI_Analysis_VERSION_REPLACEMENT_STRING
+name: AML_RAI_Analysis_Boston_VERSION_REPLACEMENT_STRING
 experiment_name: AML_RAI_Boston_VERSION_REPLACEMENT_STRING
-type: pipeline_job
+type: pipeline
 
 inputs:
   target_column_name: 'y'
   my_training_data:
-    data: azureml:Boston_Train_PQ
-    mode: mount
+    dataset: azureml:Boston_Train_PQ:VERSION_REPLACEMENT_STRING
+    mode: ro_mount
   my_test_data:
-    data: azureml:Boston_Test_PQ
-    mode: mount
+    dataset: azureml:Boston_Test_PQ:VERSION_REPLACEMENT_STRING
+    mode: ro_mount
 
 outputs:
   my_model_directory:
@@ -22,11 +22,11 @@ outputs:
     data:
       datastore: azureml:workspaceblobstore
 
-defaults:
+compute: azureml:cpucluster
+
+settings:
   component_job:
     datastore: azureml:workspaceblobstore
-    compute:
-      target: azureml:cpucluster
     environment: azureml:AML-RAI-Environment:VERSION_REPLACEMENT_STRING
 
 jobs:
