@@ -10,7 +10,8 @@ az extension remove -n azure-cli-ml
 az extension remove -n ml
 
 # Add the new one
-az extension add -n ml -y
+# az extension add -n ml -y
+az extension add --source https://azuremlsdktestpypi.blob.core.windows.net/wheels/sdk-cli-v2/ml-0.0.19_october_cand-py3-none-any.whl --yes
 
 # Upgrade to latest version
 az extension update -n ml
