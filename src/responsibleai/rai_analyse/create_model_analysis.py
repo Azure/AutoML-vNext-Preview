@@ -40,7 +40,7 @@ logging.basicConfig(level=logging.INFO)
 class ReplacementDataset:
     def __init__(self, path):
         self.path = path
-        self.id = uuid.UUID("00000000-00000000-00000000-00000000")
+        self.id = "some_string" # uuid.UUID("00000000-00000000-00000000-00000000")
 
 
 def parse_args():
