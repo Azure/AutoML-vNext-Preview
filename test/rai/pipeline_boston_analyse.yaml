@@ -22,11 +22,11 @@ outputs:
     data:
       datastore: azureml:workspaceblobstore
 
-defaults:
+compute: azureml:cpucluster
+
+settings:
   component_job:
     datastore: azureml:workspaceblobstore
-    compute:
-      target: azureml:cpucluster
     environment: azureml:AML-RAI-Environment:VERSION_REPLACEMENT_STRING
 
 jobs:
