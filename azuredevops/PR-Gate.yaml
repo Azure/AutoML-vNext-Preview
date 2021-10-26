@@ -73,7 +73,7 @@ jobs:
 
       - script: |
           echo "##[section]Upgrading pip and setuptools..."
-          pip install --upgrade pip setuptools wheel
+          pip install --upgrade pip==20.2.4 setuptools wheel
         failOnStderr: true
         displayName: Install pip etc.
 
