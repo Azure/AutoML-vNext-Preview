@@ -5,11 +5,11 @@ type: pipeline
 inputs:
   target_column_name: income
   my_training_data:
-    data: azureml:Adult_Train_PQ
-    mode: mount
+    dataset: azureml:Adult_Train_PQ
+    mode: ro_mount
   my_test_data:
-    data: azureml:Adult_Test_PQ
-    mode: mount
+    dataset: azureml:Adult_Test_PQ
+    mode: ro_mount
 
 outputs:
   my_model_directory:
