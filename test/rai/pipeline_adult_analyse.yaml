@@ -1,6 +1,6 @@
 name: AML_RAI_Analysis_VERSION_REPLACEMENT_STRING
 experiment_name: AML_RAI_Adult_VERSION_REPLACEMENT_STRING
-type: pipeline_job
+type: pipeline
 
 inputs:
   target_column_name: income
