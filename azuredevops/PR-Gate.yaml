@@ -64,8 +64,8 @@ pool:
   vmImage: "ubuntu-latest"
 
 jobs:
-  - job: RunTests
-    displayName: Run Tests
+  - job: ObtainWorkspaceAndRunTests
+    displayName: Obtain Workspace and run all tests
     pool:
       vmImage: ubuntu-latest
     steps:

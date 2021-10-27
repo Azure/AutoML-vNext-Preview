@@ -16,6 +16,7 @@ az extension remove -n azure-cli-ml
 az extension remove -n ml
 
 # Add the new one
+Write-Host "Not installing $sdkVersionSelect"
 if( $sdkVersionSelect -eq "LatestRelease")
 {
     az extension add -n ml -y
