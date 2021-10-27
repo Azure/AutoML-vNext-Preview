@@ -31,6 +31,13 @@ parameters:
       - EastUS
       - EastUS2EUAP
       - WestUS
+  - name: cliSource
+    displayName: Installation source for CLI
+    type: string
+    default: LatestRelease
+    values:
+      - LatestRelease
+      - LatestDev
 
 variables:
   - name: SubscriptionName
@@ -94,6 +101,7 @@ jobs:
           scriptLocation: scriptPath
           scriptPath: scripts/Install-SDKv2.ps1
           failOnStandardError: false
+          arguments: -sdkVersionSelect ${{parameters.cliSource}}
 
       - task: AzureCLI@2
         displayName: Obtain Workspace
