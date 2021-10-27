@@ -91,11 +91,12 @@ jobs:
         failOnStderr: true
         displayName: Install pip etc.
 
-      - powershell:
-        targetType: filePath
-        filepath: scripts/Run-Pip.ps1
-        arguments: -sdkVersionSelect ${{parameters.sdkSource}}
-        displayName: Install pip requirements
+      - task: PowerShell@2
+        inputs:
+          targetType: filePath
+          filepath: scripts/Run-Pip.ps1
+          arguments: -sdkVersionSelect ${{parameters.sdkSource}}
+          displayName: Install pip requirements
 
       - powershell: |
           Set-PSDebug -Trace 0
