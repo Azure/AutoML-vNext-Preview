@@ -99,7 +99,7 @@ jobs:
           azureSubscription: "$(SubscriptionName)"
           scriptType: pscore
           scriptLocation: scriptPath
-          scriptPath: scripts/Install-SDKv2.ps1
+          scriptPath: scripts/Install-CLIv2.ps1
           failOnStandardError: false
           arguments: -sdkVersionSelect ${{parameters.cliSource}}
 
