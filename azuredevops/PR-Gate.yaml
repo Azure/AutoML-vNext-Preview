@@ -38,6 +38,13 @@ parameters:
     values:
       - LatestRelease
       - LatestDev
+  - name: sdkSource
+    displayName: Installation source for Python SDK
+    type: string
+    default: LatestRelease
+    values:
+      - LatestRelease
+      - LatestDev
 
 variables:
   - name: SubscriptionName
@@ -84,8 +91,10 @@ jobs:
         failOnStderr: true
         displayName: Install pip etc.
 
-      - powershell: |
-          pip install -r requirement-dev.txt
+      - powershell:
+        targetType: filePath
+        filepath: scripts/Run-Pip.ps1
+        arguments: -sdkVersionSelect ${{parameters.sdkSource}}
         displayName: Install pip requirements
 
       - powershell: |
