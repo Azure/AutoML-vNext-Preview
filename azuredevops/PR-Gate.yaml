@@ -87,6 +87,6 @@ jobs:
         oldWorkspaceHandling: ${{parameters.oldWorkspaceHandling}}
         workspaceLocation: ${{parameters.workspaceLocation}}
         cliSource: ${{parameters.cliSource}}
-        sdkSource: ${{parameters.sdkSoruce}}
+        sdkSource: ${{parameters.sdkSource}}
         subscriptionName: $(SubscriptionName)
         
