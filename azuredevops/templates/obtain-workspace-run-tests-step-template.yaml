@@ -57,10 +57,6 @@ parameters:
   type: string
 - name: configFileDirectory
   type: string
-- name: configFileArtifact
-  type: string
-- name: configFileDirectory
-  type: string
   default: configFiles
 - name: configFileArtifact
   type: string
