@@ -59,12 +59,12 @@ parameters:
   type: string
 - name: configFileArtifact
   type: string
-
-variables:
-- name: ConfigFileDirectory
-  value: configFiles
-- name: ConfigFileArtifact
-  value: WorkspaceConfiguration
+- name: configFileDirectory
+  type: string
+  default: configFiles
+- name: configFileArtifact
+  type: string
+  default: WorkspaceConfiguration
 
 steps:
 - checkout: self
@@ -118,16 +118,16 @@ steps:
     WORKSPACE_WINDOW_SECONDS: ${{parameters.workspaceWindowSeconds}}
 
 - powershell: |
-    mkdir $(ConfigFileDirectory)
-    cp workspace.yaml $(ConfigFileDirectory)
-    cp config.json $(ConfigFileDirectory)
-    cp component_config.json $(ConfigFileDirectory)
+    mkdir ${{parameters.configFileDirectory}}
+    cp workspace.yaml ${{parameters.configFileDirectory}}
+    cp config.json ${{parameters.configFileDirectory}}
+    cp component_config.json ${{parameters.configFileDirectory}}
   displayName: Copy config files to separate directory
 
 - task: PublishPipelineArtifact@1
   inputs:
-    targetPath: $(ConfigFileDirectory)
-    artifactName: $(ConfigFileArtifact)
+    targetPath: ${{parameters.configFileDirectory}}
+    artifactName: ${{parameters.onfigFileArtifact}}
 
 - task: AzureCLI@2
   displayName: Create Compute
