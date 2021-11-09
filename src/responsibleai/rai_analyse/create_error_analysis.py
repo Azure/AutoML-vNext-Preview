@@ -33,6 +33,10 @@ def parse_args():
     # parse args
     args = parser.parse_args()
 
+    # Patch issue with argument passing
+    if isinstance(args.filter_features, list) and len(args.filter_features)==0:
+        args.filter_features = None
+
     # return args
     return args
 
