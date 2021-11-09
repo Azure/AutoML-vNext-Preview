@@ -2,7 +2,7 @@ $schema: http://azureml/sdk-2-0/CommandComponent.json
 name: AzureMLModelAnalysisCounterfactual
 display_name: Counterfactual with azureml-responsibleai
 version: VERSION_REPLACEMENT_STRING
-type: command_component
+type: command
 
 inputs:
   comment:
@@ -21,10 +21,10 @@ inputs:
     default: 0
   desired_range:
     type: string # JSON encoded list
-    default: 'null'
+    default: '[]'
   permitted_range:
     type: string # JSON encoded dict
-    default: 'null'
+    default: '{}'
   features_to_vary:
     type: string # Or JSON encoded list
     default: all

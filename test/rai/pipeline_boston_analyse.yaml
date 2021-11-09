@@ -80,6 +80,7 @@ jobs:
       comment: Some causal comment
       model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_info}}
       treatment_features: '["ZN", "NOX"]'
+      heterogeneity_features: '[]'
       nuisance_model: linear
       skip_cat_limit_checks: True
 
@@ -100,3 +101,4 @@ jobs:
       comment: A comment analysing errors
       model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_info}}
       max_depth: 3
+      filter_features: '[]'

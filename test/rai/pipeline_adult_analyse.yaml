@@ -78,6 +78,7 @@ jobs:
       comment: Some causal comment
       model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_info}}
       treatment_features: '["Age", "Sex"]'
+      heterogeneity_features: '["Marital Status"]'
 
   counterfactual_01:
     type: component_job
@@ -94,3 +95,4 @@ jobs:
     inputs:
       comment: A comment analysing errors
       model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_info}}
+      filter_features: '["Race", "Sex", "Workclass", "Marital Status", "Country", "Occupation"]'

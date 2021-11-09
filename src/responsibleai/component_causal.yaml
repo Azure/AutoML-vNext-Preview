@@ -2,7 +2,7 @@ $schema: http://azureml/sdk-2-0/CommandComponent.json
 name: AzureMLModelAnalysisCausal
 display_name: Causal with azureml-responsibleai
 version: VERSION_REPLACEMENT_STRING
-type: command_component
+type: command
 
 inputs:
   comment:
