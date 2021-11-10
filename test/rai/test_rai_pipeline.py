@@ -147,7 +147,7 @@ class TestRAI:
             },
             inputs=pipeline_inputs,
             outputs=train_job_outputs,
-            commpute="cpucluster"
+            compute="cpucluster"
         )
 
         # Send it
