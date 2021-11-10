@@ -93,7 +93,7 @@ class TestRAI:
 
         # The model registration job
         register_job_inputs = {
-            'model_input_path': '${{jobs.train-model-job.outputs.model_output}}',
+            'model_input_path': train_job.outputs.model_output # '${{jobs.train-model-job.outputs.model_output}}',
             'model_base_name': 'notebook_registered_logreg',
         }
         register_job_outputs = {
