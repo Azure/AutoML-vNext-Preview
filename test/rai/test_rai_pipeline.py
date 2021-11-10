@@ -138,7 +138,8 @@ class TestRAI:
 
         # Assemble into a pipeline
         pipeline_job = PipelineJob(
-            description="Notebook submitted Adult",
+            experiment_name=f"Classification_from_Python_{version_string}",
+            description="Python submitted Adult",
             jobs = {
                 'train-model-job': train_job,
                 'register-model-job': register_job,
