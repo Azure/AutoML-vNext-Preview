@@ -52,6 +52,9 @@ inputs:
   random_state:
     type: string # int or none
     default: None
+outputs:
+  causal_output:
+    type: path
 
 code:
   local_path: ./rai_analyse/

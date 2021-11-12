@@ -19,6 +19,11 @@ inputs:
     type: string
     default: 'null'
 
+
+outputs:
+  error_analysis_output:
+    type: path
+
 code:
   local_path: ./rai_analyse/
 

@@ -10,6 +10,11 @@ inputs:
   model_analysis_info:
     type: path
 
+
+outputs:
+  explanation_output:
+    type: path
+
 code:
   local_path: ./rai_analyse/
 

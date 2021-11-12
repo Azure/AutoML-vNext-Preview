@@ -32,6 +32,10 @@ inputs:
     type: boolean
     default: False
 
+outputs:
+  counterfactual_output:
+    type: path
+
 code:
   local_path: ./rai_analyse/
 
