@@ -1,5 +1,5 @@
-name: AML_RAI_Analysis_Boston_VERSION_REPLACEMENT_STRING
-experiment_name: AML_RAI_Boston_VERSION_REPLACEMENT_STRING
+name: AML_Explain_Subgraph_VERSION_REPLACEMENT_STRING
+experiment_name: AML_Explain_Subgraph_Experiment_VERSION_REPLACEMENT_STRING
 type: pipeline
 
 inputs:
