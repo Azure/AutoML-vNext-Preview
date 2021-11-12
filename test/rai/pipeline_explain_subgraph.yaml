@@ -14,6 +14,16 @@ outputs:
   explanation_dir:
     data:
       datastore: azureml:workspaceblobstore
+  model_dir:
+    data:
+      datastore: azureml:workspaceblobstore
+  train_data:
+    data:
+      datastore: azureml:workspaceblobstore
+  test_data:
+    data:
+      datastore: azureml:workspaceblobstore
+
 
 
 compute: azureml:cpucluster
