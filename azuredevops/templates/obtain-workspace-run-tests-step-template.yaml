@@ -164,6 +164,17 @@ steps:
     arguments: test/data/boston/registration_config.json
     failOnStandardError: false # Since the new CLI writes stuff there
 
+    
+- task: AzureCLI@2
+  displayName: Register dummy ModelAnalysis
+  inputs:
+    azureSubscription: "${{parameters.subscriptionName}}"
+    scriptType: pscore
+    scriptLocation: scriptPath
+    scriptPath: scripts/Register-AzureML.ps1
+    arguments: test/data/explain_subgraph/registration_config.json
+    failOnStandardError: false # Since the new CLI writes stuff there
+
 - task: AzureCLI@2
   displayName: Register Test-only components
   inputs:

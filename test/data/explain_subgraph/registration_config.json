@@ -1,0 +1,12 @@
+{
+    "environments": [],
+    "components": [],
+    "data": [
+        {
+            "script" : "noop.py",
+            "data_yamls": [
+                "data_model_analysis_info.yaml"
+            ]
+        }
+    ]
+}
