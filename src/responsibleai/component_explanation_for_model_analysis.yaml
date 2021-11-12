@@ -1,0 +1,26 @@
+$schema: http://azureml/sdk-2-0/CommandComponent.json
+name: AzureMLModelAnalysisCustomExplainer
+display_name: Customer's Explainer
+version: VERSION_REPLACEMENT_STRING
+type: command
+
+inputs:
+  model_analysis_info:
+    type: path
+  explainer:
+    type: path
+
+
+outputs:
+  global_explanation:
+    type: path
+  local_explanation:
+    type: path
+
+code:
+  local_path: ./rai_analyse/
+
+environment: azureml:AML-RAI-Environment:VERSION_REPLACEMENT_STRING
+
+command: >-
+  echo "Hello!"

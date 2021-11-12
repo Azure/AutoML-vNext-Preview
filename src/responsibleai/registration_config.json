@@ -11,7 +11,7 @@
         "component_model_analysis.yaml",
         "component_extract_model_analysis_data.yaml",
         "component_custom_explainer.yaml",
-        
+        "component_explanation_for_model_analysis.yaml",
     ],
     "data" : []
 }
