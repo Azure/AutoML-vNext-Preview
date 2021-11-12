@@ -1,0 +1,26 @@
+$schema: http://azureml/sdk-2-0/CommandComponent.json
+name: AzureMLModelAnalysisExtractData
+display_name: Extract Model Analysis Data
+version: VERSION_REPLACEMENT_STRING
+type: command
+
+inputs:
+  model_analysis:
+    type: path
+
+
+outputs:
+  model:
+    type: path
+  train_data:
+    type: path
+  test_data:
+    type: path
+
+code:
+  local_path: ./rai_analyse/
+
+environment: azureml:AML-RAI-Environment:VERSION_REPLACEMENT_STRING
+
+command: >-
+  echo "Hello!"

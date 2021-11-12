@@ -8,7 +8,10 @@
         "component_counterfactual.yaml",
         "component_error_analysis.yaml",
         "component_explain.yaml",
-        "component_model_analysis.yaml"
+        "component_model_analysis.yaml",
+        "component_extract_model_analysis_data.yaml",
+        "component_custom_explainer.yaml",
+        
     ],
     "data" : []
 }
