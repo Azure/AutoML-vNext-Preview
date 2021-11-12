@@ -41,7 +41,7 @@ jobs:
       model_analysis: ${{inputs.model_analysis}}
     outputs:
       model: ${{outputs.model_dir}}
-      training_data: ${{outputs.train_data}}
+      train_data: ${{outputs.train_data}}
       test_data: ${{outputs.test_data}}
 
   create-explainer-job:
