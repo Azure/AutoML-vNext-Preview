@@ -1,6 +1,6 @@
 $schema: http://azureml/sdk-2-0/CommandComponent.json
-name: AzureMLModelAnalysisCustomExplainer
-display_name: Customer's Explainer
+name: AzureMLModelAnalysisGenerateExplanation
+display_name: Generate Explanation
 version: VERSION_REPLACEMENT_STRING
 type: command
 
@@ -12,9 +12,7 @@ inputs:
 
 
 outputs:
-  global_explanation:
-    type: path
-  local_explanation:
+  model_analysis_explanation:
     type: path
 
 code:

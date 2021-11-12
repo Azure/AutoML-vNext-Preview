@@ -3,11 +3,18 @@ experiment_name: AML_RAI_Boston_VERSION_REPLACEMENT_STRING
 type: pipeline
 
 inputs:
+  model_analysis:
+    dataset: azureml:Model_Analysis_Info:VERSION_REPLACEMENT_STRING
+    mode: ro_mount
 
 outputs:
   explainer_directory:
     data:
       datastore: azureml:workspaceblobstore
+  explanation_dir:
+    data:
+      datastore: azureml:workspaceblobstore
+
 
 compute: azureml:cpucluster
 
@@ -21,71 +28,29 @@ jobs:
     type: component_job
     component: azureml:AzureMLModelAnalysisExtractData:VERSION_REPLACEMENT_STRING
     inputs:
-      training_data: ${{inputs.my_training_data}}
-      target_column_name: ${{inputs.target_column_name}}
-      categorical_features: '[]'
-      continuous_features: '["CRIM", "ZN", "INDUS", "CHAS", "NOX", "RM", "AGE","DIS", "RAD", "TAX", "PTRATIO", "B", "LSTAT"]'
+      model_analysis: ${{inputs.model_analysis}}
     outputs:
-      model_output: ${{outputs.my_model_directory}}
+      model: ${{outputs.model_dir}}
+      training_data: ${{outputs.train_data}}
+      test_data: ${{outputs.test_data}}
 
-  register-model-job:
+  create-explainer-job:
     type: component_job
-    component: azureml:RegisterModel:VERSION_REPLACEMENT_STRING
+    component: azureml:AzureMLModelAnalysisCustomExplainer:VERSION_REPLACEMENT_STRING
     inputs:
-      model_input_path: ${{jobs.train-model-job.outputs.model_output}}
-      model_base_name: component_registered_boston_01
+      model: ${{jobs.extract-ma-data-job.outputs.model}}
+      train_data: ${{jobs.extract-ma-data-job.outputs.train_data}}
     outputs:
-      model_info_output_path: ${{outputs.model_info}}
+      explainer: ${{outputs.explainer_directory}}
 
-  create-ma-job:
+  create-explanation-job:
     type: component_job
-    component: azureml:AzureMLModelAnalysis:VERSION_REPLACEMENT_STRING
+    component: azureml:AzureMLModelAnalysisGenerateExplanation:VERSION_REPLACEMENT_STRING
     inputs:
-      title: Boston Housing Analysis
-      task_type: regression
-      model_info_path: ${{jobs.register-model-job.outputs.model_info_output_path}}
-      train_dataset: ${{inputs.my_training_data}}
-      test_dataset: ${{inputs.my_test_data}}
-      target_column_name: ${{inputs.target_column_name}}
-      X_column_names: '["CRIM", "ZN", "INDUS", "CHAS", "NOX", "RM", "AGE","DIS", "RAD", "TAX", "PTRATIO", "B", "LSTAT"]'
-      datastore_name: workspaceblobstore
-      categorical_column_names: '[]'
+      model_analysis_info: ${{inputs.model_analysis}}
+      explainer: ${{jobs.create-explainer-job.outputs.explainer}}
     outputs:
-      model_analysis_info: ${{outputs.ma_info}}
+      model_analysis_explanation: ${{outputs.explanation_dir}}
 
-  explain_01:
-    type: component_job
-    component: azureml:AzureMLModelAnalysisExplanation:VERSION_REPLACEMENT_STRING
-    inputs:
-      comment: Some random string
-      model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_info}}
 
-  causal_01:
-    type: component_job
-    component: azureml:AzureMLModelAnalysisCausal:VERSION_REPLACEMENT_STRING
-    inputs:
-      comment: Some causal comment
-      model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_info}}
-      treatment_features: '["ZN", "NOX"]'
-      heterogeneity_features: '[]'
-      nuisance_model: linear
-      skip_cat_limit_checks: True
 
-  counterfactual_01:
-    type: component_job
-    component: azureml:AzureMLModelAnalysisCounterfactual:VERSION_REPLACEMENT_STRING
-    inputs:
-      comment: A counterfactual comment
-      model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_info}}
-      total_CFs: 10
-      desired_range: '[10, 300]'
-      feature_importance: True
-
-  error_analysis_01:
-    type: component_job
-    component: azureml:AzureMLModelAnalysisErrorAnalysis:VERSION_REPLACEMENT_STRING
-    inputs:
-      comment: A comment analysing errors
-      model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_info}}
-      max_depth: 3
-      filter_features: '[]'

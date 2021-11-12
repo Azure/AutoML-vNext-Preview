@@ -4,6 +4,7 @@
 
 import logging
 import pathlib
+import pytest
 import time
 
 from azure.ml.entities import InputDatasetEntry
@@ -34,6 +35,7 @@ def submit_and_wait(ml_client, pipeline_job):
 
 
 class TestRAI:
+    @pytest.mark.skip("Want things to go faster")
     def test_classification_pipeline_from_yaml(self, ml_client, component_config):
         current_dir = pathlib.Path(__file__).parent.absolute()
         pipeline_file = current_dir / "pipeline_adult_analyse.yaml"
@@ -66,6 +68,23 @@ class TestRAI:
 
         submit_and_wait(ml_client, pipeline_job)
 
+    def test_explanation_subgraph_from_yaml(self, ml_client, component_config):
+        current_dir = pathlib.Path(__file__).parent.absolute()
+        pipeline_file = current_dir / "pipeline_explain_subgraph.yaml"
+        pipeline_processed_file = "pipeline_explain_subgraph.processed.yaml"
+
+        replacements = {
+            'VERSION_REPLACEMENT_STRING': str(component_config['version'])
+        }
+        process_file(pipeline_file, pipeline_processed_file, replacements)
+
+        pipeline_job = Job.load(
+            path=pipeline_processed_file
+        )
+
+        submit_and_wait(ml_client, pipeline_job)
+
+    @pytest.mark.skip("Want things to go faster")
     def test_classification_pipeline(self, ml_client, component_config):
         # This only configures an explanation for simplicity
         version_string = component_config['version']
@@ -133,14 +152,14 @@ class TestRAI:
         }
         explain_job = ComponentJob(
             component=f"AzureMLModelAnalysisExplanation:{version_string}",
-            inputs = explain_inputs
+            inputs=explain_inputs
         )
 
         # Assemble into a pipeline
         pipeline_job = PipelineJob(
             experiment_name=f"Classification_from_Python_{version_string}",
             description="Python submitted Adult",
-            jobs = {
+            jobs={
                 'train-model-job': train_job,
                 'register-model-job': register_job,
                 'create-ma-job': create_ma_job,
