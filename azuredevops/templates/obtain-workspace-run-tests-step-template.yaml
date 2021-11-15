@@ -91,8 +91,8 @@ steps:
   displayName: Install YAML extension for Powershell
 
 - powershell: |
-    #Pin az cli
-    python -m pip install azure-cli<2.30.0
+    # Pin az cli
+    pip install --upgrade --force-reinstall --no-cache-dir "azure-cli<2.30.0"
   displayName: Upper bound on azure-cli
 
 - task: AzureCLI@2
