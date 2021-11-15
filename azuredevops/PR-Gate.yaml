@@ -56,7 +56,7 @@ parameters:
 
 variables:
 - name: SubscriptionName
-  value: "INFRA Project Vienna INT (589c7ae9-223e-45e3-a191-98433e0821a9)"
+  value: "INFRA Project Vienna INT"
 
 pr:
   - main
