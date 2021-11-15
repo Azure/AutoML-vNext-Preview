@@ -90,10 +90,10 @@ steps:
     Install-Module powershell-yaml -Scope CurrentUser -Force
   displayName: Install YAML extension for Powershell
 
-- powershell: |
-    # Pin az cli
-    pip install --upgrade --force-reinstall --no-cache-dir "azure-cli<2.30.0"
-  displayName: Upper bound on azure-cli
+#- powershell: |
+#    # Pin az cli
+#    pip install --upgrade --force-reinstall --no-cache-dir "azure-cli<2.30.0"
+#  displayName: Upper bound on azure-cli
 
 - task: AzureCLI@2
   displayName: Install AzureML CLI v2
