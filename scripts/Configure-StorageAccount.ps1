@@ -16,3 +16,8 @@ Write-Host "Workspace: $($ws_info.workspace_name)"
 $ws = az ml workspace show --resource-group $ws_info.resource_group --name $ws_info.workspace_name | ConvertFrom-Json
 
 Write-Host "Storage Account: $($ws.storage_account)"
+
+# Set the permissions
+New-AzRoleAssignment -ObjectID $env:servicePrincipalId `
+    -RoleDefinitionName "Storage Blob Data Reader" `
+    -Scope $ws.storage_account
