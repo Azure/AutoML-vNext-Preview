@@ -113,6 +113,17 @@ steps:
     WORKSPACE_LOCATION: ${{parameters.workspaceLocation}}
     WORKSPACE_WINDOW_SECONDS: ${{parameters.workspaceWindowSeconds}}
 
+- task: AzureCLI@2
+  displayName: Configure storage account access
+  inputs:
+    azureSubscription: "${{parameters.subscriptionName}}"
+    scriptType: pscore
+    scriptLocation: scriptPath
+    scriptPath: scripts/Configure-StorageAccount.ps1
+    failOnStandardError: false # Since the new CLI writes stuff there
+  addSpnToEnvironment: true
+
+
 - powershell: |
     mkdir ${{parameters.configFileDirectory}}
     cp workspace.yaml ${{parameters.configFileDirectory}}
