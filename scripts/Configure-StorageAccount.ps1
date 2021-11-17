@@ -24,5 +24,5 @@ Install-Module -Name Az -Scope CurrentUser -Repository PSGallery -Force
 
 # Set the permissions
 Write-Host 
-Write-Host $env:servicePrincipalId
+Write-Host "Id: $($env:servicePrincipalId)"
 New-AzRoleAssignment -ObjectID $env:servicePrincipalId -RoleDefinitionName "Storage Blob Data Reader" -Scope $ws.storage_account
