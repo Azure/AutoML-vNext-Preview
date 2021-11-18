@@ -20,9 +20,7 @@ Write-Host "Storage Account: $($ws.storage_account)"
 Write-Host
 
 # Install the command we need
-Install-Module -Name Az -Scope CurrentUser -Repository PSGallery -Force
 
 # Set the permissions
 Write-Host 
-Write-Host "Id: $($env:servicePrincipalId)"
-New-AzRoleAssignment -ObjectID $env:servicePrincipalId -RoleDefinitionName "Storage Blob Data Reader" -Scope $ws.storage_account
+az role assignment create --assignee $env:servicePrincipalId --role "Storage Blob Data Reader" --scope $ws.storage_account
