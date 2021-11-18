@@ -23,4 +23,8 @@ Write-Host
 
 # Set the permissions
 Write-Host 
-az role assignment create --assignee $env:servicePrincipalId --role "Storage Blob Data Reader" --scope $ws.storage_account
+az role assignment create `
+    --assignee-object-id $env:servicePrincipalId `
+    --assignee-principal-type ServicePrincipal `
+    --role "Storage Blob Data Reader" `
+    --scope $ws.storage_account
