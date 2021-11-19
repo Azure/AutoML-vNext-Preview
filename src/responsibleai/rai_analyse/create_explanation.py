@@ -41,7 +41,7 @@ def main(args):
         model_analysis_parent))
 
     # Load the Model Analysis
-    ma = ModelAnalysis.load(args.model_analysis_info)
+    ma = ModelAnalysis.load(args.model_analysis_dashboard)
     _logger.info("Loaded ModelAnalysis object")
 
     # Add the explanation
