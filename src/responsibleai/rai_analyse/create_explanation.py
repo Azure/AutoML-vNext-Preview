@@ -85,11 +85,12 @@ def main(args):
             ma.save(tmpdirname)
             _logger.info(f"Saved to {tmpdirname}")
 
-            explainer_dirs = os.listdir(pathlib.Path(tmpdirname/'explainer'))
+            explainer_dirs = os.listdir(pathlib.Path(tmpdirname)/'explainer')
             print(f"explainer_dirs: {explainer_dirs}")
 
             print_dir_tree(explainer_dirs[0])
-            shutil.copytree(explainer_dirs[0], args.explanation_path, dirs_exist_ok=True)
+            shutil.copytree(
+                explainer_dirs[0], args.explanation_path, dirs_exist_ok=True)
             _logger.info("Copied to output")
 
 
