@@ -63,7 +63,7 @@ def main(args):
                         incoming_dir, dirs_exist_ok=True)
 
         os.makedirs(incoming_dir / 'causal', exist_ok=True)
-        os.makedirs(incoming_dir / 'counter_factual', exist_ok=True)
+        os.makedirs(incoming_dir / 'counterfactual', exist_ok=True)
         os.makedirs(incoming_dir / 'error_analysis', exist_ok=True)
         os.makedirs(incoming_dir / 'explainer', exist_ok=True)
 
