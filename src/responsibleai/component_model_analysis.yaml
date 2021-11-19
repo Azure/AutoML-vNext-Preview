@@ -36,7 +36,6 @@ command: >-
   --train_dataset ${{inputs.train_dataset}}
   --test_dataset ${{inputs.test_dataset}}
   --target_column_name ${{inputs.target_column_name}}
-  --X_column_names '${{inputs.X_column_names}}'
   --maximum_rows_for_test_dataset ${{inputs.maximum_rows_for_test_dataset}}
   --categorical_column_names '${{inputs.categorical_column_names}}'
   --output_path ${{outputs.model_analysis_dashboard}}
