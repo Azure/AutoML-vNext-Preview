@@ -68,14 +68,14 @@ jobs:
     component: azureml:AzureMLModelAnalysisExplanation:VERSION_REPLACEMENT_STRING
     inputs:
       comment: Some random string
-      model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_info}}
+      model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_dashboard}}
 
   causal_01:
     type: component_job
     component: azureml:AzureMLModelAnalysisCausal:VERSION_REPLACEMENT_STRING
     inputs:
       comment: Some causal comment
-      model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_info}}
+      model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_dashboard}}
       treatment_features: '["Age", "Sex"]'
       heterogeneity_features: '["Marital Status"]'
 
@@ -84,7 +84,7 @@ jobs:
     component: azureml:AzureMLModelAnalysisCounterfactual:VERSION_REPLACEMENT_STRING
     inputs:
       comment: A counterfactual comment
-      model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_info}}
+      model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_dashboard}}
       total_CFs: 10
       desired_class: opposite
 
@@ -93,5 +93,5 @@ jobs:
     component: azureml:AzureMLModelAnalysisErrorAnalysis:VERSION_REPLACEMENT_STRING
     inputs:
       comment: A comment analysing errors
-      model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_info}}
+      model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_dashboard}}
       filter_features: '["Race", "Sex", "Workclass", "Marital Status", "Country", "Occupation"]'
