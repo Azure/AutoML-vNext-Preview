@@ -102,7 +102,7 @@ def main(args):
         model=model_estimator,
         train=train_df,
         test=test_df,
-        target_column_name=args.target_column_name,
+        target_column=args.target_column_name,
         task_type=args.task_type,
         categorical_features=cat_col_names,
         maximum_rows_for_test=args.maximum_rows_for_test_dataset
