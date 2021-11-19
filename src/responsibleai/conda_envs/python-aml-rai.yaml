@@ -5,6 +5,7 @@ dependencies:
   - python=3.8
   - pip=20.0.2
   - pip:
+    - numpy<1.20
     - pandas
     - pyarrow
     - scikit-learn
