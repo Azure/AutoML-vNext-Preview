@@ -8,6 +8,7 @@ import logging
 import os
 import pathlib
 import tempfile
+import shutil
 
 from responsibleai import ModelAnalysis
 
@@ -32,6 +33,20 @@ def parse_args():
     return args
 
 
+def print_dir_tree(base_dir):
+    for current_dir, subdirs, files in os.walk(base_dir):
+        # Current Iteration Directory
+        print(current_dir)
+
+        # Directories
+        for dirname in subdirs:
+            print('\t' + dirname)
+
+        # Files
+        for filename in files:
+            print('\t' + filename)
+
+
 def main(args):
     # Load the model_analysis_parent info
     model_analysis_parent_file = os.path.join(
@@ -42,37 +57,33 @@ def main(args):
         model_analysis_parent))
 
     # Load the Model Analysis
-    incoming_dir = pathlib.Path(args.model_analysis_dashboard)
-    os.mkdir(incoming_dir / 'causal')
-    os.mkdir(incoming_dir / 'counter_factual')
-    os.mkdir(incoming_dir / 'error_analysis')
-    os.mkdir(incoming_dir / 'explainer')
+    with tempfile.TemporaryDirectory() as incoming_temp_dir:
+        incoming_dir = pathlib.Path(incoming_temp_dir)
+        shutil.copytree(args.model_analysis_dashboard,
+                        incoming_dir, dirs_exist_ok=True)
 
-    ma = ModelAnalysis.load(args.model_analysis_dashboard)
-    _logger.info("Loaded ModelAnalysis object")
+        os.mkdir(incoming_dir / 'causal')
+        os.mkdir(incoming_dir / 'counter_factual')
+        os.mkdir(incoming_dir / 'error_analysis')
+        os.mkdir(incoming_dir / 'explainer')
 
-    # Add the explanation
-    ma.explainer.add()
-    _logger.info("Added explanation")
+        print_dir_tree(incoming_dir)
 
-    # Compute
-    ma.compute()
-    _logger.info("Computation complete")
+        ma = ModelAnalysis.load(incoming_dir)
+        _logger.info("Loaded ModelAnalysis object")
 
-    # Save
-    with tempfile.TemporaryDirectory() as tmpdirname:
-        ma.save(tmpdirname)
-        for current_dir, subdirs, files in os.walk(tmpdirname):
-            # Current Iteration Directory
-            print(current_dir)
+        # Add the explanation
+        ma.explainer.add()
+        _logger.info("Added explanation")
 
-            # Directories
-            for dirname in subdirs:
-                print('\t' + dirname)
+        # Compute
+        ma.compute()
+        _logger.info("Computation complete")
 
-            # Files
-            for filename in files:
-                print('\t' + filename)
+        # Save
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            ma.save(tmpdirname)
+            print_dir_tree(tmpdirname)
 
 
 # run script
