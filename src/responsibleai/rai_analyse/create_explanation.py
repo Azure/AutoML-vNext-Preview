@@ -6,13 +6,9 @@ import argparse
 import json
 import logging
 import os
+import tempfile
 
-from azureml.core import Run
-import azureml.responsibleai
-from azureml.responsibleai.tools.model_analysis._requests.explain_request import ExplainRequest
-from azureml.responsibleai.tools.model_analysis._requests.request_dto import RequestDTO
-from azureml.responsibleai.tools.model_analysis._compute_dto import ComputeDTO
-from azureml.responsibleai.tools.model_analysis._utilities import _run_all_and_upload
+from responsibleai import ModelAnalysis
 
 from constants import Constants
 
@@ -24,8 +20,9 @@ def parse_args():
     # setup arg parser
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--model_analysis_info", type=str, required=True)
+    parser.add_argument("--model_analysis_dashboard", type=str, required=True)
     parser.add_argument("--comment", type=str, required=True)
+    parser.add_argument("--explanation_path", type=str, required=True)
 
     # parse args
     args = parser.parse_args()
@@ -41,20 +38,33 @@ def main(args):
         model_analysis_parent = json.load(si)
     _logger.info("Model_analysis_parent info: {0}".format(model_analysis_parent))
 
-    ws = Run.get_context().experiment.workspace
-    model_analysis_run = Run.get(ws, model_analysis_parent[Constants.MA_RUN_ID_KEY])
+    # Load the Model Analysis
+    ma = ModelAnalysis.load(args.model_analysis_info)
+    _logger.info("Loaded ModelAnalysis object")
 
-    explain_request = ExplainRequest(args.comment)
+    # Add the explanation
+    ma.explainer.add()
+    _logger.info("Added explanation")
 
-    req_dto = RequestDTO(explanation_requests=[explain_request])
-    compute_dto = ComputeDTO(
-        model_analysis_run.experiment.name, model_analysis_run_id=model_analysis_run.id, requests=req_dto
-    )
-    _logger.info("compute_dto created")
+    # Compute
+    ma.compute()
+    _logger.info("Computation complete")
 
-    explain_run = model_analysis_run.child_run()
-    _run_all_and_upload(compute_dto, explain_run)
-    explain_run.complete()
+    # Save
+    with tempfile.TemporaryDirectory() as tmpdirname:
+        ma.save(tmpdirname)
+        for current_dir, subdirs, files in os.walk(tmpdirname):
+        # Current Iteration Directory
+        print( current_dir )
+
+        # Directories
+        for dirname in subdirs:
+            print( '\t' + dirname )
+
+        # Files
+        for filename in files:
+            print( '\t' + filename )
+
 
 
 # run script
@@ -62,8 +72,6 @@ if __name__ == "__main__":
     # add space in logs
     print("*" * 60)
     print("\n\n")
-
-    print("azureml-responsibleai version:", azureml.responsibleai.__version__)
 
     # parse args
     args = parse_args()

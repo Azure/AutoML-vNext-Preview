@@ -129,11 +129,15 @@ class TestRAI:
         # Setup the explanation
         explain_inputs = {
             'comment': 'Insert text here',
-            'model_analysis_info': '${{jobs.create-ma-job.outputs.model_analysis_dashboard}}'
+            'model_analysis_dashboard': '${{jobs.create-ma-job.outputs.model_analysis_dashboard}}'
+        }
+        explain_outputs = {
+            'explanation': None
         }
         explain_job = ComponentJob(
             component=f"AzureMLModelAnalysisExplanation:{version_string}",
-            inputs=explain_inputs
+            inputs=explain_inputs,
+            outputs=explain_outputs
         )
 
         # Assemble into a pipeline
