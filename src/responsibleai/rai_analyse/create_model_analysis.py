@@ -6,9 +6,8 @@ import argparse
 import json
 import logging
 import os
-import uuid
+from typing import Any
 
-import mlflow
 import pandas as pd
 
 from azureml.core import Model, Run, Workspace
