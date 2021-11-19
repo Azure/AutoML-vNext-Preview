@@ -129,7 +129,7 @@ class TestRAI:
         # Setup the explanation
         explain_inputs = {
             'comment': 'Insert text here',
-            'model_analysis_dashboard': '${{jobs.create-ma-job.outputs.model_analysis_info}}'
+            'model_analysis_dashboard': '${{jobs.create-ma-job.outputs.model_analysis_dashboard}}'
         }
         explain_job = ComponentJob(
             component=f"AzureMLModelAnalysisExplanation:{version_string}",
