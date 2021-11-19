@@ -6,6 +6,7 @@ import argparse
 import json
 import logging
 import os
+import pathlib
 import tempfile
 
 from responsibleai import ModelAnalysis
@@ -41,6 +42,12 @@ def main(args):
         model_analysis_parent))
 
     # Load the Model Analysis
+    incoming_dir = pathlib.Path(args.model_analysis_dashboard)
+    os.mkdir(incoming_dir / 'causal')
+    os.mkdir(incoming_dir / 'counter_factual')
+    os.mkdir(incoming_dir / 'error_analysis')
+    os.mkdir(incoming_dir / 'explainer')
+
     ma = ModelAnalysis.load(args.model_analysis_dashboard)
     _logger.info("Loaded ModelAnalysis object")
 
