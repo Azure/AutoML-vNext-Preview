@@ -33,10 +33,12 @@ def parse_args():
 
 def main(args):
     # Load the model_analysis_parent info
-    model_analysis_parent_file = os.path.join(args.model_analysis_info, Constants.MODEL_ANALYSIS_PARENT_FILENAME)
+    model_analysis_parent_file = os.path.join(
+        args.model_analysis_info, Constants.MODEL_ANALYSIS_PARENT_FILENAME)
     with open(model_analysis_parent_file, "r") as si:
         model_analysis_parent = json.load(si)
-    _logger.info("Model_analysis_parent info: {0}".format(model_analysis_parent))
+    _logger.info("Model_analysis_parent info: {0}".format(
+        model_analysis_parent))
 
     # Load the Model Analysis
     ma = ModelAnalysis.load(args.model_analysis_info)
@@ -54,17 +56,16 @@ def main(args):
     with tempfile.TemporaryDirectory() as tmpdirname:
         ma.save(tmpdirname)
         for current_dir, subdirs, files in os.walk(tmpdirname):
-        # Current Iteration Directory
-        print( current_dir )
+            # Current Iteration Directory
+            print(current_dir)
 
-        # Directories
-        for dirname in subdirs:
-            print( '\t' + dirname )
+            # Directories
+            for dirname in subdirs:
+                print('\t' + dirname)
 
-        # Files
-        for filename in files:
-            print( '\t' + filename )
-
+            # Files
+            for filename in files:
+                print('\t' + filename)
 
 
 # run script
