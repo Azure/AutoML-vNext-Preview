@@ -62,10 +62,10 @@ def main(args):
         shutil.copytree(args.model_analysis_dashboard,
                         incoming_dir, dirs_exist_ok=True)
 
-        os.mkdir(incoming_dir / 'causal')
-        os.mkdir(incoming_dir / 'counter_factual')
-        os.mkdir(incoming_dir / 'error_analysis')
-        os.mkdir(incoming_dir / 'explainer')
+        os.makedirs(incoming_dir / 'causal', exist_ok=True)
+        os.makedirs(incoming_dir / 'counter_factual', exist_ok=True)
+        os.makedirs(incoming_dir / 'error_analysis', exist_ok=True)
+        os.makedirs(incoming_dir / 'explainer', exist_ok=True)
 
         print_dir_tree(incoming_dir)
 
