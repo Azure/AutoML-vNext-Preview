@@ -17,8 +17,6 @@ inputs:
     type: path # Must be Parquet
   target_column_name:
     type: string
-  X_column_names:
-    type: string # List[str]
   maximum_rows_for_test_dataset:
     type: integer
     default: 5000
@@ -41,4 +39,4 @@ command: >-
   --X_column_names '${{inputs.X_column_names}}'
   --maximum_rows_for_test_dataset ${{inputs.maximum_rows_for_test_dataset}}
   --categorical_column_names '${{inputs.categorical_column_names}}'
-  --output_path ${{outputs.model_analysis_info}}
+  --output_path ${{outputs.model_analysis_dashboard}}

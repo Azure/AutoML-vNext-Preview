@@ -38,8 +38,6 @@ def parse_args():
     parser.add_argument("--test_dataset", type=str, required=True)
 
     parser.add_argument("--target_column_name", type=str, required=True)
-    parser.add_argument("--X_column_names", type=str,
-                        required=True, help="List[str]")
 
     parser.add_argument("--maximum_rows_for_test_dataset",
                         type=int, default=5000)
