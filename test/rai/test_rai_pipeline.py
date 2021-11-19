@@ -135,7 +135,7 @@ class TestRAI:
             'explanation': None
         }
         explain_job = ComponentJob(
-            component=f"AzureMLModelAnalysisExplanation:{version_string}",
+            component=f"ModelAnalysisExplanation:{version_string}",
             inputs=explain_inputs,
             outputs=explain_outputs
         )
