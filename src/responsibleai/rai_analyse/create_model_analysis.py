@@ -8,6 +8,7 @@ import logging
 import os
 from typing import Any
 
+import mlflow
 import pandas as pd
 
 from azureml.core import Model, Run, Workspace
