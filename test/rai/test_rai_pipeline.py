@@ -113,15 +113,15 @@ class TestRAI:
             'train_dataset': '${{inputs.my_training_data}}',
             'test_dataset': '${{inputs.my_test_data}}',
             'target_column_name': '${{inputs.target_column_name}}',
-            'X_column_names': '["Age", "Workclass", "Education-Num", "Marital Status", "Occupation", "Relationship", "Race", "Sex", "Capital Gain", "Capital Loss", "Hours per week", "Country"]',
-            'datastore_name': 'workspaceblobstore',
+            # 'X_column_names': '["Age", "Workclass", "Education-Num", "Marital Status", "Occupation", "Relationship", "Race", "Sex", "Capital Gain", "Capital Loss", "Hours per week", "Country"]',
+            # 'datastore_name': 'workspaceblobstore',
             'categorical_column_names': '["Race", "Sex", "Workclass", "Marital Status", "Country", "Occupation"]',
         }
         create_ma_outputs = {
-            'model_analysis_info': None
+            'model_analysis_dashboard': None
         }
         create_ma_job = ComponentJob(
-            component=f"AzureMLModelAnalysis:{version_string}",
+            component=f"ModelAnalysisConstructor:{version_string}",
             inputs=create_ma_inputs,
             outputs=create_ma_outputs
         )
@@ -129,18 +129,18 @@ class TestRAI:
         # Setup the explanation
         explain_inputs = {
             'comment': 'Insert text here',
-            'model_analysis_info': '${{jobs.create-ma-job.outputs.model_analysis_info}}'
+            'model_analysis_dashboard': '${{jobs.create-ma-job.outputs.model_analysis_info}}'
         }
         explain_job = ComponentJob(
             component=f"AzureMLModelAnalysisExplanation:{version_string}",
-            inputs = explain_inputs
+            inputs=explain_inputs
         )
 
         # Assemble into a pipeline
         pipeline_job = PipelineJob(
             experiment_name=f"Classification_from_Python_{version_string}",
             description="Python submitted Adult",
-            jobs = {
+            jobs={
                 'train-model-job': train_job,
                 'register-model-job': register_job,
                 'create-ma-job': create_ma_job,
