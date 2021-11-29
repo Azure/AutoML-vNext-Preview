@@ -24,7 +24,6 @@ def parse_args():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--model_analysis_dashboard", type=str, required=True)
-    parser.add_argument("--comment", type=str, required=True)
     parser.add_argument("--total_CFs", type=int, required=True)
     parser.add_argument("--method", type=str)
     parser.add_argument("--desired_class", type=str_or_int_parser)
@@ -88,8 +87,7 @@ def main(args):
             desired_range=args.desired_range,
             permitted_range=args.permitted_range,
             features_to_vary=args.features_to_vary,
-            feature_importance=args.feature_importance,
-            comment=args.comment
+            feature_importance=args.feature_importance
         )
         _logger.info("Added counterfactual")
 
