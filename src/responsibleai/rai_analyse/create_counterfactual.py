@@ -91,7 +91,7 @@ def main(args):
             feature_importance=args.feature_importance,
             comment=args.comment
         )
-        _logger.info("Added explanation")
+        _logger.info("Added counterfactual")
 
         # Compute
         ma.compute()
