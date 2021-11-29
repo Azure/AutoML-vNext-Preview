@@ -127,3 +127,20 @@ def main(args):
             shutil.copytree(
                 pathlib.Path(tmpdirname)/'causal', args.causal_path, dirs_exist_ok=True)
             _logger.info("Copied to output")
+
+
+# run script
+if __name__ == "__main__":
+    # add space in logs
+    print("*" * 60)
+    print("\n\n")
+
+    # parse args
+    args = parse_args()
+
+    # run main function
+    main(args)
+
+    # add space in logs
+    print("*" * 60)
+    print("\n\n")

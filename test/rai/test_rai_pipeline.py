@@ -156,6 +156,22 @@ class TestRAI:
             outputs=causal_outputs
         )
 
+        # Setup counterfactual
+        counterfactual_inputs = {
+            'comment': "Something witty",
+            'model_analysis_dashboard': '${{jobs.create-ma-job.outputs.model_analysis_dashboard}}',
+            'treatment_features': '["Age", "Sex"]',
+            'heterogeneity_features': '["Marital Status"]',
+        }
+        counterfactual_outputs = {
+            'counterfactual': None
+        }
+        counterfactual_job = ComponentJob(
+            component=f"ModelAnalysisCounterfactual:{version_string}",
+            inputs=counterfactual_inputs,
+            outputs=counterfactual_outputs
+        )
+
         # Assemble into a pipeline
         pipeline_job = PipelineJob(
             experiment_name=f"Classification_from_Python_{version_string}",
@@ -165,7 +181,8 @@ class TestRAI:
                 'register-model-job': register_job,
                 'create-ma-job': create_ma_job,
                 'explain-ma-job': explain_job,
-                'causal-ma-job': causal_job
+                'causal-ma-job': causal_job,
+                'counterfactual-ma-job': counterfactual_job
             },
             inputs=pipeline_inputs,
             outputs=train_job_outputs,

@@ -1,5 +1,5 @@
 $schema: http://azureml/sdk-2-0/CommandComponent.json
-name: AzureMLModelAnalysisCounterfactual
+name: ModelAnalysisCounterfactual
 display_name: Counterfactual with azureml-responsibleai
 version: VERSION_REPLACEMENT_STRING
 type: command
@@ -32,6 +32,11 @@ inputs:
     type: boolean
     default: False
 
+
+outputs:
+  counterfactual:
+    type: path
+
 code:
   local_path: ./rai_analyse/
 
@@ -48,3 +53,4 @@ command: >-
   --permitted_range '${{inputs.permitted_range}}'
   --features_to_vary '${{inputs.features_to_vary}}'
   --feature_importance '${{inputs.feature_importance}}'
+  --counterfactual_path ${{outputs.counterfactual}}
