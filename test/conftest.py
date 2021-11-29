@@ -5,6 +5,7 @@
 import json
 import pytest
 
+from azure.identity import DefaultAzureCredential
 from azure.ml import MLClient
 
 
@@ -29,9 +30,10 @@ def workspace_config():
 @pytest.fixture(scope='function')
 def ml_client(workspace_config):
     client = MLClient(
-        workspace_config['subscription_id'],
-        workspace_config['resource_group'],
-        workspace_config['workspace_name'],
+        credential=DefaultAzureCredential(),
+        subscription_id=workspace_config['subscription_id'],
+        resource_group_name=workspace_config['resource_group'],
+        workspace_name=workspace_config['workspace_name'],
         logging_enable=True
     )
 
