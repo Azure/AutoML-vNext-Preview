@@ -6,7 +6,7 @@ type: command
 
 inputs:
   comment:
-    type: str
+    type: string
   model_analysis_dashboard:
     type: path
   treatment_features:
