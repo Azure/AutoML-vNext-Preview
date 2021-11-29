@@ -158,7 +158,6 @@ class TestRAI:
 
         # Setup counterfactual
         counterfactual_inputs = {
-            'comment': "Something witty",
             'model_analysis_dashboard': '${{jobs.create-ma-job.outputs.model_analysis_dashboard}}',
             'total_CFs': '10',
             'desired_class': 'opposite'
