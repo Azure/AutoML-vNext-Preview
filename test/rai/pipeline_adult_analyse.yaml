@@ -13,13 +13,13 @@ inputs:
 
 outputs:
   my_model_directory:
-    datastore: azureml:workspaceblobstore
+    # datastore: azureml:workspaceblobstore
     mode: upload
   ma_info:
-    datastore: azureml:workspaceblobstore
+    # datastore: azureml:workspaceblobstore
     mode: upload
   model_info:
-    datastore: azureml:workspaceblobstore
+    # datastore: azureml:workspaceblobstore
     mode: upload
 
 compute: azureml:cpucluster
