@@ -6,7 +6,7 @@ import logging
 import pathlib
 import time
 
-from azure.ml.entities import InputDatasetEntry
+from azure.ml.entities import JobInput
 from azure.ml.entities import ComponentJob, Job, PipelineJob
 
 _logger = logging.getLogger(__file__)
@@ -73,8 +73,8 @@ class TestRAI:
         # Configure the global pipeline inputs:
         pipeline_inputs = {
             'target_column_name': 'income',
-            'my_training_data': InputDatasetEntry(dataset=f"Adult_Train_PQ:{version_string}"),
-            'my_test_data': InputDatasetEntry(dataset=f"Adult_Test_PQ:{version_string}")
+            'my_training_data': JobInput(dataset=f"Adult_Train_PQ:{version_string}"),
+            'my_test_data': JobInput(dataset=f"Adult_Test_PQ:{version_string}")
         }
 
         # Specify the training job
