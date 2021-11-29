@@ -160,8 +160,8 @@ class TestRAI:
         counterfactual_inputs = {
             'comment': "Something witty",
             'model_analysis_dashboard': '${{jobs.create-ma-job.outputs.model_analysis_dashboard}}',
-            'treatment_features': '["Age", "Sex"]',
-            'heterogeneity_features': '["Marital Status"]',
+            'total_CFs': '10',
+            'desired_class': 'opposite'
         }
         counterfactual_outputs = {
             'counterfactual': None
