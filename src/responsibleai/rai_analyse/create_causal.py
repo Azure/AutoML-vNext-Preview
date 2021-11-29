@@ -24,7 +24,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--model_analysis_dashboard", type=str, required=True)
-    parser.add_argument("--coment", type=str)
+    parser.add_argument("--comment", type=str)
 
     parser.add_argument("--treatment_features",
                         type=json.loads, help="List[str]")
