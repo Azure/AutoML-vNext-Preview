@@ -23,7 +23,7 @@ def parse_args():
     # setup arg parser
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--model_analysis_info", type=str, required=True)
+    parser.add_argument("--model_analysis_dashboard", type=str, required=True)
     parser.add_argument("--comment", type=str, required=True)
     parser.add_argument("--total_CFs", type=int, required=True)
     parser.add_argument("--method", type=str)
