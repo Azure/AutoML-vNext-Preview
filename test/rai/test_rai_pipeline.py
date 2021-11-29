@@ -140,6 +140,22 @@ class TestRAI:
             outputs=explain_outputs
         )
 
+        # Setup causal
+        causal_inputs = {
+            'comment': 'Insert something',
+            'model_analysis_dashboard': '${{jobs.create-ma-job.outputs.model_analysis_dashboard}}',
+            'treatement_features': '["Age", "Sex"]',
+            'heterogeneity_features': '["Marital Status"]'
+        }
+        causal_outputs = {
+            'causal': None
+        }
+        causal_job = ComponentJob(
+            component=f"ModelAnalysisCausal:{version_string}",
+            inputs=causal_inputs,
+            outputs=causal_outputs
+        )
+
         # Assemble into a pipeline
         pipeline_job = PipelineJob(
             experiment_name=f"Classification_from_Python_{version_string}",
@@ -149,6 +165,7 @@ class TestRAI:
                 'register-model-job': register_job,
                 'create-ma-job': create_ma_job,
                 'explain-ma-job': explain_job,
+                'causal-ma-job': causal_job
             },
             inputs=pipeline_inputs,
             outputs=train_job_outputs,
