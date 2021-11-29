@@ -62,6 +62,10 @@ code:
 
 environment: azureml:AML-RAI-Environment:VERSION_REPLACEMENT_STRING
 
+# For debugging
+environment_variables:
+   AZUREML_COMPUTE_USE_COMMON_RUNTIME: true
+
 command: >-
   python create_causal.py
   --comment '${{inputs.comment}}'
