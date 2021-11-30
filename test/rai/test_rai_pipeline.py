@@ -179,7 +179,7 @@ class TestRAI:
                 'register-model-job': register_job,
                 'create-ma-job': create_ma_job,
                 'explain-ma-job': explain_job,
-                'causal-ma-job': causal_job,
+                # 'causal-ma-job': causal_job,
                 'counterfactual-ma-job': counterfactual_job
             },
             inputs=pipeline_inputs,
