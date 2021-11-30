@@ -2,6 +2,7 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # ---------------------------------------------------------
 
+
 class Constants:
     MODEL_ID_KEY = "id"  # To match Model schema
     MODEL_INFO_FILENAME = "model_info.json"

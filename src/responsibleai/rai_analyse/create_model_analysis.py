@@ -28,21 +28,23 @@ def parse_args():
 
     parser.add_argument("--title", type=str, required=True)
 
-    parser.add_argument("--task_type", type=str, required=True,
-                        choices=["classification", "regression"])
+    parser.add_argument(
+        "--task_type", type=str, required=True, choices=["classification", "regression"]
+    )
 
-    parser.add_argument("--model_info_path", type=str,
-                        help="name:version", required=True)
+    parser.add_argument(
+        "--model_info_path", type=str, help="name:version", required=True
+    )
 
     parser.add_argument("--train_dataset", type=str, required=True)
     parser.add_argument("--test_dataset", type=str, required=True)
 
     parser.add_argument("--target_column_name", type=str, required=True)
 
-    parser.add_argument("--maximum_rows_for_test_dataset",
-                        type=int, default=5000)
-    parser.add_argument("--categorical_column_names",
-                        type=str, help="Optional[List[str]]")
+    parser.add_argument("--maximum_rows_for_test_dataset", type=int, default=5000)
+    parser.add_argument(
+        "--categorical_column_names", type=str, help="Optional[List[str]]"
+    )
 
     parser.add_argument("--output_path", type=str, help="Path to output JSON")
 
@@ -54,8 +56,7 @@ def parse_args():
 
 
 def fetch_model_id(args):
-    model_info_path = os.path.join(
-        args.model_info_path, Constants.MODEL_INFO_FILENAME)
+    model_info_path = os.path.join(args.model_info_path, Constants.MODEL_INFO_FILENAME)
     with open(model_info_path, "r") as json_file:
         model_info = json.load(json_file)
     return model_info[Constants.MODEL_ID_KEY]
@@ -89,13 +90,12 @@ def main(args):
 
     model_id = fetch_model_id(args)
     _logger.info("Loading model: {0}".format(model_id))
-    model_estimator = load_mlflow_model(
-        my_run.experiment.workspace, model_id
-    )
+    model_estimator = load_mlflow_model(my_run.experiment.workspace, model_id)
 
     _logger.info("Getting categorical columns")
     cat_col_names = get_from_args(
-        args, "categorical_column_names", custom_parser=json.loads, allow_none=True)
+        args, "categorical_column_names", custom_parser=json.loads, allow_none=True
+    )
 
     _logger.info("Creating ModelAnalysis object")
     model_analysis = ModelAnalysis(
@@ -105,7 +105,7 @@ def main(args):
         target_column=args.target_column_name,
         task_type=args.task_type,
         categorical_features=cat_col_names,
-        maximum_rows_for_test=args.maximum_rows_for_test_dataset
+        maximum_rows_for_test=args.maximum_rows_for_test_dataset,
     )
 
     _logger.info("Saving ModelAnalysis object")
@@ -114,16 +114,13 @@ def main(args):
     _logger.info("Saving JSON for tool components")
     output_dict = {Constants.MA_RUN_ID_KEY: str(my_run.id)}
     output_file = os.path.join(
-        args.output_path, Constants.MODEL_ANALYSIS_PARENT_FILENAME)
+        args.output_path, Constants.MODEL_ANALYSIS_PARENT_FILENAME
+    )
     with open(output_file, "w") as of:
         json.dump(output_dict, of)
 
     _logger.info("Adding properties to Run")
-    my_run.add_properties(
-        {
-            'TBD': 'TBD'
-        }
-    )
+    my_run.add_properties({"TBD": "TBD"})
 
 
 # run script

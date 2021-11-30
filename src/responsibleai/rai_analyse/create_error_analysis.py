@@ -9,7 +9,9 @@ import os
 
 from azureml.core import Run
 import azureml.responsibleai
-from azureml.responsibleai.tools.model_analysis._requests.error_analysis_request import ErrorAnalysisRequest
+from azureml.responsibleai.tools.model_analysis._requests.error_analysis_request import (
+    ErrorAnalysisRequest,
+)
 from azureml.responsibleai.tools.model_analysis._requests.request_dto import RequestDTO
 from azureml.responsibleai.tools.model_analysis._compute_dto import ComputeDTO
 from azureml.responsibleai.tools.model_analysis._utilities import _run_all_and_upload
@@ -34,7 +36,7 @@ def parse_args():
     args = parser.parse_args()
 
     # Patch issue with argument passing
-    if isinstance(args.filter_features, list) and len(args.filter_features)==0:
+    if isinstance(args.filter_features, list) and len(args.filter_features) == 0:
         args.filter_features = None
 
     # return args
@@ -43,7 +45,9 @@ def parse_args():
 
 def main(args):
     # Load the model_analysis_parent info
-    model_analysis_parent_file = os.path.join(args.model_analysis_info, Constants.MODEL_ANALYSIS_PARENT_FILENAME)
+    model_analysis_parent_file = os.path.join(
+        args.model_analysis_info, Constants.MODEL_ANALYSIS_PARENT_FILENAME
+    )
     with open(model_analysis_parent_file, "r") as si:
         model_analysis_parent = json.load(si)
     _logger.info("Model_analysis_parent info: {0}".format(model_analysis_parent))
@@ -52,12 +56,17 @@ def main(args):
     model_analysis_run = Run.get(ws, model_analysis_parent[Constants.MA_RUN_ID_KEY])
 
     req = ErrorAnalysisRequest(
-        max_depth=args.max_depth, num_leaves=args.num_leaves, filter_features=args.filter_features, comment=args.comment
+        max_depth=args.max_depth,
+        num_leaves=args.num_leaves,
+        filter_features=args.filter_features,
+        comment=args.comment,
     )
 
     req_dto = RequestDTO(error_analysis_requests=[req])
     compute_dto = ComputeDTO(
-        model_analysis_run.experiment.name, model_analysis_run_id=model_analysis_run.id, requests=req_dto
+        model_analysis_run.experiment.name,
+        model_analysis_run_id=model_analysis_run.id,
+        requests=req_dto,
     )
     _logger.info("compute_dto created")
 

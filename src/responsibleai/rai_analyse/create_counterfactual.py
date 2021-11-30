@@ -47,32 +47,31 @@ def print_dir_tree(base_dir):
 
         # Directories
         for dirname in subdirs:
-            print('\t' + dirname)
+            print("\t" + dirname)
 
         # Files
         for filename in files:
-            print('\t' + filename)
+            print("\t" + filename)
 
 
 def main(args):
     # Load the model_analysis_parent info
     model_analysis_parent_file = os.path.join(
-        args.model_analysis_dashboard, Constants.MODEL_ANALYSIS_PARENT_FILENAME)
+        args.model_analysis_dashboard, Constants.MODEL_ANALYSIS_PARENT_FILENAME
+    )
     with open(model_analysis_parent_file, "r") as si:
         model_analysis_parent = json.load(si)
-    _logger.info("Model_analysis_parent info: {0}".format(
-        model_analysis_parent))
+    _logger.info("Model_analysis_parent info: {0}".format(model_analysis_parent))
 
     # Load the Model Analysis
     with tempfile.TemporaryDirectory() as incoming_temp_dir:
         incoming_dir = pathlib.Path(incoming_temp_dir)
-        shutil.copytree(args.model_analysis_dashboard,
-                        incoming_dir, dirs_exist_ok=True)
+        shutil.copytree(args.model_analysis_dashboard, incoming_dir, dirs_exist_ok=True)
 
-        os.makedirs(incoming_dir / 'causal', exist_ok=True)
-        os.makedirs(incoming_dir / 'counterfactual', exist_ok=True)
-        os.makedirs(incoming_dir / 'error_analysis', exist_ok=True)
-        os.makedirs(incoming_dir / 'explainer', exist_ok=True)
+        os.makedirs(incoming_dir / "causal", exist_ok=True)
+        os.makedirs(incoming_dir / "counterfactual", exist_ok=True)
+        os.makedirs(incoming_dir / "error_analysis", exist_ok=True)
+        os.makedirs(incoming_dir / "explainer", exist_ok=True)
 
         print_dir_tree(incoming_dir)
 
@@ -87,7 +86,7 @@ def main(args):
             desired_range=args.desired_range,
             permitted_range=args.permitted_range,
             features_to_vary=args.features_to_vary,
-            feature_importance=args.feature_importance
+            feature_importance=args.feature_importance,
         )
         _logger.info("Added counterfactual")
 
@@ -103,7 +102,10 @@ def main(args):
             print_dir_tree(tmpdirname)
 
             shutil.copytree(
-                pathlib.Path(tmpdirname)/'counterfactual', args.explanation_path, dirs_exist_ok=True)
+                pathlib.Path(tmpdirname) / "counterfactual",
+                args.explanation_path,
+                dirs_exist_ok=True,
+            )
             _logger.info("Copied to output")
 
 

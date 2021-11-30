@@ -13,7 +13,12 @@ import shutil
 from responsibleai import ModelAnalysis
 
 from constants import Constants
-from arg_helpers import float_or_json_parser, boolean_parser, str_or_list_parser, int_or_none_parser
+from arg_helpers import (
+    float_or_json_parser,
+    boolean_parser,
+    str_or_list_parser,
+    int_or_none_parser,
+)
 
 _logger = logging.getLogger(__file__)
 logging.basicConfig(level=logging.INFO)
@@ -25,16 +30,20 @@ def parse_args():
 
     parser.add_argument("--model_analysis_dashboard", type=str, required=True)
 
-    parser.add_argument("--treatment_features",
-                        type=json.loads, help="List[str]")
-    parser.add_argument("--heterogeneity_features", type=json.loads,
-                        help="Optional[List[str]] use 'null' to skip")
+    parser.add_argument("--treatment_features", type=json.loads, help="List[str]")
+    parser.add_argument(
+        "--heterogeneity_features",
+        type=json.loads,
+        help="Optional[List[str]] use 'null' to skip",
+    )
     parser.add_argument("--nuisance_model", type=str)
     parser.add_argument("--heterogeneity_model", type=str)
     parser.add_argument("--alpha", type=float)
     parser.add_argument("--upper_bound_on_cat_expansion", type=int)
     parser.add_argument(
-        "--treatment_cost", type=float_or_json_parser, help="Union[float, List[Union[float, np.ndarray]]]"
+        "--treatment_cost",
+        type=float_or_json_parser,
+        help="Union[float, List[Union[float, np.ndarray]]]",
     )
     parser.add_argument("--min_tree_leaf_samples", type=int)
     parser.add_argument("--max_tree_depth", type=int)
@@ -60,32 +69,31 @@ def print_dir_tree(base_dir):
 
         # Directories
         for dirname in subdirs:
-            print('\t' + dirname)
+            print("\t" + dirname)
 
         # Files
         for filename in files:
-            print('\t' + filename)
+            print("\t" + filename)
 
 
 def main(args):
     # Load the model_analysis_parent info
     model_analysis_parent_file = os.path.join(
-        args.model_analysis_dashboard, Constants.MODEL_ANALYSIS_PARENT_FILENAME)
+        args.model_analysis_dashboard, Constants.MODEL_ANALYSIS_PARENT_FILENAME
+    )
     with open(model_analysis_parent_file, "r") as si:
         model_analysis_parent = json.load(si)
-    _logger.info("Model_analysis_parent info: {0}".format(
-        model_analysis_parent))
+    _logger.info("Model_analysis_parent info: {0}".format(model_analysis_parent))
 
     # Load the Model Analysis
     with tempfile.TemporaryDirectory() as incoming_temp_dir:
         incoming_dir = pathlib.Path(incoming_temp_dir)
-        shutil.copytree(args.model_analysis_dashboard,
-                        incoming_dir, dirs_exist_ok=True)
+        shutil.copytree(args.model_analysis_dashboard, incoming_dir, dirs_exist_ok=True)
 
-        os.makedirs(incoming_dir / 'causal', exist_ok=True)
-        os.makedirs(incoming_dir / 'counterfactual', exist_ok=True)
-        os.makedirs(incoming_dir / 'error_analysis', exist_ok=True)
-        os.makedirs(incoming_dir / 'explainer', exist_ok=True)
+        os.makedirs(incoming_dir / "causal", exist_ok=True)
+        os.makedirs(incoming_dir / "counterfactual", exist_ok=True)
+        os.makedirs(incoming_dir / "error_analysis", exist_ok=True)
+        os.makedirs(incoming_dir / "explainer", exist_ok=True)
 
         print_dir_tree(incoming_dir)
 
@@ -107,7 +115,7 @@ def main(args):
             categories=args.categories,
             n_jobs=args.n_jobs,
             verbose=args.verbose,
-            random_state=args.random_state
+            random_state=args.random_state,
         )
         _logger.info("Added explanation")
 
@@ -123,7 +131,10 @@ def main(args):
             print_dir_tree(tmpdirname)
 
             shutil.copytree(
-                pathlib.Path(tmpdirname)/'causal', args.causal_path, dirs_exist_ok=True)
+                pathlib.Path(tmpdirname) / "causal",
+                args.causal_path,
+                dirs_exist_ok=True,
+            )
             _logger.info("Copied to output")
 
 
