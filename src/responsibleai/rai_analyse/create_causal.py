@@ -24,7 +24,6 @@ def parse_args():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--model_analysis_dashboard", type=str, required=True)
-    parser.add_argument("--comment", type=str)
 
     parser.add_argument("--treatment_features",
                         type=json.loads, help="List[str]")
@@ -106,7 +105,6 @@ def main(args):
             max_tree_depth=args.max_tree_depth,
             skip_cat_limit_checks=args.skip_cat_limit_checks,
             categories=args.categories,
-            comment=args.comment,
             n_jobs=args.n_jobs,
             verbose=args.verbose,
             random_state=args.random_state

@@ -5,8 +5,6 @@ version: VERSION_REPLACEMENT_STRING
 type: command
 
 inputs:
-  comment:
-    type: string
   model_analysis_dashboard:
     type: path
   treatment_features:
@@ -68,7 +66,6 @@ environment_variables:
 
 command: >-
   python create_causal.py
-  --comment '${{inputs.comment}}'
   --model_analysis_dashboard ${{inputs.model_analysis_dashboard}}
   --treatment_features '${{inputs.treatment_features}}'
   --heterogeneity_features '${{inputs.heterogeneity_features}}'

@@ -142,7 +142,6 @@ class TestRAI:
 
         # Setup causal
         causal_inputs = {
-            'comment': 'Insert something',
             'model_analysis_dashboard': '${{jobs.create-ma-job.outputs.model_analysis_dashboard}}',
             'treatment_features': '["Age", "Sex"]',
             'heterogeneity_features': '["Marital Status"]'
