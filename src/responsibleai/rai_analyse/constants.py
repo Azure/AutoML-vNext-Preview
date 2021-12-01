@@ -6,5 +6,21 @@
 class Constants:
     MODEL_ID_KEY = "id"  # To match Model schema
     MODEL_INFO_FILENAME = "model_info.json"
-    MA_RUN_ID_KEY = "model_analysis_run_id"
-    MODEL_ANALYSIS_PARENT_FILENAME = "model_analysis.json"
+    RAI_INSIGHTS_RUN_ID_KEY = "rai_insights_parent_run_id"
+    RAI_INSIGHTS_PARENT_FILENAME = "rai_insights.json"
+
+
+class PropertyKeyValues:
+    # The property to indicate the type of Run
+    RAI_INSIGHTS_TYPE_KEY = '_azureml.responsibleai.rai_inights.type'
+    RAI_INSIGHTS_TYPE_CONSTRUCT = 'construction'
+    RAI_INSIGHTS_TYPE_CAUSAL = 'causal'
+    RAI_INSIGHTS_TYPE_COUNTERFACTUAL = 'counterfactual'
+    RAI_INSIGHTS_TYPE_EXPLANATION = 'explanation'
+    RAI_INSIGHTS_TYPE_ERROR_ANALYSIS = 'error_analysis'
+
+    # Property for tool runs to point at their constructor run
+    RAI_INSIGHTS_CONSTRUCTOR_RUN_ID_KEY = '_azureml.responsibleai.rai_insights.constructor_run'
+
+    # Property to record responsibleai version
+    RAI_INSIGHTS_RESPONSIBLEAI_VERSION_KEY = '_azureml.responsibleai.rai_insights.responsibleai_version'

@@ -13,9 +13,9 @@ import pandas as pd
 
 from azureml.core import Model, Run, Workspace
 
-from responsibleai import ModelAnalysis
+from responsibleai import ModelAnalysis, __version__ as responsibleai_version
 
-from constants import Constants
+from constants import Constants, PropertyKeyValues
 from arg_helpers import get_from_args
 
 _logger = logging.getLogger(__file__)
@@ -41,7 +41,8 @@ def parse_args():
 
     parser.add_argument("--target_column_name", type=str, required=True)
 
-    parser.add_argument("--maximum_rows_for_test_dataset", type=int, default=5000)
+    parser.add_argument("--maximum_rows_for_test_dataset",
+                        type=int, default=5000)
     parser.add_argument(
         "--categorical_column_names", type=str, help="Optional[List[str]]"
     )
@@ -56,7 +57,8 @@ def parse_args():
 
 
 def fetch_model_id(args):
-    model_info_path = os.path.join(args.model_info_path, Constants.MODEL_INFO_FILENAME)
+    model_info_path = os.path.join(
+        args.model_info_path, Constants.MODEL_INFO_FILENAME)
     with open(model_info_path, "r") as json_file:
         model_info = json.load(json_file)
     return model_info[Constants.MODEL_ID_KEY]
@@ -112,15 +114,19 @@ def main(args):
     model_analysis.save(args.output_path)
 
     _logger.info("Saving JSON for tool components")
-    output_dict = {Constants.MA_RUN_ID_KEY: str(my_run.id)}
+    output_dict = {Constants.RAI_INSIGHTS_RUN_ID_KEY: str(my_run.id)}
     output_file = os.path.join(
-        args.output_path, Constants.MODEL_ANALYSIS_PARENT_FILENAME
+        args.output_path, Constants.RAI_INSIGHTS_PARENT_FILENAME
     )
     with open(output_file, "w") as of:
         json.dump(output_dict, of)
 
     _logger.info("Adding properties to Run")
-    my_run.add_properties({"TBD": "TBD"})
+    run_properties = {
+        PropertyKeyValues.RAI_INSIGHTS_TYPE_KEY: PropertyKeyValues.RAI_INSIGHTS_TYPE_CONSTRUCT,
+        PropertyKeyValues.RAI_INSIGHTS_RESPONSIBLEAI_VERSION_KEY: responsibleai_version
+    }
+    my_run.add_properties(run_properties)
 
 
 # run script
