@@ -106,8 +106,8 @@ class TestRAI:
             outputs=register_job_outputs
         )
 
-        # Top level Model Analysis component
-        create_ma_inputs = {
+        # Top level RAI Insights component
+        create_rai_inputs = {
             'title': 'Run built from Python',
             'task_type': 'classification',
             'model_info_path': '${{jobs.register-model-job.outputs.model_info_output_path}}',
@@ -118,25 +118,25 @@ class TestRAI:
             # 'datastore_name': 'workspaceblobstore',
             'categorical_column_names': '["Race", "Sex", "Workclass", "Marital Status", "Country", "Occupation"]',
         }
-        create_ma_outputs = {
-            'model_analysis_dashboard': None
+        create_rai_outputs = {
+            'rai_insights_dashboard': None
         }
-        create_ma_job = ComponentJob(
-            component=f"ModelAnalysisConstructor:{version_string}",
-            inputs=create_ma_inputs,
-            outputs=create_ma_outputs
+        create_rai_job = ComponentJob(
+            component=f"RAIInsightsConstructor:{version_string}",
+            inputs=create_rai_inputs,
+            outputs=create_rai_outputs
         )
 
         # Setup the explanation
         explain_inputs = {
             'comment': 'Insert text here',
-            'model_analysis_dashboard': '${{jobs.create-ma-job.outputs.model_analysis_dashboard}}'
+            'rai_insights_dashboard': '${{jobs.create-rai-job.outputs.rai_insights_dashboard}}'
         }
         explain_outputs = {
             'explanation': None
         }
         explain_job = ComponentJob(
-            component=f"ModelAnalysisExplanation:{version_string}",
+            component=f"RAIInsightsExplanation:{version_string}",
             inputs=explain_inputs,
             outputs=explain_outputs
         )
@@ -178,10 +178,10 @@ class TestRAI:
             jobs={
                 'train-model-job': train_job,
                 'register-model-job': register_job,
-                'create-ma-job': create_ma_job,
-                'explain-ma-job': explain_job,
+                'create-rai-job': create_rai_job,
+                'explain-rai-job': explain_job,
                 # 'causal-ma-job': causal_job,
-                #'counterfactual-ma-job': counterfactual_job
+                # 'counterfactual-ma-job': counterfactual_job
             },
             inputs=pipeline_inputs,
             outputs=train_job_outputs,
