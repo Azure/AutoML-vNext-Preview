@@ -1,6 +1,6 @@
 $schema: http://azureml/sdk-2-0/CommandComponent.json
-name: ModelAnalysisConstructor
-display_name: RAI Dashboard Constructor
+name: RAIInsightsConstructor
+display_name: RAI Insights Dashboard Constructor
 version: VERSION_REPLACEMENT_STRING
 type: command
 inputs:
@@ -23,13 +23,13 @@ inputs:
   categorical_column_names:
     type: string # Optional[List[str]]
 outputs:
-  model_analysis_dashboard:
+  rai_insights_dashboard:
     type: path
 code:
   local_path: ./rai_analyse/
 environment: azureml:AML-RAI-Environment:VERSION_REPLACEMENT_STRING
 command: >-
-  python create_model_analysis.py
+  python create_rai_insights.py
   --title '${{inputs.title}}'
   --task_type ${{inputs.task_type}}
   --model_info_path ${{inputs.model_info_path}}
@@ -38,4 +38,4 @@ command: >-
   --target_column_name ${{inputs.target_column_name}}
   --maximum_rows_for_test_dataset ${{inputs.maximum_rows_for_test_dataset}}
   --categorical_column_names '${{inputs.categorical_column_names}}'
-  --output_path ${{outputs.model_analysis_dashboard}}
+  --output_path ${{outputs.rai_insights_dashboard}}
