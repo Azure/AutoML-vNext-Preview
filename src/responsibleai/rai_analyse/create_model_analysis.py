@@ -13,7 +13,7 @@ import pandas as pd
 
 from azureml.core import Model, Run, Workspace
 
-from responsibleai import ModelAnalysis, __version__ as responsibleai_version
+from responsibleai import RAIInsights, __version__ as responsibleai_version
 
 from constants import Constants, PropertyKeyValues
 from arg_helpers import get_from_args
@@ -99,8 +99,8 @@ def main(args):
         args, "categorical_column_names", custom_parser=json.loads, allow_none=True
     )
 
-    _logger.info("Creating ModelAnalysis object")
-    model_analysis = ModelAnalysis(
+    _logger.info("Creating RAIInsights object")
+    insights = RAIInsights(
         model=model_estimator,
         train=train_df,
         test=test_df,
@@ -110,8 +110,8 @@ def main(args):
         maximum_rows_for_test=args.maximum_rows_for_test_dataset,
     )
 
-    _logger.info("Saving ModelAnalysis object")
-    model_analysis.save(args.output_path)
+    _logger.info("Saving RAIInsights object")
+    insights.save(args.output_path)
 
     _logger.info("Saving JSON for tool components")
     output_dict = {Constants.RAI_INSIGHTS_RUN_ID_KEY: str(my_run.id)}
