@@ -1,11 +1,11 @@
 $schema: http://azureml/sdk-2-0/CommandComponent.json
-name: ModelAnalysisCounterfactual
-display_name: Counterfactual with azureml-responsibleai
+name: RAIInsightsCounterfactual
+display_name: Add Counterfactuals to RAI Insights Dashboard
 version: VERSION_REPLACEMENT_STRING
 type: command
 
 inputs:
-  model_analysis_dashboard:
+  rai_insights_dashboard:
     type: path
   total_CFs:
     type: integer
@@ -42,7 +42,7 @@ environment: azureml:AML-RAI-Environment:VERSION_REPLACEMENT_STRING
 
 command: >-
   python create_counterfactual.py
-  --model_analysis_dashboard ${{inputs.model_analysis_dashboard}}
+  --rai_insights_dashboard ${{inputs.rai_insights_dashboard}}
   --total_CFs ${{inputs.total_CFs}}
   --method ${{inputs.method}}
   --desired_class ${{inputs.desired_class}}

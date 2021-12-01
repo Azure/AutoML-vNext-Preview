@@ -27,4 +27,5 @@ class PropertyKeyValues:
 
     # Properties for the constructor run to point at tool runs
     RAI_INSIGHTS_CAUSAL_POINTER_KEY_FORMAT = '_azureml.responsibleai.rai_insights.has_causal_{0}'
+    RAI_INSIGHTS_COUNTERFACTUAL_POINTER_KEY_FORMAT = '_azureml.responsibleai.rai_insights.has_counterfactual_{0}'
     RAI_INSIGHTS_EXPLANATION_POINTER_KEY_FORMAT = '_azureml.responsibleai.rai_insights.has_explanation_{0}'

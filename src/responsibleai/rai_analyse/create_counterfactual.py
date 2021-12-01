@@ -9,8 +9,11 @@ import os
 import pathlib
 import tempfile
 import shutil
+import uuid
 
-from responsibleai import ModelAnalysis
+from responsibleai import RAIInsights, __version__ as responsibleai_version
+
+from azureml.core import Run
 
 from constants import Constants
 from arg_helpers import boolean_parser, str_or_int_parser, str_or_list_parser
@@ -23,7 +26,7 @@ def parse_args():
     # setup arg parser
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--model_analysis_dashboard", type=str, required=True)
+    parser.add_argument("--rai_insights_dashboard", type=str, required=True)
     parser.add_argument("--total_CFs", type=int, required=True)
     parser.add_argument("--method", type=str)
     parser.add_argument("--desired_class", type=str_or_int_parser)

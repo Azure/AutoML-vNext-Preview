@@ -158,7 +158,7 @@ class TestRAI:
 
         # Setup counterfactual
         counterfactual_inputs = {
-            'model_analysis_dashboard': '${{jobs.create-ma-job.outputs.model_analysis_dashboard}}',
+            'rai_insights_dashboard': '${{jobs.create-ma-job.outputs.rai_insights_dashboard}}',
             'total_CFs': '10',
             'desired_class': 'opposite'
         }
@@ -166,7 +166,7 @@ class TestRAI:
             'counterfactual': None
         }
         counterfactual_job = ComponentJob(
-            component=f"ModelAnalysisCounterfactual:{version_string}",
+            component=f"RAIInsightsCounterfactual:{version_string}",
             inputs=counterfactual_inputs,
             outputs=counterfactual_outputs
         )
@@ -180,8 +180,8 @@ class TestRAI:
                 'register-model-job': register_job,
                 'create-rai-job': create_rai_job,
                 'explain-rai-job': explain_job,
-                'causal-ma-job': causal_job,
-                # 'counterfactual-ma-job': counterfactual_job
+                'causal-rai-job': causal_job,
+                'counterfactual-rai-job': counterfactual_job
             },
             inputs=pipeline_inputs,
             outputs=train_job_outputs,
