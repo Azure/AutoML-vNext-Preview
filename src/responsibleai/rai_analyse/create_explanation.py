@@ -105,7 +105,7 @@ def main(args):
 
     _logger.info("Adding explanation property to constructor run")
     extra_props = {
-        RAI_INSIGHTS_EXPLANATION_POINTER_KEY_FORMAT.format(my_run.id): True
+        PropertyKeyValues.RAI_INSIGHTS_EXPLANATION_POINTER_KEY_FORMAT.format(my_run.id): True
     }
     constructor_run = Run.get(my_run.experiment.workspace, rai_insights_parent[Constants.RAI_INSIGHTS_RUN_ID_KEY])
     constructor_run.add_properties(extra_props)
