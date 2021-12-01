@@ -24,3 +24,6 @@ class PropertyKeyValues:
 
     # Property to record responsibleai version
     RAI_INSIGHTS_RESPONSIBLEAI_VERSION_KEY = '_azureml.responsibleai.rai_insights.responsibleai_version'
+
+    # Properties for the constructor run to point at tool runs
+    RAI_INSIGHTS_EXPLANATION_POINTER_KEY_FORMAT = '_azureml.responsibleai.rai_insights.has_explanation_{0}'
