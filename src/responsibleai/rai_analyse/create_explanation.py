@@ -9,6 +9,7 @@ import os
 import pathlib
 import tempfile
 import shutil
+import uuid
 
 from responsibleai import RAIInsights, __version__ as responsibleai_version
 
@@ -87,8 +88,14 @@ def main(args):
             rai_i.save(tmpdirname)
             _logger.info(f"Saved to {tmpdirname}")
 
+            explain_dirs = os.listdir(pathlib.Path(tmpdirname) / "explainer")
+            assert len(explain_dirs) == 1, "Checking for exactly one explanation"
+            _logger.info("Checking dirname is GUID")
+            uuid.UUID(explain_dirs[0])
+
+
             shutil.copytree(
-                pathlib.Path(tmpdirname) / "explainer",
+                pathlib.Path(tmpdirname) / "explainer" / explain_dirs[0],
                 args.explanation_path,
                 dirs_exist_ok=True,
             )
