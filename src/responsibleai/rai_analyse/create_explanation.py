@@ -70,8 +70,6 @@ def main(args):
         os.makedirs(incoming_dir / "error_analysis", exist_ok=True)
         os.makedirs(incoming_dir / "explainer", exist_ok=True)
 
-        print_dir_tree(incoming_dir)
-
         rai_i = RAIInsights.load(incoming_dir)
         _logger.info("Loaded RAI Insights object")
 

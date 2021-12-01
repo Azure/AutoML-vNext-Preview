@@ -12,7 +12,7 @@ class Constants:
 
 class PropertyKeyValues:
     # The property to indicate the type of Run
-    RAI_INSIGHTS_TYPE_KEY = '_azureml.responsibleai.rai_inights.type'
+    RAI_INSIGHTS_TYPE_KEY = '_azureml.responsibleai.rai_insights.type'
     RAI_INSIGHTS_TYPE_CONSTRUCT = 'construction'
     RAI_INSIGHTS_TYPE_CAUSAL = 'causal'
     RAI_INSIGHTS_TYPE_COUNTERFACTUAL = 'counterfactual'
