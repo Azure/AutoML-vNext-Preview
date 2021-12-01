@@ -21,7 +21,7 @@ def process_file(input_file, output_file, replacements):
             outfile.write(line)
 
 
-def submit_and_wait(ml_client, pipeline_job):
+def submit_and_wait(ml_client, pipeline_job) -> PipelineJob:
     created_job = ml_client.jobs.create_or_update(pipeline_job)
     assert created_job is not None
 
@@ -31,6 +31,7 @@ def submit_and_wait(ml_client, pipeline_job):
         print("Latest status : {0}".format(created_job.status))
         _logger.info("Latest status : {0}".format(created_job.status))
     assert created_job.status == 'Completed'
+    return created_job
 
 
 class TestRAI:
@@ -188,4 +189,7 @@ class TestRAI:
         )
 
         # Send it
-        submit_and_wait(ml_client, pipeline_job)
+        pipeline_job = submit_and_wait(ml_client, pipeline_job)
+
+        print(pipeline_job)
+        assert False, str(pipeline_job)
