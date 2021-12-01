@@ -143,7 +143,7 @@ class TestRAI:
 
         # Setup causal
         causal_inputs = {
-            'model_analysis_dashboard': '${{jobs.create-ma-job.outputs.model_analysis_dashboard}}',
+            'rai_insights_dashboard': '${{jobs.create-rai-job.outputs.rai_insights_dashboard}}',
             'treatment_features': '["Age", "Sex"]',
             'heterogeneity_features': '["Marital Status"]'
         }
@@ -151,7 +151,7 @@ class TestRAI:
             'causal': None
         }
         causal_job = ComponentJob(
-            component=f"ModelAnalysisCausal:{version_string}",
+            component=f"RAIInsightsCausal:{version_string}",
             inputs=causal_inputs,
             outputs=causal_outputs
         )
@@ -180,7 +180,7 @@ class TestRAI:
                 'register-model-job': register_job,
                 'create-rai-job': create_rai_job,
                 'explain-rai-job': explain_job,
-                # 'causal-ma-job': causal_job,
+                'causal-ma-job': causal_job,
                 # 'counterfactual-ma-job': counterfactual_job
             },
             inputs=pipeline_inputs,

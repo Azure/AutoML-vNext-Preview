@@ -10,7 +10,7 @@ import pathlib
 import tempfile
 import shutil
 
-from responsibleai import ModelAnalysis
+from responsibleai import RAIInsights
 
 from constants import Constants
 from arg_helpers import (
@@ -28,7 +28,7 @@ def parse_args():
     # setup arg parser
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--model_analysis_dashboard", type=str, required=True)
+    parser.add_argument("--rai_insights_dashboard", type=str, required=True)
 
     parser.add_argument("--treatment_features", type=json.loads, help="List[str]")
     parser.add_argument(
@@ -78,17 +78,17 @@ def print_dir_tree(base_dir):
 
 def main(args):
     # Load the model_analysis_parent info
-    model_analysis_parent_file = os.path.join(
-        args.model_analysis_dashboard, Constants.RAI_INSIGHTS_PARENT_FILENAME
+    rai_insights_parent_file = os.path.join(
+        args.rai_insights_dashboard, Constants.RAI_INSIGHTS_PARENT_FILENAME
     )
-    with open(model_analysis_parent_file, "r") as si:
+    with open(rai_insights_parent_file, "r") as si:
         model_analysis_parent = json.load(si)
     _logger.info("Model_analysis_parent info: {0}".format(model_analysis_parent))
 
     # Load the Model Analysis
     with tempfile.TemporaryDirectory() as incoming_temp_dir:
         incoming_dir = pathlib.Path(incoming_temp_dir)
-        shutil.copytree(args.model_analysis_dashboard, incoming_dir, dirs_exist_ok=True)
+        shutil.copytree(args.rai_insights_dashboard, incoming_dir, dirs_exist_ok=True)
 
         os.makedirs(incoming_dir / "causal", exist_ok=True)
         os.makedirs(incoming_dir / "counterfactual", exist_ok=True)
@@ -97,11 +97,11 @@ def main(args):
 
         print_dir_tree(incoming_dir)
 
-        ma = ModelAnalysis.load(incoming_dir)
-        _logger.info("Loaded ModelAnalysis object")
+        rai_i = RAIInsights.load(incoming_dir)
+        _logger.info("Loaded RAI Insights object")
 
         # Add the causal analysis
-        ma.causal.add(
+        rai_i.causal.add(
             treatment_features=args.treatment_features,
             heterogeneity_features=args.heterogeneity_features,
             nuisance_model=args.nuisance_model,
@@ -120,12 +120,12 @@ def main(args):
         _logger.info("Added explanation")
 
         # Compute
-        ma.compute()
+        rai_i.compute()
         _logger.info("Computation complete")
 
         # Save
         with tempfile.TemporaryDirectory() as tmpdirname:
-            ma.save(tmpdirname)
+            rai_i.save(tmpdirname)
             _logger.info(f"Saved to {tmpdirname}")
 
             print_dir_tree(tmpdirname)
