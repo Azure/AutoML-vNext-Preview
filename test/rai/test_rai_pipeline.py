@@ -181,7 +181,7 @@ class TestRAI:
                 'create-rai-job': create_rai_job,
                 'explain-rai-job': explain_job,
                 'causal-rai-job': causal_job,
-                'counterfactual-rai-job': counterfactual_job
+                # 'counterfactual-rai-job': counterfactual_job
             },
             inputs=pipeline_inputs,
             outputs=train_job_outputs,
