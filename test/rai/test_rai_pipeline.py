@@ -2,6 +2,7 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # ---------------------------------------------------------
 
+from _typeshed import NoneType
 import logging
 import pathlib
 import time
@@ -171,6 +172,20 @@ class TestRAI:
             outputs=counterfactual_outputs
         )
 
+        # Setup error analysis
+        error_analysis_inputs = {
+            'rai_insights_dashboard': '${{jobs.create-rai-job.outputs.rai_insights_dashboard}}',
+            'filter_features': '["Race", "Sex", "Workclass", "Marital Status", "Country", "Occupation"]'
+        }
+        error_analysis_outputs = {
+            'error_analysis': None
+        }
+        error_analysis_job = ComponentJob(
+            component=f"RAIInsightsErrorAnalysis:{version_string}",
+            inputs=error_analysis_inputs,
+            outputs=error_analysis_outputs
+        )
+
         # Assemble into a pipeline
         pipeline_job = PipelineJob(
             experiment_name=f"Classification_from_Python_{version_string}",
@@ -181,7 +196,8 @@ class TestRAI:
                 'create-rai-job': create_rai_job,
                 'explain-rai-job': explain_job,
                 'causal-rai-job': causal_job,
-                'counterfactual-rai-job': counterfactual_job
+                'counterfactual-rai-job': counterfactual_job,
+                'error-analysis-rai-job': error_analysis_job
             },
             inputs=pipeline_inputs,
             outputs=train_job_outputs,
