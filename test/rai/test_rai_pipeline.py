@@ -206,6 +206,4 @@ class TestRAI:
 
         # Send it
         pipeline_job = submit_and_wait(ml_client, pipeline_job)
-
-        print(pipeline_job)
-        assert False, str(pipeline_job)
+        assert pipeline_job is not None
