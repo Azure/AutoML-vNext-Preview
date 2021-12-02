@@ -2,7 +2,6 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # ---------------------------------------------------------
 
-from _typeshed import NoneType
 import logging
 import pathlib
 import time
