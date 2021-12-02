@@ -23,6 +23,15 @@ _logger = logging.getLogger(__file__)
 logging.basicConfig(level=logging.INFO)
 
 
+# Directory names saved by RAIInsights might not match tool names
+_tool_directory_mapping: Dict[str, str] = {
+    RAIToolType.CAUSAL: 'causal',
+    RAIToolType.COUNTERFACTUAL: 'counterfactual',
+    RAIToolType.ERROR_ANALYSIS: 'error_analysis',
+    RAIToolType.EXPLANATION: 'explainer'
+}
+
+
 def print_dir_tree(base_dir):
     for current_dir, subdirs, files in os.walk(base_dir):
         # Current Iteration Directory
@@ -59,10 +68,8 @@ def load_rai_insights_from_input_port(input_port_path: str) -> RAIInsights:
         # since directories don't actually exist in Azure Blob store
         # they may not be present (some of the tools always have
         # a file present, even if no tool instances have been added)
-        os.makedirs(incoming_dir / "causal", exist_ok=True)
-        os.makedirs(incoming_dir / "counterfactual", exist_ok=True)
-        os.makedirs(incoming_dir / "error_analysis", exist_ok=True)
-        os.makedirs(incoming_dir / "explainer", exist_ok=True)
+        for v in _tool_directory_mapping.values:
+            os.makedirs(incoming_dir / v, exist_ok=True)
         _logger.info("Added empty directories")
 
         result = RAIInsights.load(incoming_dir)
@@ -70,18 +77,20 @@ def load_rai_insights_from_input_port(input_port_path: str) -> RAIInsights:
     return result
 
 
-def save_to_output_port(rai_i: RAIInsights, output_port_path: str, tool_dir_name: str):
+def save_to_output_port(rai_i: RAIInsights, output_port_path: str, tool_type: str):
     with tempfile.TemporaryDirectory() as tmpdirname:
         rai_i.save(tmpdirname)
         _logger.info(f"Saved to {tmpdirname}")
 
-        tool_dirs = os.listdir(pathlib.Path(tmpdirname) / tool_dir_name)
-        assert len(tool_dirs) == 1, "Checking for exactly one tool output"
+        tool_dir_name = _tool_directory_mapping(tool_type)
+        insight_dirs = os.listdir(pathlib.Path(tmpdirname) / tool_dir_name)
+        assert len(insight_dirs) == 1, "Checking for exactly one tool output"
         _logger.info("Checking dirname is GUID")
-        uuid.UUID(tool_dirs[0])
+        uuid.UUID(insight_dirs[0])
 
+        _logger.info("Starting copy")
         shutil.copytree(
-            pathlib.Path(tmpdirname) / tool_dir_name / tool_dirs[0],
+            pathlib.Path(tmpdirname) / tool_dir_name / insight_dirs[0],
             output_port_path,
             dirs_exist_ok=True,
         )
@@ -93,6 +102,9 @@ def add_properties_to_tool_run(tool_type: str, constructor_run_id: str):
     if tool_type == RAIToolType.CAUSAL:
         type_key = PropertyKeyValues.RAI_INSIGHTS_TYPE_CAUSAL
         pointer_format = PropertyKeyValues.RAI_INSIGHTS_CAUSAL_POINTER_KEY_FORMAT
+    elif tool_type == RAIToolType.COUNTERFACTUAL:
+        type_key = PropertyKeyValues.RAI_INSIGHTS_TYPE_COUNTERFACTUAL
+        pointer_format = PropertyKeyValues.RAI_INSIGHTS_COUNTERFACTUAL_POINTER_KEY_FORMAT
     elif tool_type == RAIToolType.EXPLANATION:
         type_key = PropertyKeyValues.RAI_INSIGHTS_TYPE_EXPLANATION
         pointer_format = PropertyKeyValues.RAI_INSIGHTS_EXPLANATION_POINTER_KEY_FORMAT

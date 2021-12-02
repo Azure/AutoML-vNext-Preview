@@ -50,7 +50,7 @@ def main(args):
     _logger.info("Computation complete")
 
     # Save
-    save_to_output_port(rai_i, args.explanation_path, "explainer")
+    save_to_output_port(rai_i, args.explanation_path, RAIToolType.EXPLANATION)
 
     # Add the necessary properties
     add_properties_to_tool_run(

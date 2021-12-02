@@ -9,13 +9,17 @@ import os
 import pathlib
 import tempfile
 import shutil
-import uuid
 
-from responsibleai import RAIInsights, __version__ as responsibleai_version
+from responsibleai import RAIInsights
 
-from azureml.core import Run
 
-from constants import DashboardInfo
+from constants import DashboardInfo, RAIToolType
+from rai_component_utilities import (
+    load_dashboard_info_file,
+    load_rai_insights_from_input_port,
+    save_to_output_port,
+    add_properties_to_tool_run,
+)
 from arg_helpers import boolean_parser, str_or_int_parser, str_or_list_parser
 
 _logger = logging.getLogger(__file__)
@@ -59,30 +63,14 @@ def print_dir_tree(base_dir):
 
 def main(args):
     # Load the model_analysis_parent info
-    model_analysis_parent_file = os.path.join(
-        args.model_analysis_dashboard, DashboardInfo.RAI_INSIGHTS_PARENT_FILENAME
-    )
-    with open(model_analysis_parent_file, "r") as si:
-        model_analysis_parent = json.load(si)
-    _logger.info("Model_analysis_parent info: {0}".format(model_analysis_parent))
+    dashboard_info = load_dashboard_info_file(args.rai_insights_dashboard)
 
-    # Load the Model Analysis
-    with tempfile.TemporaryDirectory() as incoming_temp_dir:
-        incoming_dir = pathlib.Path(incoming_temp_dir)
-        shutil.copytree(args.model_analysis_dashboard, incoming_dir, dirs_exist_ok=True)
+    # Load the RAI Insights object
+    rai_i: RAIInsights = load_rai_insights_from_input_port(
+        args.rai_insights_dashboard)
 
-        os.makedirs(incoming_dir / "causal", exist_ok=True)
-        os.makedirs(incoming_dir / "counterfactual", exist_ok=True)
-        os.makedirs(incoming_dir / "error_analysis", exist_ok=True)
-        os.makedirs(incoming_dir / "explainer", exist_ok=True)
-
-        print_dir_tree(incoming_dir)
-
-        ma = ModelAnalysis.load(incoming_dir)
-        _logger.info("Loaded ModelAnalysis object")
-
-        # Add the counterfactual
-        ma.counterfactual.add(
+    # Add the counterfactual
+    rai_i.counterfactual.add(
             total_CFs=args.total_CFs,
             method=args.method,
             desired_class=args.desired_class,
@@ -91,25 +79,21 @@ def main(args):
             features_to_vary=args.features_to_vary,
             feature_importance=args.feature_importance,
         )
-        _logger.info("Added counterfactual")
+    _logger.info("Added counterfactual")
 
-        # Compute
-        ma.compute()
-        _logger.info("Computation complete")
+    # Compute
+    rai_i.compute()
+    _logger.info("Computation complete")
 
-        # Save
-        with tempfile.TemporaryDirectory() as tmpdirname:
-            ma.save(tmpdirname)
-            _logger.info(f"Saved to {tmpdirname}")
+    # Save
+    save_to_output_port(rai_i, args.causal_path, RAIToolType.COUNTERFACTUAL)
 
-            print_dir_tree(tmpdirname)
+    # Add the necessary properties
+    add_properties_to_tool_run(
+        RAIToolType.COUNTERFACTUAL, dashboard_info[DashboardInfo.RAI_INSIGHTS_RUN_ID_KEY]
+    )
 
-            shutil.copytree(
-                pathlib.Path(tmpdirname) / "counterfactual",
-                args.explanation_path,
-                dirs_exist_ok=True,
-            )
-            _logger.info("Copied to output")
+    _logger.info("Completing")
 
 
 # run script

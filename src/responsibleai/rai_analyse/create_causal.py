@@ -98,7 +98,7 @@ def main(args):
     _logger.info("Computation complete")
 
     # Save
-    save_to_output_port(rai_i, args.causal_path, "causal")
+    save_to_output_port(rai_i, args.causal_path, RAIToolType.CAUSAL)
 
     # Add the necessary properties
     add_properties_to_tool_run(
