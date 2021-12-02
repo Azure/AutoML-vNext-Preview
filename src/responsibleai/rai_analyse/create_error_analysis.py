@@ -53,7 +53,9 @@ def main(args):
     _logger.info("Model_analysis_parent info: {0}".format(model_analysis_parent))
 
     ws = Run.get_context().experiment.workspace
-    model_analysis_run = Run.get(ws, model_analysis_parent[Constants.RAI_INSIGHTS_RUN_ID_KEY])
+    model_analysis_run = Run.get(
+        ws, model_analysis_parent[Constants.RAI_INSIGHTS_RUN_ID_KEY]
+    )
 
     req = ErrorAnalysisRequest(
         max_depth=args.max_depth,

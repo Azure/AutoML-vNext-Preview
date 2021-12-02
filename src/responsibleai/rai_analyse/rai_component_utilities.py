@@ -84,13 +84,11 @@ def add_properties_to_tool_run(tool_type: str, constructor_run_id: str):
     run_properties = {
         PropertyKeyValues.RAI_INSIGHTS_TYPE_KEY: type_key,
         PropertyKeyValues.RAI_INSIGHTS_RESPONSIBLEAI_VERSION_KEY: responsibleai_version,
-        PropertyKeyValues.RAI_INSIGHTS_CONSTRUCTOR_RUN_ID_KEY: constructor_run_id
+        PropertyKeyValues.RAI_INSIGHTS_CONSTRUCTOR_RUN_ID_KEY: constructor_run_id,
     }
     target_run.add_properties(run_properties)
 
     _logger.info("Adding tool property to constructor run")
-    extra_props = {
-        pointer_format.format(target_run.id): target_run.id
-    }
+    extra_props = {pointer_format.format(target_run.id): target_run.id}
     constructor_run = Run.get(target_run.experiment.workspace, constructor_run_id)
     constructor_run.add_properties(extra_props)

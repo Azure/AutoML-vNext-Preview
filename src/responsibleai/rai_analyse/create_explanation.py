@@ -11,7 +11,11 @@ from responsibleai import RAIInsights
 
 
 from constants import Constants, RAIToolType
-from rai_component_utilities import load_rai_insights_from_input_port, save_to_output_port, add_properties_to_tool_run
+from rai_component_utilities import (
+    load_rai_insights_from_input_port,
+    save_to_output_port,
+    add_properties_to_tool_run,
+)
 
 _logger = logging.getLogger(__file__)
 logging.basicConfig(level=logging.INFO)
@@ -42,8 +46,7 @@ def main(args):
     _logger.info("rai_insights_parent info: {0}".format(rai_insights_parent))
 
     # Load the RAI Insights object
-    rai_i: RAIInsights = load_rai_insights_from_input_port(
-        args.rai_insights_dashboard)
+    rai_i: RAIInsights = load_rai_insights_from_input_port(args.rai_insights_dashboard)
 
     # Add the explanation
     rai_i.explainer.add()
@@ -54,11 +57,12 @@ def main(args):
     _logger.info("Computation complete")
 
     # Save
-    save_to_output_port(rai_i, args.explanation_path, 'explainer')
+    save_to_output_port(rai_i, args.explanation_path, "explainer")
 
     # Add the necessary properties
-    add_properties_to_tool_run(RAIToolType.Explanation,
-                               rai_insights_parent[Constants.RAI_INSIGHTS_RUN_ID_KEY])
+    add_properties_to_tool_run(
+        RAIToolType.Explanation, rai_insights_parent[Constants.RAI_INSIGHTS_RUN_ID_KEY]
+    )
 
     _logger.info("Completing")
 

@@ -35,8 +35,7 @@ def parse_args():
 
     parser.add_argument("--rai_insights_dashboard", type=str, required=True)
 
-    parser.add_argument("--treatment_features",
-                        type=json.loads, help="List[str]")
+    parser.add_argument("--treatment_features", type=json.loads, help="List[str]")
     parser.add_argument(
         "--heterogeneity_features",
         type=json.loads,
@@ -89,14 +88,12 @@ def main(args):
     )
     with open(rai_insights_parent_file, "r") as si:
         rai_insights_parent = json.load(si)
-    _logger.info("Model_analysis_parent info: {0}".format(
-        rai_insights_parent))
+    _logger.info("Model_analysis_parent info: {0}".format(rai_insights_parent))
 
     # Load the Model Analysis
     with tempfile.TemporaryDirectory() as incoming_temp_dir:
         incoming_dir = pathlib.Path(incoming_temp_dir)
-        shutil.copytree(args.rai_insights_dashboard,
-                        incoming_dir, dirs_exist_ok=True)
+        shutil.copytree(args.rai_insights_dashboard, incoming_dir, dirs_exist_ok=True)
 
         os.makedirs(incoming_dir / "causal", exist_ok=True)
         os.makedirs(incoming_dir / "counterfactual", exist_ok=True)
@@ -146,12 +143,13 @@ def main(args):
             )
             _logger.info("Copied to output")
 
-        
     _logger.info("Adding properties to Run")
     run_properties = {
         PropertyKeyValues.RAI_INSIGHTS_TYPE_KEY: PropertyKeyValues.RAI_INSIGHTS_TYPE_CAUSAL,
         PropertyKeyValues.RAI_INSIGHTS_RESPONSIBLEAI_VERSION_KEY: responsibleai_version,
-        PropertyKeyValues.RAI_INSIGHTS_CONSTRUCTOR_RUN_ID_KEY: rai_insights_parent[Constants.RAI_INSIGHTS_RUN_ID_KEY]
+        PropertyKeyValues.RAI_INSIGHTS_CONSTRUCTOR_RUN_ID_KEY: rai_insights_parent[
+            Constants.RAI_INSIGHTS_RUN_ID_KEY
+        ],
     }
     my_run = Run.get_context()
     my_run.add_properties(run_properties)
@@ -160,7 +158,10 @@ def main(args):
     extra_props = {
         PropertyKeyValues.RAI_INSIGHTS_CAUSAL_POINTER_KEY_FORMAT.format(my_run.id): True
     }
-    constructor_run = Run.get(my_run.experiment.workspace, rai_insights_parent[Constants.RAI_INSIGHTS_RUN_ID_KEY])
+    constructor_run = Run.get(
+        my_run.experiment.workspace,
+        rai_insights_parent[Constants.RAI_INSIGHTS_RUN_ID_KEY],
+    )
     constructor_run.add_properties(extra_props)
     _logger.info("Completing")
 
