@@ -124,7 +124,8 @@ def main(args):
     _logger.info("Adding properties to Run")
     run_properties = {
         PropertyKeyValues.RAI_INSIGHTS_TYPE_KEY: PropertyKeyValues.RAI_INSIGHTS_TYPE_CONSTRUCT,
-        PropertyKeyValues.RAI_INSIGHTS_RESPONSIBLEAI_VERSION_KEY: responsibleai_version
+        PropertyKeyValues.RAI_INSIGHTS_RESPONSIBLEAI_VERSION_KEY: responsibleai_version,
+        PropertyKeyValues.RAI_INSIGHTS_MODEL_ID_KEY: model_id
     }
     my_run.add_properties(run_properties)
 

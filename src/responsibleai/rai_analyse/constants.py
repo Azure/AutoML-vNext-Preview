@@ -19,6 +19,9 @@ class PropertyKeyValues:
     RAI_INSIGHTS_TYPE_EXPLANATION = 'explanation'
     RAI_INSIGHTS_TYPE_ERROR_ANALYSIS = 'error_analysis'
 
+    # Property to point at the model under examination
+    RAI_INSIGHTS_MODEL_ID_KEY = '_azureml.responsibleai.rai_insights.model_id'
+
     # Property for tool runs to point at their constructor run
     RAI_INSIGHTS_CONSTRUCTOR_RUN_ID_KEY = '_azureml.responsibleai.rai_insights.constructor_run'
 
