@@ -26,7 +26,6 @@ def parse_args():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--rai_insights_dashboard", type=str, required=True)
-    parser.add_argument("--comment", type=str, required=True)
     parser.add_argument("--max_depth", type=int)
     parser.add_argument("--num_leaves", type=int)
     parser.add_argument("--filter_features", type=json.loads, help="List")
