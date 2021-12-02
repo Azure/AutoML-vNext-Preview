@@ -74,7 +74,8 @@ def save_to_output_port(rai_i: RAIInsights, output_port_path: str, tool_dir_name
     _logger.info("Copied to output")
 
 
-def add_properties_to_tool_run(target_run: Run, tool_type: str, constructor_run_id: str):
+def add_properties_to_tool_run(tool_type: str, constructor_run_id: str):
+    target_run = Run.get_context()
     if tool_type == RAIToolType.EXPLANATION:
         type_key = PropertyKeyValues.RAI_INSIGHTS_TYPE_EXPLANATION
         pointer_format = PropertyKeyValues.RAI_INSIGHTS_EXPLANATION_POINTER_KEY_FORMAT

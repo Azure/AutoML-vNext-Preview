@@ -6,17 +6,11 @@ import argparse
 import json
 import logging
 import os
-import pathlib
-import tempfile
-import shutil
-import uuid
 
-from responsibleai import RAIInsights, __version__ as responsibleai_version
+from responsibleai import RAIInsights
 
 
-from azureml.core import Run
-
-from constants import Constants, PropertyKeyValues, RAIToolType
+from constants import Constants, RAIToolType
 from rai_component_utilities import load_rai_insights_from_input_port, save_to_output_port, add_properties_to_tool_run
 
 _logger = logging.getLogger(__file__)
@@ -48,7 +42,8 @@ def main(args):
     _logger.info("rai_insights_parent info: {0}".format(rai_insights_parent))
 
     # Load the RAI Insights object
-    rai_i = load_rai_insights_from_input_port(args.rai_insights_dashboard)
+    rai_i: RAIInsights = load_rai_insights_from_input_port(
+        args.rai_insights_dashboard)
 
     # Add the explanation
     rai_i.explainer.add()
@@ -62,8 +57,7 @@ def main(args):
     save_to_output_port(rai_i, args.explanation_path, 'explainer')
 
     # Add the necessary properties
-    my_run = Run.get_context()
-    add_properties_to_tool_run(my_run, RAIToolType.Explanation,
+    add_properties_to_tool_run(RAIToolType.Explanation,
                                rai_insights_parent[Constants.RAI_INSIGHTS_RUN_ID_KEY])
 
     _logger.info("Completing")
