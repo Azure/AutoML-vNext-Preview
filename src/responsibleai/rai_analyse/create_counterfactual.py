@@ -48,19 +48,18 @@ def main(args):
     dashboard_info = load_dashboard_info_file(args.rai_insights_dashboard)
 
     # Load the RAI Insights object
-    rai_i: RAIInsights = load_rai_insights_from_input_port(
-        args.rai_insights_dashboard)
+    rai_i: RAIInsights = load_rai_insights_from_input_port(args.rai_insights_dashboard)
 
     # Add the counterfactual
     rai_i.counterfactual.add(
-            total_CFs=args.total_CFs,
-            method=args.method,
-            desired_class=args.desired_class,
-            desired_range=args.desired_range,
-            permitted_range=args.permitted_range,
-            features_to_vary=args.features_to_vary,
-            feature_importance=args.feature_importance,
-        )
+        total_CFs=args.total_CFs,
+        method=args.method,
+        desired_class=args.desired_class,
+        desired_range=args.desired_range,
+        permitted_range=args.permitted_range,
+        features_to_vary=args.features_to_vary,
+        feature_importance=args.feature_importance,
+    )
     _logger.info("Added counterfactual")
 
     # Compute
@@ -72,7 +71,8 @@ def main(args):
 
     # Add the necessary properties
     add_properties_to_tool_run(
-        RAIToolType.COUNTERFACTUAL, dashboard_info[DashboardInfo.RAI_INSIGHTS_RUN_ID_KEY]
+        RAIToolType.COUNTERFACTUAL,
+        dashboard_info[DashboardInfo.RAI_INSIGHTS_RUN_ID_KEY],
     )
 
     _logger.info("Completing")

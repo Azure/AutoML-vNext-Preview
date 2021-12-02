@@ -25,10 +25,10 @@ logging.basicConfig(level=logging.INFO)
 
 # Directory names saved by RAIInsights might not match tool names
 _tool_directory_mapping: Dict[str, str] = {
-    RAIToolType.CAUSAL: 'causal',
-    RAIToolType.COUNTERFACTUAL: 'counterfactual',
-    RAIToolType.ERROR_ANALYSIS: 'error_analysis',
-    RAIToolType.EXPLANATION: 'explainer'
+    RAIToolType.CAUSAL: "causal",
+    RAIToolType.COUNTERFACTUAL: "counterfactual",
+    RAIToolType.ERROR_ANALYSIS: "error_analysis",
+    RAIToolType.EXPLANATION: "explainer",
 }
 
 
@@ -104,10 +104,14 @@ def add_properties_to_tool_run(tool_type: str, constructor_run_id: str):
         pointer_format = PropertyKeyValues.RAI_INSIGHTS_CAUSAL_POINTER_KEY_FORMAT
     elif tool_type == RAIToolType.COUNTERFACTUAL:
         type_key = PropertyKeyValues.RAI_INSIGHTS_TYPE_COUNTERFACTUAL
-        pointer_format = PropertyKeyValues.RAI_INSIGHTS_COUNTERFACTUAL_POINTER_KEY_FORMAT
-    elif tool_type==RAIToolType.ERROR_ANALYSIS:
+        pointer_format = (
+            PropertyKeyValues.RAI_INSIGHTS_COUNTERFACTUAL_POINTER_KEY_FORMAT
+        )
+    elif tool_type == RAIToolType.ERROR_ANALYSIS:
         type_key = RAIToolType.ERROR_ANALYSIS
-        pointer_format = PropertyKeyValues.RAI_INSIGHTS_ERROR_ANALYSIS_POINTER_KEY_FORMAT
+        pointer_format = (
+            PropertyKeyValues.RAI_INSIGHTS_ERROR_ANALYSIS_POINTER_KEY_FORMAT
+        )
     elif tool_type == RAIToolType.EXPLANATION:
         type_key = PropertyKeyValues.RAI_INSIGHTS_TYPE_EXPLANATION
         pointer_format = PropertyKeyValues.RAI_INSIGHTS_EXPLANATION_POINTER_KEY_FORMAT
@@ -124,6 +128,5 @@ def add_properties_to_tool_run(tool_type: str, constructor_run_id: str):
 
     _logger.info("Adding tool property to constructor run")
     extra_props = {pointer_format.format(target_run.id): target_run.id}
-    constructor_run = Run.get(
-        target_run.experiment.workspace, constructor_run_id)
+    constructor_run = Run.get(target_run.experiment.workspace, constructor_run_id)
     constructor_run.add_properties(extra_props)

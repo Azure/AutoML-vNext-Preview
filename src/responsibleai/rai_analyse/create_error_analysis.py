@@ -48,8 +48,7 @@ def main(args):
     dashboard_info = load_dashboard_info_file(args.rai_insights_dashboard)
 
     # Load the RAI Insights object
-    rai_i: RAIInsights = load_rai_insights_from_input_port(
-        args.rai_insights_dashboard)
+    rai_i: RAIInsights = load_rai_insights_from_input_port(args.rai_insights_dashboard)
 
     # Add the error analysis
     rai_i.error_analysis.add(
@@ -64,12 +63,12 @@ def main(args):
     _logger.info("Computation complete")
 
     # Save
-    save_to_output_port(rai_i, args.error_analysis_path,
-                        RAIToolType.ERROR_ANALYSIS)
+    save_to_output_port(rai_i, args.error_analysis_path, RAIToolType.ERROR_ANALYSIS)
 
     # Add the necessary properties
     add_properties_to_tool_run(
-        RAIToolType.ERROR_ANALYSIS, dashboard_info[DashboardInfo.RAI_INSIGHTS_RUN_ID_KEY]
+        RAIToolType.ERROR_ANALYSIS,
+        dashboard_info[DashboardInfo.RAI_INSIGHTS_RUN_ID_KEY],
     )
     _logger.info("Completing")
 

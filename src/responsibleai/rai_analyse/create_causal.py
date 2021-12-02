@@ -33,8 +33,7 @@ def parse_args():
 
     parser.add_argument("--rai_insights_dashboard", type=str, required=True)
 
-    parser.add_argument("--treatment_features",
-                        type=json.loads, help="List[str]")
+    parser.add_argument("--treatment_features", type=json.loads, help="List[str]")
     parser.add_argument(
         "--heterogeneity_features",
         type=json.loads,
@@ -71,8 +70,7 @@ def main(args):
     dashboard_info = load_dashboard_info_file(args.rai_insights_dashboard)
 
     # Load the RAI Insights object
-    rai_i: RAIInsights = load_rai_insights_from_input_port(
-        args.rai_insights_dashboard)
+    rai_i: RAIInsights = load_rai_insights_from_input_port(args.rai_insights_dashboard)
 
     # Add the causal analysis
     rai_i.causal.add(
