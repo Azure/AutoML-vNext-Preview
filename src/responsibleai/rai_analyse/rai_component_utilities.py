@@ -82,7 +82,7 @@ def save_to_output_port(rai_i: RAIInsights, output_port_path: str, tool_type: st
         rai_i.save(tmpdirname)
         _logger.info(f"Saved to {tmpdirname}")
 
-        tool_dir_name = _tool_directory_mapping(tool_type)
+        tool_dir_name = _tool_directory_mapping[tool_type]
         insight_dirs = os.listdir(pathlib.Path(tmpdirname) / tool_dir_name)
         assert len(insight_dirs) == 1, "Checking for exactly one tool output"
         _logger.info("Checking dirname is GUID")
