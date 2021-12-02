@@ -15,7 +15,7 @@ from responsibleai import RAIInsights, __version__ as responsibleai_version
 
 from azureml.core import Run
 
-from constants import Constants
+from constants import DashboardInfo
 from arg_helpers import boolean_parser, str_or_int_parser, str_or_list_parser
 
 _logger = logging.getLogger(__file__)
@@ -60,7 +60,7 @@ def print_dir_tree(base_dir):
 def main(args):
     # Load the model_analysis_parent info
     model_analysis_parent_file = os.path.join(
-        args.model_analysis_dashboard, Constants.RAI_INSIGHTS_PARENT_FILENAME
+        args.model_analysis_dashboard, DashboardInfo.RAI_INSIGHTS_PARENT_FILENAME
     )
     with open(model_analysis_parent_file, "r") as si:
         model_analysis_parent = json.load(si)

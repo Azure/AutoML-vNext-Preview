@@ -16,7 +16,7 @@ from azureml.responsibleai.tools.model_analysis._requests.request_dto import Req
 from azureml.responsibleai.tools.model_analysis._compute_dto import ComputeDTO
 from azureml.responsibleai.tools.model_analysis._utilities import _run_all_and_upload
 
-from constants import Constants
+from constants import DashboardInfo
 
 _logger = logging.getLogger(__file__)
 logging.basicConfig(level=logging.INFO)
@@ -46,7 +46,7 @@ def parse_args():
 def main(args):
     # Load the model_analysis_parent info
     model_analysis_parent_file = os.path.join(
-        args.model_analysis_info, Constants.RAI_INSIGHTS_PARENT_FILENAME
+        args.model_analysis_info, DashboardInfo.RAI_INSIGHTS_PARENT_FILENAME
     )
     with open(model_analysis_parent_file, "r") as si:
         model_analysis_parent = json.load(si)
@@ -54,7 +54,7 @@ def main(args):
 
     ws = Run.get_context().experiment.workspace
     model_analysis_run = Run.get(
-        ws, model_analysis_parent[Constants.RAI_INSIGHTS_RUN_ID_KEY]
+        ws, model_analysis_parent[DashboardInfo.RAI_INSIGHTS_RUN_ID_KEY]
     )
 
     req = ErrorAnalysisRequest(
