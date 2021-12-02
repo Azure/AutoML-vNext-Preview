@@ -48,7 +48,7 @@ def main(args):
     _logger.info("rai_insights_parent info: {0}".format(rai_insights_parent))
 
     # Load the RAI Insights object
-    rai_i = load_rai_insights_from_input_port(args.rai_insights.dashboard)
+    rai_i = load_rai_insights_from_input_port(args.rai_insights_dashboard)
     
     # Add the explanation
     rai_i.explainer.add()
