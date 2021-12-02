@@ -5,10 +5,6 @@
 import argparse
 import json
 import logging
-import os
-import pathlib
-import tempfile
-import shutil
 
 from responsibleai import RAIInsights
 

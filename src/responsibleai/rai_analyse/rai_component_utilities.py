@@ -105,6 +105,9 @@ def add_properties_to_tool_run(tool_type: str, constructor_run_id: str):
     elif tool_type == RAIToolType.COUNTERFACTUAL:
         type_key = PropertyKeyValues.RAI_INSIGHTS_TYPE_COUNTERFACTUAL
         pointer_format = PropertyKeyValues.RAI_INSIGHTS_COUNTERFACTUAL_POINTER_KEY_FORMAT
+    elif tool_type==RAIToolType.ERROR_ANALYSIS:
+        type_key = RAIToolType.ERROR_ANALYSIS
+        pointer_format = PropertyKeyValues.RAI_INSIGHTS_ERROR_ANALYSIS_POINTER_KEY_FORMAT
     elif tool_type == RAIToolType.EXPLANATION:
         type_key = PropertyKeyValues.RAI_INSIGHTS_TYPE_EXPLANATION
         pointer_format = PropertyKeyValues.RAI_INSIGHTS_EXPLANATION_POINTER_KEY_FORMAT

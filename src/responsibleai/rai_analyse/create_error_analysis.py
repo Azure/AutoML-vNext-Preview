@@ -5,18 +5,17 @@
 import argparse
 import json
 import logging
-import os
 
-from azureml.core import Run
-import azureml.responsibleai
-from azureml.responsibleai.tools.model_analysis._requests.error_analysis_request import (
-    ErrorAnalysisRequest,
+from responsibleai import RAIInsights
+
+
+from constants import DashboardInfo, RAIToolType
+from rai_component_utilities import (
+    load_dashboard_info_file,
+    load_rai_insights_from_input_port,
+    save_to_output_port,
+    add_properties_to_tool_run,
 )
-from azureml.responsibleai.tools.model_analysis._requests.request_dto import RequestDTO
-from azureml.responsibleai.tools.model_analysis._compute_dto import ComputeDTO
-from azureml.responsibleai.tools.model_analysis._utilities import _run_all_and_upload
-
-from constants import DashboardInfo
 
 _logger = logging.getLogger(__file__)
 logging.basicConfig(level=logging.INFO)
@@ -26,11 +25,12 @@ def parse_args():
     # setup arg parser
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--model_analysis_info", type=str, required=True)
+    parser.add_argument("--rai_insights_dashboard", type=str, required=True)
     parser.add_argument("--comment", type=str, required=True)
     parser.add_argument("--max_depth", type=int)
     parser.add_argument("--num_leaves", type=int)
     parser.add_argument("--filter_features", type=json.loads, help="List")
+    parser.add_argument("--error_analysis_path", type=str)
 
     # parse args
     args = parser.parse_args()
@@ -45,36 +45,33 @@ def parse_args():
 
 def main(args):
     # Load the model_analysis_parent info
-    model_analysis_parent_file = os.path.join(
-        args.model_analysis_info, DashboardInfo.RAI_INSIGHTS_PARENT_FILENAME
-    )
-    with open(model_analysis_parent_file, "r") as si:
-        model_analysis_parent = json.load(si)
-    _logger.info("Model_analysis_parent info: {0}".format(model_analysis_parent))
+    dashboard_info = load_dashboard_info_file(args.rai_insights_dashboard)
 
-    ws = Run.get_context().experiment.workspace
-    model_analysis_run = Run.get(
-        ws, model_analysis_parent[DashboardInfo.RAI_INSIGHTS_RUN_ID_KEY]
-    )
+    # Load the RAI Insights object
+    rai_i: RAIInsights = load_rai_insights_from_input_port(
+        args.rai_insights_dashboard)
 
-    req = ErrorAnalysisRequest(
+    # Add the error analysis
+    rai_i.error_analysis.add(
         max_depth=args.max_depth,
         num_leaves=args.num_leaves,
         filter_features=args.filter_features,
-        comment=args.comment,
     )
+    _logger.info("Added error analysis")
 
-    req_dto = RequestDTO(error_analysis_requests=[req])
-    compute_dto = ComputeDTO(
-        model_analysis_run.experiment.name,
-        model_analysis_run_id=model_analysis_run.id,
-        requests=req_dto,
+    # Compute
+    rai_i.compute()
+    _logger.info("Computation complete")
+
+    # Save
+    save_to_output_port(rai_i, args.error_analysis_path,
+                        RAIToolType.ERROR_ANALYSIS)
+
+    # Add the necessary properties
+    add_properties_to_tool_run(
+        RAIToolType.ERROR_ANALYSIS, dashboard_info[DashboardInfo.RAI_INSIGHTS_RUN_ID_KEY]
     )
-    _logger.info("compute_dto created")
-
-    child_run = model_analysis_run.child_run()
-    _run_all_and_upload(compute_dto, child_run)
-    child_run.complete()
+    _logger.info("Completing")
 
 
 # run script
@@ -82,8 +79,6 @@ if __name__ == "__main__":
     # add space in logs
     print("*" * 60)
     print("\n\n")
-
-    print("azureml-responsibleai version:", azureml.responsibleai.__version__)
 
     # parse args
     args = parse_args()

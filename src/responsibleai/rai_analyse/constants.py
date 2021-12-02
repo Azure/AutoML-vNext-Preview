@@ -39,6 +39,9 @@ class PropertyKeyValues:
     RAI_INSIGHTS_COUNTERFACTUAL_POINTER_KEY_FORMAT = (
         "_azureml.responsibleai.rai_insights.has_counterfactual_{0}"
     )
+    RAI_INSIGHTS_ERROR_ANALYSIS_POINTER_KEY_FORMAT = (
+        "_azureml.responsibleai.rai_insights.has_error_analysis_{0}"
+    )
     RAI_INSIGHTS_EXPLANATION_POINTER_KEY_FORMAT = (
         "_azureml.responsibleai.rai_insights.has_explanation_{0}"
     )
