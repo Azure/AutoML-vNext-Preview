@@ -9,7 +9,11 @@ import shutil
 import tempfile
 import uuid
 
-from responsibleai import RAIInsights
+from azureml.core import Run
+
+from responsibleai import RAIInsights, __version__ as responsibleai_version
+
+from constants import PropertyKeyValues, RAIToolType
 
 
 _logger = logging.getLogger(__file__)
@@ -68,3 +72,24 @@ def save_to_output_port(rai_i: RAIInsights, output_port_path: str, tool_dir_name
             dirs_exist_ok=True,
         )
     _logger.info("Copied to output")
+
+
+def add_properties_to_tool_run(target_run: Run, tool_type: str, constructor_run_id: str):
+    if tool_type == RAIToolType.EXPLANATION:
+        type_key = PropertyKeyValues.RAI_INSIGHTS_TYPE_EXPLANATION
+        pointer_format = PropertyKeyValues.RAI_INSIGHTS_EXPLANATION_POINTER_KEY_FORMAT
+
+    _logger.info("Adding properties to Run")
+    run_properties = {
+        PropertyKeyValues.RAI_INSIGHTS_TYPE_KEY: type_key,
+        PropertyKeyValues.RAI_INSIGHTS_RESPONSIBLEAI_VERSION_KEY: responsibleai_version,
+        PropertyKeyValues.RAI_INSIGHTS_CONSTRUCTOR_RUN_ID_KEY: constructor_run_id
+    }
+    target_run.add_properties(run_properties)
+
+    _logger.info("Adding tool property to constructor run")
+    extra_props = {
+        pointer_format.format(target_run.id): target_run.id
+    }
+    constructor_run = Run.get(target_run.experiment.workspace, constructor_run_id)
+    constructor_run.add_properties(extra_props)

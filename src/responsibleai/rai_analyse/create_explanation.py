@@ -16,8 +16,8 @@ from responsibleai import RAIInsights, __version__ as responsibleai_version
 
 from azureml.core import Run
 
-from constants import Constants, PropertyKeyValues
-from rai_component_utilities import load_rai_insights_from_input_port, save_to_output_port
+from constants import Constants, PropertyKeyValues, RAIToolType
+from rai_component_utilities import load_rai_insights_from_input_port, save_to_output_port, add_properties_to_tool_run
 
 _logger = logging.getLogger(__file__)
 logging.basicConfig(level=logging.INFO)
@@ -39,7 +39,7 @@ def parse_args():
 
 
 def main(args):
-    # Load the model_analysis_parent info
+    # Load the rai_insights_dashboard file info
     rai_insights_dashboard_file = os.path.join(
         args.rai_insights_dashboard, Constants.RAI_INSIGHTS_PARENT_FILENAME
     )
@@ -49,7 +49,7 @@ def main(args):
 
     # Load the RAI Insights object
     rai_i = load_rai_insights_from_input_port(args.rai_insights_dashboard)
-    
+
     # Add the explanation
     rai_i.explainer.add()
     _logger.info("Added explanation")
@@ -61,23 +61,11 @@ def main(args):
     # Save
     save_to_output_port(rai_i, args.explanation_path, 'explainer')
 
-    _logger.info("Adding properties to Run")
-    run_properties = {
-        PropertyKeyValues.RAI_INSIGHTS_TYPE_KEY: PropertyKeyValues.RAI_INSIGHTS_TYPE_EXPLANATION,
-        PropertyKeyValues.RAI_INSIGHTS_RESPONSIBLEAI_VERSION_KEY: responsibleai_version,
-        PropertyKeyValues.RAI_INSIGHTS_CONSTRUCTOR_RUN_ID_KEY: rai_insights_parent[
-            Constants.RAI_INSIGHTS_RUN_ID_KEY]
-    }
+    # Add the necessary properties
     my_run = Run.get_context()
-    my_run.add_properties(run_properties)
+    add_properties_to_tool_run(my_run, RAIToolType.Explanation,
+                               rai_insights_parent[Constants.RAI_INSIGHTS_RUN_ID_KEY])
 
-    _logger.info("Adding explanation property to constructor run")
-    extra_props = {
-        PropertyKeyValues.RAI_INSIGHTS_EXPLANATION_POINTER_KEY_FORMAT.format(my_run.id): True
-    }
-    constructor_run = Run.get(my_run.experiment.workspace,
-                              rai_insights_parent[Constants.RAI_INSIGHTS_RUN_ID_KEY])
-    constructor_run.add_properties(extra_props)
     _logger.info("Completing")
 
 
