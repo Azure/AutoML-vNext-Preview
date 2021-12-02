@@ -63,7 +63,7 @@ def save_to_output_port(rai_i: RAIInsights, output_port_path: str, tool_dir_name
         uuid.UUID(tool_dirs[0])
 
         shutil.copytree(
-            pathlib.Path(tmpdirname) / tool_dir_name / tool_dir_name[0],
+            pathlib.Path(tmpdirname) / tool_dir_name / tool_dirs[0],
             output_port_path,
             dirs_exist_ok=True,
         )
