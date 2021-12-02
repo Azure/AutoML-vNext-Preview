@@ -158,7 +158,7 @@ class TestRAI:
 
         # Setup counterfactual
         counterfactual_inputs = {
-            'rai_insights_dashboard': '${{jobs.create-ma-job.outputs.rai_insights_dashboard}}',
+            'rai_insights_dashboard': '${{jobs.create-rai-job.outputs.rai_insights_dashboard}}',
             'total_CFs': '10',
             'desired_class': 'opposite'
         }
