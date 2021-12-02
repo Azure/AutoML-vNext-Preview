@@ -71,13 +71,13 @@ jobs:
     component: azureml:RAIInsightsExplanation:VERSION_REPLACEMENT_STRING
     inputs:
       comment: Some random string
-      model_analysis_info: ${{jobs.create-rai-job.outputs.rai_insights_dashboard}}
+      rai_insights_dashboard: ${{jobs.create-rai-job.outputs.rai_insights_dashboard}}
 
   causal_01:
     type: component_job
     component: azureml:RAIInsightsCausal:VERSION_REPLACEMENT_STRING
     inputs:
-      model_analysis_info: ${{jobs.create-rai-job.outputs.rai_insights_dashboard}}
+      rai_insights_dashboard: ${{jobs.create-rai-job.outputs.rai_insights_dashboard}}
       treatment_features: '["ZN", "NOX"]'
       heterogeneity_features: '[]'
       nuisance_model: linear
@@ -87,7 +87,7 @@ jobs:
     type: component_job
     component: azureml:RAIInsightsCounterfactual:VERSION_REPLACEMENT_STRING
     inputs:
-      model_analysis_info: ${{jobs.create-rai-job.outputs.rai_insights_dashboard}}
+      rai_insights_dashboard: ${{jobs.create-rai-job.outputs.rai_insights_dashboard}}
       total_CFs: 10
       desired_range: '[10, 300]'
       feature_importance: True
@@ -96,6 +96,6 @@ jobs:
     type: component_job
     component: azureml:RAIInsightsErrorAnalysis:VERSION_REPLACEMENT_STRING
     inputs:
-      model_analysis_info: ${{jobs.create-rai-job.outputs.rai_insights_dashboard}}
+      rai_insights_dashboard: ${{jobs.create-rai-job.outputs.rai_insights_dashboard}}
       max_depth: 3
       filter_features: '[]'
