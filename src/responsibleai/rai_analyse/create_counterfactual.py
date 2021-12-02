@@ -47,20 +47,6 @@ def parse_args():
     return args
 
 
-def print_dir_tree(base_dir):
-    for current_dir, subdirs, files in os.walk(base_dir):
-        # Current Iteration Directory
-        print(current_dir)
-
-        # Directories
-        for dirname in subdirs:
-            print("\t" + dirname)
-
-        # Files
-        for filename in files:
-            print("\t" + filename)
-
-
 def main(args):
     # Load the model_analysis_parent info
     dashboard_info = load_dashboard_info_file(args.rai_insights_dashboard)
@@ -86,7 +72,7 @@ def main(args):
     _logger.info("Computation complete")
 
     # Save
-    save_to_output_port(rai_i, args.causal_path, RAIToolType.COUNTERFACTUAL)
+    save_to_output_port(rai_i, args.counterfactual_path, RAIToolType.COUNTERFACTUAL)
 
     # Add the necessary properties
     add_properties_to_tool_run(
