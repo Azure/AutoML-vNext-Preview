@@ -15,7 +15,7 @@ outputs:
   my_model_directory:
     # datastore: azureml:workspaceblobstore
     mode: upload
-  ma_dashboard:
+  rai_insights_dashboard:
     # datastore: azureml:workspaceblobstore
     mode: upload
   model_info:
@@ -48,9 +48,9 @@ jobs:
     outputs:
       model_info_output_path: ${{outputs.model_info}}
 
-  create-ma-job:
+  create-rai-job:
     type: component_job
-    component: azureml:ModelAnalysisConstructor:VERSION_REPLACEMENT_STRING
+    component: azureml:RAIInsightsConstructor:VERSION_REPLACEMENT_STRING
     inputs:
       title: With just the OSS
       task_type: classification
@@ -61,37 +61,34 @@ jobs:
       # X_column_names: '["Age", "Workclass", "Education-Num", "Marital Status", "Occupation", "Relationship", "Race", "Sex", "Capital Gain", "Capital Loss", "Hours per week", "Country"]'
       categorical_column_names: '["Race", "Sex", "Workclass", "Marital Status", "Country", "Occupation"]'
     outputs:
-      model_analysis_dashboard: ${{outputs.ma_dashboard}}
+      rai_insights_dashboard: ${{outputs.rai_insights_dashboard}}
 
   explain_01:
     type: component_job
-    component: azureml:AzureMLModelAnalysisExplanation:VERSION_REPLACEMENT_STRING
+    component: azureml:RAIInsightsExplanation:VERSION_REPLACEMENT_STRING
     inputs:
       comment: Some random string
-      model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_dashboard}}
+      rai_insights_dashboard: ${{jobs.create-rai-job.outputs.rai_insights_dashboard}}
 
   causal_01:
     type: component_job
-    component: azureml:AzureMLModelAnalysisCausal:VERSION_REPLACEMENT_STRING
+    component: azureml:RAIInsightsCausal:VERSION_REPLACEMENT_STRING
     inputs:
-      comment: Some causal comment
-      model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_dashboard}}
+      rai_insights_dashboard: ${{jobs.create-rai-job.outputs.rai_insights_dashboard}}
       treatment_features: '["Age", "Sex"]'
       heterogeneity_features: '["Marital Status"]'
 
   counterfactual_01:
     type: component_job
-    component: azureml:AzureMLModelAnalysisCounterfactual:VERSION_REPLACEMENT_STRING
+    component: azureml:RAIInsightsCounterfactual:VERSION_REPLACEMENT_STRING
     inputs:
-      comment: A counterfactual comment
-      model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_dashboard}}
+      rai_insights_dashboard: ${{jobs.create-rai-job.outputs.rai_insights_dashboard}}
       total_CFs: 10
       desired_class: opposite
 
   error_analysis_01:
     type: component_job
-    component: azureml:AzureMLModelAnalysisErrorAnalysis:VERSION_REPLACEMENT_STRING
+    component: azureml:RAIInsightsErrorAnalysis:VERSION_REPLACEMENT_STRING
     inputs:
-      comment: A comment analysing errors
-      model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_dashboard}}
+      rai_insights_dashboard: ${{jobs.create-rai-job.outputs.rai_insights_dashboard}}
       filter_features: '["Race", "Sex", "Workclass", "Marital Status", "Country", "Occupation"]'
