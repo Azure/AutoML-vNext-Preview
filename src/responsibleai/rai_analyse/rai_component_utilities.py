@@ -68,7 +68,7 @@ def load_rai_insights_from_input_port(input_port_path: str) -> RAIInsights:
         # since directories don't actually exist in Azure Blob store
         # they may not be present (some of the tools always have
         # a file present, even if no tool instances have been added)
-        for v in _tool_directory_mapping.values:
+        for v in _tool_directory_mapping.values():
             os.makedirs(incoming_dir / v, exist_ok=True)
         _logger.info("Added empty directories")
 
