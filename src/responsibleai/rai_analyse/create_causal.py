@@ -17,7 +17,7 @@ from responsibleai import RAIInsights, __version__ as responsibleai_version
 from azureml.core import Run
 
 
-from constants import Constants, PropertyKeyValues
+from constants import DashboardInfo, PropertyKeyValues
 from arg_helpers import (
     float_or_json_parser,
     boolean_parser,
@@ -84,7 +84,7 @@ def print_dir_tree(base_dir):
 def main(args):
     # Load the model_analysis_parent info
     rai_insights_parent_file = os.path.join(
-        args.rai_insights_dashboard, Constants.RAI_INSIGHTS_PARENT_FILENAME
+        args.rai_insights_dashboard, DashboardInfo.RAI_INSIGHTS_PARENT_FILENAME
     )
     with open(rai_insights_parent_file, "r") as si:
         rai_insights_parent = json.load(si)
@@ -148,7 +148,7 @@ def main(args):
         PropertyKeyValues.RAI_INSIGHTS_TYPE_KEY: PropertyKeyValues.RAI_INSIGHTS_TYPE_CAUSAL,
         PropertyKeyValues.RAI_INSIGHTS_RESPONSIBLEAI_VERSION_KEY: responsibleai_version,
         PropertyKeyValues.RAI_INSIGHTS_CONSTRUCTOR_RUN_ID_KEY: rai_insights_parent[
-            Constants.RAI_INSIGHTS_RUN_ID_KEY
+            DashboardInfo.RAI_INSIGHTS_RUN_ID_KEY
         ],
     }
     my_run = Run.get_context()
@@ -160,7 +160,7 @@ def main(args):
     }
     constructor_run = Run.get(
         my_run.experiment.workspace,
-        rai_insights_parent[Constants.RAI_INSIGHTS_RUN_ID_KEY],
+        rai_insights_parent[DashboardInfo.RAI_INSIGHTS_RUN_ID_KEY],
     )
     constructor_run.add_properties(extra_props)
     _logger.info("Completing")

@@ -15,7 +15,7 @@ from azureml.core import Model, Run, Workspace
 
 from responsibleai import RAIInsights, __version__ as responsibleai_version
 
-from constants import Constants, PropertyKeyValues
+from constants import DashboardInfo, PropertyKeyValues
 from arg_helpers import get_from_args
 
 _logger = logging.getLogger(__file__)
@@ -56,10 +56,10 @@ def parse_args():
 
 
 def fetch_model_id(args):
-    model_info_path = os.path.join(args.model_info_path, Constants.MODEL_INFO_FILENAME)
+    model_info_path = os.path.join(args.model_info_path, DashboardInfo.MODEL_INFO_FILENAME)
     with open(model_info_path, "r") as json_file:
         model_info = json.load(json_file)
-    return model_info[Constants.MODEL_ID_KEY]
+    return model_info[DashboardInfo.MODEL_ID_KEY]
 
 
 def load_mlflow_model(workspace: Workspace, model_id: str) -> Any:
@@ -112,8 +112,8 @@ def main(args):
     insights.save(args.output_path)
 
     _logger.info("Saving JSON for tool components")
-    output_dict = {Constants.RAI_INSIGHTS_RUN_ID_KEY: str(my_run.id)}
-    output_file = os.path.join(args.output_path, Constants.RAI_INSIGHTS_PARENT_FILENAME)
+    output_dict = {DashboardInfo.RAI_INSIGHTS_RUN_ID_KEY: str(my_run.id)}
+    output_file = os.path.join(args.output_path, DashboardInfo.RAI_INSIGHTS_PARENT_FILENAME)
     with open(output_file, "w") as of:
         json.dump(output_dict, of)
 

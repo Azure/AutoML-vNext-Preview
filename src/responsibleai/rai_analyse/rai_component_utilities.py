@@ -2,6 +2,7 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # ---------------------------------------------------------
 
+import json
 import logging
 import os
 import pathlib
@@ -9,11 +10,13 @@ import shutil
 import tempfile
 import uuid
 
+from typing import Dict
+
 from azureml.core import Run
 
 from responsibleai import RAIInsights, __version__ as responsibleai_version
 
-from constants import PropertyKeyValues, RAIToolType
+from constants import DashboardInfo, PropertyKeyValues, RAIToolType
 
 
 _logger = logging.getLogger(__file__)
@@ -32,6 +35,17 @@ def print_dir_tree(base_dir):
         # Files
         for filename in files:
             print("\t" + filename)
+
+
+def load_dashboard_info_file(input_port_path: str) -> Dict[str, str]:
+    # Load the rai_insights_dashboard file info
+    rai_insights_dashboard_file = os.path.join(
+        input_port_path, DashboardInfo.RAI_INSIGHTS_PARENT_FILENAME
+    )
+    with open(rai_insights_dashboard_file, "r") as si:
+        dashboard_info = json.load(si)
+    _logger.info("rai_insights_parent info: {0}".format(dashboard_info))
+    return dashboard_info
 
 
 def load_rai_insights_from_input_port(input_port_path: str) -> RAIInsights:
@@ -90,5 +104,6 @@ def add_properties_to_tool_run(tool_type: str, constructor_run_id: str):
 
     _logger.info("Adding tool property to constructor run")
     extra_props = {pointer_format.format(target_run.id): target_run.id}
-    constructor_run = Run.get(target_run.experiment.workspace, constructor_run_id)
+    constructor_run = Run.get(
+        target_run.experiment.workspace, constructor_run_id)
     constructor_run.add_properties(extra_props)
