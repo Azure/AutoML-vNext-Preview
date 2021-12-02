@@ -96,6 +96,6 @@ jobs:
     type: component_job
     component: azureml:RAIInsightsErrorAnalysis:VERSION_REPLACEMENT_STRING
     inputs:
-      model_analysis_info: ${{jobs.create-rai-job.outputs.model_analysis_dashboard}}
+      model_analysis_info: ${{jobs.create-rai-job.outputs.rai_insights_dashboard}}
       max_depth: 3
       filter_features: '[]'
