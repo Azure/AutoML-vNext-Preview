@@ -4,5 +4,6 @@ azure-ml
 pandas
 pyarrow
 pytest
+pytest-xdist
 scikit-learn
 shap

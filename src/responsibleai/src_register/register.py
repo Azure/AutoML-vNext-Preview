@@ -27,6 +27,7 @@ def parse_args():
     parser.add_argument("--model_input_path", type=str, help="Path to input model")
     parser.add_argument("--model_info_output_path", type=str, help="Path to write model info JSON")
     parser.add_argument("--model_base_name", type=str, help="Name of the registered model")
+    parser.add_argument("--model_name_suffix", type=int, help="Set negative to use epoch_secs")
 
     # parse args
     args = parser.parse_args()
@@ -45,8 +46,11 @@ def main(args):
     print("Loading model")
     mlflow_model = mlflow.sklearn.load_model(args.model_input_path)
 
-    epoch_secs = int(time.time())
-    registered_name = "{0}_{1}".format(args.model_base_name, epoch_secs)
+    if args.model_name_suffix < 0:
+        suffix = int(time.time())
+    else:
+        suffix = args.model_name_suffix
+    registered_name = "{0}_{1}".format(args.model_base_name, suffix)
     print(f"Registering model as {registered_name}")
 
     print("Registering via MLFlow")

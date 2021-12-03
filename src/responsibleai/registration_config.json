@@ -4,6 +4,7 @@
     ],
     "components" : [
         "component_register_model.yaml",
+        "component_fetch_registered_model.yaml",
         "component_causal.yaml",
         "component_counterfactual.yaml",
         "component_error_analysis.yaml",
