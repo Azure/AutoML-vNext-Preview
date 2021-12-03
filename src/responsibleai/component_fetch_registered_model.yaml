@@ -1,0 +1,13 @@
+$schema: http://azureml/sdk-2-0/CommandComponent.json
+name: FetchRegisteredModel
+display_name: Fetch Registered Model
+version: VERSION_REPLACEMENT_STRING
+type: command
+inputs:
+  model_id:
+    type: string
+outputs:
+  model_info_output_path:
+    type: path
+command: >-
+  cat "{ 'id' : '${{inputs.model_id}}' }" > ${{outputs.model_info_output_path}}
