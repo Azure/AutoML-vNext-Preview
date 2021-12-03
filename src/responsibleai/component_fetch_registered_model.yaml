@@ -11,4 +11,4 @@ outputs:
     type: path
 environment: azureml:AML-RAI-Environment:VERSION_REPLACEMENT_STRING
 command: >-
-  cat "{ 'id' : '${{inputs.model_id}}' }" > ${{outputs.model_info_output_path}}/model_info.json
+  cat "{ \'id\' : \'${{inputs.model_id}}\' }" > ${{outputs.model_info_output_path}}/model_info.json
