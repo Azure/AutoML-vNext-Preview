@@ -10,7 +10,7 @@ inputs:
   model_base_name:
     type: string
   model_name_suffix: # Set negative to use epoch_secs
-    type: int
+    type: integer
     default: -1
 outputs:
   model_info_output_path:
