@@ -15,7 +15,7 @@ outputs:
   my_model_directory:
     # datastore: azureml:workspaceblobstore
     mode: upload
-  ma_info:
+  rai_insights_dashboard:
     # datastore: azureml:workspaceblobstore
     mode: upload
   model_info:
@@ -50,9 +50,9 @@ jobs:
     outputs:
       model_info_output_path: ${{outputs.model_info}}
 
-  create-ma-job:
+  create-rai-job:
     type: component_job
-    component: azureml:AzureMLModelAnalysis:VERSION_REPLACEMENT_STRING
+    component: azureml:RAIInsightsConstructor:VERSION_REPLACEMENT_STRING
     inputs:
       title: Boston Housing Analysis
       task_type: regression
@@ -60,25 +60,24 @@ jobs:
       train_dataset: ${{inputs.my_training_data}}
       test_dataset: ${{inputs.my_test_data}}
       target_column_name: ${{inputs.target_column_name}}
-      X_column_names: '["CRIM", "ZN", "INDUS", "CHAS", "NOX", "RM", "AGE","DIS", "RAD", "TAX", "PTRATIO", "B", "LSTAT"]'
-      datastore_name: workspaceblobstore
+      # X_column_names: '["CRIM", "ZN", "INDUS", "CHAS", "NOX", "RM", "AGE","DIS", "RAD", "TAX", "PTRATIO", "B", "LSTAT"]'
+      # datastore_name: workspaceblobstore
       categorical_column_names: '[]'
     outputs:
-      model_analysis_info: ${{outputs.ma_info}}
+      rai_insights_dashboard: ${{outputs.rai_insights_dashboard}}
 
   explain_01:
     type: component_job
-    component: azureml:AzureMLModelAnalysisExplanation:VERSION_REPLACEMENT_STRING
+    component: azureml:RAIInsightsExplanation:VERSION_REPLACEMENT_STRING
     inputs:
       comment: Some random string
-      model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_info}}
+      rai_insights_dashboard: ${{jobs.create-rai-job.outputs.rai_insights_dashboard}}
 
   causal_01:
     type: component_job
-    component: azureml:AzureMLModelAnalysisCausal:VERSION_REPLACEMENT_STRING
+    component: azureml:RAIInsightsCausal:VERSION_REPLACEMENT_STRING
     inputs:
-      comment: Some causal comment
-      model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_info}}
+      rai_insights_dashboard: ${{jobs.create-rai-job.outputs.rai_insights_dashboard}}
       treatment_features: '["ZN", "NOX"]'
       heterogeneity_features: '[]'
       nuisance_model: linear
@@ -86,19 +85,17 @@ jobs:
 
   counterfactual_01:
     type: component_job
-    component: azureml:AzureMLModelAnalysisCounterfactual:VERSION_REPLACEMENT_STRING
+    component: azureml:RAIInsightsCounterfactual:VERSION_REPLACEMENT_STRING
     inputs:
-      comment: A counterfactual comment
-      model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_info}}
+      rai_insights_dashboard: ${{jobs.create-rai-job.outputs.rai_insights_dashboard}}
       total_CFs: 10
       desired_range: '[10, 300]'
       feature_importance: True
 
   error_analysis_01:
     type: component_job
-    component: azureml:AzureMLModelAnalysisErrorAnalysis:VERSION_REPLACEMENT_STRING
+    component: azureml:RAIInsightsErrorAnalysis:VERSION_REPLACEMENT_STRING
     inputs:
-      comment: A comment analysing errors
-      model_analysis_info: ${{jobs.create-ma-job.outputs.model_analysis_info}}
+      rai_insights_dashboard: ${{jobs.create-rai-job.outputs.rai_insights_dashboard}}
       max_depth: 3
       filter_features: '[]'

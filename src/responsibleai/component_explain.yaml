@@ -1,13 +1,17 @@
 $schema: http://azureml/sdk-2-0/CommandComponent.json
-name: AzureMLModelAnalysisExplanation
-display_name: Explanation with azureml-responsibleai
+name: RAIInsightsExplanation
+display_name: Add Explanation to RAI Insights Dashboard
 version: VERSION_REPLACEMENT_STRING
 type: command
 
 inputs:
   comment:
     type: string
-  model_analysis_info:
+  rai_insights_dashboard:
+    type: path
+
+outputs:
+  explanation:
     type: path
 
 code:
@@ -18,4 +22,5 @@ environment: azureml:AML-RAI-Environment:VERSION_REPLACEMENT_STRING
 command: >-
   python create_explanation.py
   --comment '${{inputs.comment}}'
-  --model_analysis_info ${{inputs.model_analysis_info}}
+  --rai_insights_dashboard ${{inputs.rai_insights_dashboard}}
+  --explanation_path ${{outputs.explanation}}

@@ -21,7 +21,7 @@ def process_file(input_file, output_file, replacements):
             outfile.write(line)
 
 
-def submit_and_wait(ml_client, pipeline_job):
+def submit_and_wait(ml_client, pipeline_job) -> PipelineJob:
     created_job = ml_client.jobs.create_or_update(pipeline_job)
     assert created_job is not None
 
@@ -31,6 +31,7 @@ def submit_and_wait(ml_client, pipeline_job):
         print("Latest status : {0}".format(created_job.status))
         _logger.info("Latest status : {0}".format(created_job.status))
     assert created_job.status == 'Completed'
+    return created_job
 
 
 class TestRAI:
@@ -105,46 +106,97 @@ class TestRAI:
             outputs=register_job_outputs
         )
 
-        # Top level Model Analysis component
-        create_ma_inputs = {
+        # Top level RAI Insights component
+        create_rai_inputs = {
             'title': 'Run built from Python',
             'task_type': 'classification',
             'model_info_path': '${{jobs.register-model-job.outputs.model_info_output_path}}',
             'train_dataset': '${{inputs.my_training_data}}',
             'test_dataset': '${{inputs.my_test_data}}',
             'target_column_name': '${{inputs.target_column_name}}',
-            'X_column_names': '["Age", "Workclass", "Education-Num", "Marital Status", "Occupation", "Relationship", "Race", "Sex", "Capital Gain", "Capital Loss", "Hours per week", "Country"]',
-            'datastore_name': 'workspaceblobstore',
+            # 'X_column_names': '["Age", "Workclass", "Education-Num", "Marital Status", "Occupation", "Relationship", "Race", "Sex", "Capital Gain", "Capital Loss", "Hours per week", "Country"]',
+            # 'datastore_name': 'workspaceblobstore',
             'categorical_column_names': '["Race", "Sex", "Workclass", "Marital Status", "Country", "Occupation"]',
         }
-        create_ma_outputs = {
-            'model_analysis_info': None
+        create_rai_outputs = {
+            'rai_insights_dashboard': None
         }
-        create_ma_job = ComponentJob(
-            component=f"AzureMLModelAnalysis:{version_string}",
-            inputs=create_ma_inputs,
-            outputs=create_ma_outputs
+        create_rai_job = ComponentJob(
+            component=f"RAIInsightsConstructor:{version_string}",
+            inputs=create_rai_inputs,
+            outputs=create_rai_outputs
         )
 
         # Setup the explanation
         explain_inputs = {
             'comment': 'Insert text here',
-            'model_analysis_info': '${{jobs.create-ma-job.outputs.model_analysis_info}}'
+            'rai_insights_dashboard': '${{jobs.create-rai-job.outputs.rai_insights_dashboard}}'
+        }
+        explain_outputs = {
+            'explanation': None
         }
         explain_job = ComponentJob(
-            component=f"AzureMLModelAnalysisExplanation:{version_string}",
-            inputs = explain_inputs
+            component=f"RAIInsightsExplanation:{version_string}",
+            inputs=explain_inputs,
+            outputs=explain_outputs
+        )
+
+        # Setup causal
+        causal_inputs = {
+            'rai_insights_dashboard': '${{jobs.create-rai-job.outputs.rai_insights_dashboard}}',
+            'treatment_features': '["Age", "Sex"]',
+            'heterogeneity_features': '["Marital Status"]'
+        }
+        causal_outputs = {
+            'causal': None
+        }
+        causal_job = ComponentJob(
+            component=f"RAIInsightsCausal:{version_string}",
+            inputs=causal_inputs,
+            outputs=causal_outputs
+        )
+
+        # Setup counterfactual
+        counterfactual_inputs = {
+            'rai_insights_dashboard': '${{jobs.create-rai-job.outputs.rai_insights_dashboard}}',
+            'total_CFs': '10',
+            'desired_class': 'opposite'
+        }
+        counterfactual_outputs = {
+            'counterfactual': None
+        }
+        counterfactual_job = ComponentJob(
+            component=f"RAIInsightsCounterfactual:{version_string}",
+            inputs=counterfactual_inputs,
+            outputs=counterfactual_outputs
+        )
+
+        # Setup error analysis
+        error_analysis_inputs = {
+            'rai_insights_dashboard': '${{jobs.create-rai-job.outputs.rai_insights_dashboard}}',
+            'filter_features': '["Race", "Sex", "Workclass", "Marital Status", "Country", "Occupation"]'
+        }
+        error_analysis_outputs = {
+            'error_analysis': None
+        }
+        error_analysis_job = ComponentJob(
+            component=f"RAIInsightsErrorAnalysis:{version_string}",
+            inputs=error_analysis_inputs,
+            outputs=error_analysis_outputs
         )
 
         # Assemble into a pipeline
         pipeline_job = PipelineJob(
             experiment_name=f"Classification_from_Python_{version_string}",
             description="Python submitted Adult",
-            jobs = {
+            jobs={
                 'train-model-job': train_job,
                 'register-model-job': register_job,
-                'create-ma-job': create_ma_job,
-                'explain-ma-job': explain_job,
+                'create-rai-job': create_rai_job,
+                'explain-rai-job': explain_job,
+                'causal-rai-job': causal_job,
+                'counterfactual-rai-job': counterfactual_job,
+                'error-analysis-rai-job': error_analysis_job
             },
             inputs=pipeline_inputs,
             outputs=train_job_outputs,
@@ -152,4 +204,5 @@ class TestRAI:
         )
 
         # Send it
-        submit_and_wait(ml_client, pipeline_job)
+        pipeline_job = submit_and_wait(ml_client, pipeline_job)
+        assert pipeline_job is not None

@@ -1,13 +1,11 @@
 $schema: http://azureml/sdk-2-0/CommandComponent.json
-name: AzureMLModelAnalysisCausal
-display_name: Causal with azureml-responsibleai
+name: RAIInsightsCausal
+display_name: Add Causal to a RAI Insights Dashboard
 version: VERSION_REPLACEMENT_STRING
 type: command
 
 inputs:
-  comment:
-    type: string
-  model_analysis_info:
+  rai_insights_dashboard:
     type: path
   treatment_features:
     type: string # JSON encoded list
@@ -53,15 +51,22 @@ inputs:
     type: string # int or none
     default: None
 
+outputs:
+  causal:
+    type: path
+
 code:
   local_path: ./rai_analyse/
 
 environment: azureml:AML-RAI-Environment:VERSION_REPLACEMENT_STRING
 
+# For debugging
+environment_variables:
+   AZUREML_COMPUTE_USE_COMMON_RUNTIME: true
+
 command: >-
   python create_causal.py
-  --comment '${{inputs.comment}}'
-  --model_analysis_info ${{inputs.model_analysis_info}}
+  --rai_insights_dashboard ${{inputs.rai_insights_dashboard}}
   --treatment_features '${{inputs.treatment_features}}'
   --heterogeneity_features '${{inputs.heterogeneity_features}}'
   --nuisance_model ${{inputs.nuisance_model}}
@@ -75,3 +80,4 @@ command: >-
   --n_jobs ${{inputs.n_jobs}}
   --verbose ${{inputs.verbose}}
   --random_state '${{inputs.random_state}}'
+  --causal_path ${{outputs.causal}}

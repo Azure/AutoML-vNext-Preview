@@ -1,13 +1,11 @@
 $schema: http://azureml/sdk-2-0/CommandComponent.json
-name: AzureMLModelAnalysisErrorAnalysis
-display_name: ErrorAnalysis with azureml-responsibleai
+name: RAIInsightsErrorAnalysis
+display_name: Add Error Analysis to RAI Insights Dashboard
 version: VERSION_REPLACEMENT_STRING
 type: command
 
 inputs:
-  comment:
-    type: string
-  model_analysis_info:
+  rai_insights_dashboard:
     type: path
   max_depth:
     type: integer
@@ -19,6 +17,10 @@ inputs:
     type: string
     default: 'null'
 
+outputs:
+  error_analysis:
+    type: path
+
 code:
   local_path: ./rai_analyse/
 
@@ -26,8 +28,8 @@ environment: azureml:AML-RAI-Environment:VERSION_REPLACEMENT_STRING
 
 command: >-
   python create_error_analysis.py
-  --comment '${{inputs.comment}}'
-  --model_analysis_info ${{inputs.model_analysis_info}}
+  --rai_insights_dashboard ${{inputs.rai_insights_dashboard}}
   --max_depth ${{inputs.max_depth}}
   --num_leaves ${{inputs.num_leaves}}
   --filter_features '${{inputs.filter_features}}'
+  --error_analysis_path ${{outputs.error_analysis}}
