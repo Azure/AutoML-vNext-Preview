@@ -2,7 +2,7 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # ---------------------------------------------------------
 
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 from azureml.core import Workspace, Run
 from azure.ml import MLClient
@@ -47,7 +47,7 @@ def list_components_for_rai_insight(
     ml_client: MLClient,
     experiment_name: str,
     rai_insight_id: str
-) -> List[str]:
+) -> List[Tuple[str, str]]:
     v1_workspace = _get_v1_workspace_client(ml_client)
     v1_experiment = v1_workspace.experiments[experiment_name]
 
