@@ -25,3 +25,8 @@ class PropertyKeyValues:
     RAI_INSIGHTS_RESPONSIBLEAI_VERSION_KEY = (
         "_azureml.responsibleai.rai_insights.responsibleai_version"
     )
+
+
+# This comes from the component definitions
+class OutputPortNames:
+    RAI_INSIGHTS_CONSTRUCTOR_OUTPUT_PORT = 'rai_insights_dashboard'

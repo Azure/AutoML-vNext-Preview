@@ -4,20 +4,11 @@
 
 from typing import List, Optional, Tuple
 
-from azureml.core import Workspace, Run
+from azureml.core import Run
 from azure.ml import MLClient
 
 from ._constants import PropertyKeyValues
-
-
-def _get_v1_workspace_client(ml_client: MLClient) -> Workspace:
-    subscription = ml_client._workspace_scope.subscription_id
-    rg_name = ml_client._workspace_scope.resource_group_name
-    ws_name = ml_client._workspace_scope.workspace_name
-
-    v1_workspace = Workspace(subscription, rg_name, ws_name, auth=None)
-
-    return v1_workspace
+from ._utilities import _get_v1_workspace_client
 
 
 def list_rai_insights(
