@@ -348,3 +348,12 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# Notebook ignores
+**/.ipynb_checkpoints/
+
+# pip install -e ignores
+**/*.egg-info/
+
+# VS Code ignore
+.vscode/settings.json
