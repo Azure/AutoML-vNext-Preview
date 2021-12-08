@@ -3,6 +3,7 @@
 # ---------------------------------------------------------
 
 import json
+import logging
 import os
 import pathlib
 import shutil
@@ -24,6 +25,9 @@ from ._list_rai_runs import list_components_for_rai_insight
 from ._utilities import _get_v1_workspace_client
 
 
+_logger = logging.getLogger(__file__)
+logging.basicConfig(level=logging.INFO)
+
 # Directory names saved by RAIInsights might not match tool names
 _tool_directory_mapping: Dict[str, str] = {
     RAIToolType.CAUSAL: "causal",
@@ -44,6 +48,7 @@ def _get_output_port_info(
         mlflow_client: MlflowClient,
         run_id: str,
         port_name: str) -> Any:
+    _logger.info("Downloading port {0} for {1}".format(port_name, run_id))
     with tempfile.TemporaryDirectory() as temp_dir:
         mlflow_client.download_artifacts(
             run_id,
@@ -55,7 +60,6 @@ def _get_output_port_info(
 
         with open(json_filename, 'r') as json_file:
             port_info = json.load(json_file)
-
     return port_info
 
 
@@ -68,9 +72,15 @@ def _download_port_files(
 ) -> None:
     port_info = _get_output_port_info(mlflow_client, run_id, port_name)
 
-    _, storage_account, _, account_dns_suffix = AzureBlobArtifactRepository.parse_wasbs_uri(
+    wasbs_tuple = AzureBlobArtifactRepository.parse_wasbs_uri(
         port_info['Uri']
     )
+    storage_account = wasbs_tuple[1]
+    if len(wasbs_tuple) == 4:
+        account_dns_suffix = wasbs_tuple[3]
+    else:
+        account_dns_suffix = 'blob.core.windows.net'
+
     account_url = "https://{account}.{suffix}".format(
         account=storage_account,
         suffix=account_dns_suffix
@@ -90,6 +100,7 @@ def download_rai_insights(
     rai_insight_id: str,
     path: str
 ) -> None:
+    _logger.info("Starting download of RAI insights")
     v1_ws = _get_v1_workspace_client(ml_client)
 
     mlflow.set_tracking_uri(v1_ws.get_mlflow_tracking_uri())
@@ -100,6 +111,7 @@ def download_rai_insights(
         temp_dir_path = pathlib.Path(temp_dir)
 
         # Get the empty RAIInsights
+        _logger.info("Downloading empty RAIInsights")
         _download_port_files(
             mlflow_client,
             rai_insight_id,
@@ -118,11 +130,14 @@ def download_rai_insights(
             v1_ws.get_run(rai_insight_id).experiment.name,
             rai_insight_id=rai_insight_id
         )
+        _logger.info("Found {0} tool runs".format(len(tool_runs)))
         for t in tool_runs:
             run_id = t[0]
             tool = t[1]
+            _logger.info("Downloading {0} from {1}".format(tool, run_id))
 
-            insight_directory = temp_dir_path/_tool_directory_mapping[tool]/run_id
+            insight_directory = temp_dir_path / \
+                _tool_directory_mapping[tool]/run_id
             insight_directory.mkdir(parents=True, exist_ok=False)
 
             _download_port_files(
