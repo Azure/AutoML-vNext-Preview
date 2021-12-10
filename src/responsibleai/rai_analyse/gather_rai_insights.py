@@ -10,6 +10,7 @@ import shutil
 import tempfile
 
 from responsibleai import RAIInsights
+from responsibleai.serialization_utilities import serialize_json_safe
 
 from rai_component_utilities import create_rai_tool_directories, copy_insight_to_raiinsights, print_dir_tree
 
@@ -61,10 +62,11 @@ def main(args):
         _logger.info("Saved dashboard to oputput")
 
         rai_data = rai_i.get_data()
+        rai_dict = serialize_json_safe(rai_data)
         json_filename = 'dashboard.json'
         output_path = Path(args.ux_json) / json_filename
         with open(output_path, 'w') as json_file:
-            json.dump(rai_data, json_file)
+            json.dump(rai_dict, json_file)
         _logger.info("Dashboard JSON written")
 
 
