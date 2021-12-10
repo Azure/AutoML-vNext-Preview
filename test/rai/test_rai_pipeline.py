@@ -4,6 +4,7 @@
 
 import logging
 import pathlib
+import pytest
 import time
 
 from azure.ml.entities import JobInput
@@ -35,6 +36,7 @@ def submit_and_wait(ml_client, pipeline_job) -> PipelineJob:
 
 
 class TestRAI:
+    @pytest.mark.skip("Debugging")
     def test_classification_pipeline_from_yaml(self, ml_client, component_config):
         current_dir = pathlib.Path(__file__).parent.absolute()
         pipeline_file = current_dir / "pipeline_adult_analyse.yaml"
@@ -51,6 +53,7 @@ class TestRAI:
 
         submit_and_wait(ml_client, pipeline_job)
 
+    @pytest.mark.skip("Debugging")
     def test_boston_pipeline_from_yaml(self, ml_client, component_config):
         current_dir = pathlib.Path(__file__).parent.absolute()
         pipeline_file = current_dir / "pipeline_boston_analyse.yaml"
@@ -223,6 +226,7 @@ class TestRAI:
         pipeline_job = submit_and_wait(ml_client, pipeline_job)
         assert pipeline_job is not None
 
+    @pytest.mark.skip("Debugging")
     def test_fetch_registered_model_component(self, ml_client, component_config):
         # Actually does two pipelines. One to register, then one to use
         version_string = component_config['version']
