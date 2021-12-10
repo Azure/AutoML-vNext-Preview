@@ -57,7 +57,7 @@ def load_dashboard_info_file(input_port_path: str) -> Dict[str, str]:
     return dashboard_info
 
 
-def create_rai_tool_directories(rai_insights_dir: pathlib.Path)->None:
+def create_rai_tool_directories(rai_insights_dir: pathlib.Path) -> None:
     # Have to create empty subdirectories for the managers
     # THe RAI Insights object expect these to be present, but
     # since directories don't actually exist in Azure Blob store
@@ -66,6 +66,7 @@ def create_rai_tool_directories(rai_insights_dir: pathlib.Path)->None:
     for v in _tool_directory_mapping.values():
         os.makedirs(rai_insights_dir / v, exist_ok=True)
     _logger.info("Added empty directories")
+
 
 def load_rai_insights_from_input_port(input_port_path: str) -> RAIInsights:
     with tempfile.TemporaryDirectory() as incoming_temp_dir:
@@ -79,6 +80,7 @@ def load_rai_insights_from_input_port(input_port_path: str) -> RAIInsights:
         _logger.info("Loaded RAIInsights object")
     return result
 
+
 def copy_insight_to_raiinsights(rai_insights_dir: pathlib.Path, insight_dir: pathlib.Path) -> None:
     print("Starting copy")
     dir_items = list(insight_dir.iterdir())
@@ -88,14 +90,21 @@ def copy_insight_to_raiinsights(rai_insights_dir: pathlib.Path, insight_dir: pat
     tool_dir_name = dir_items[0].parts[-1]
     _logger.info("Detected tool: {0}".format(tool_dir_name))
     assert tool_dir_name in _tool_directory_mapping.values()
+    tool_dir = insight_dir/tool_dir_name
 
+    tool_dir_items = list(insight_dir.iterdir())
+    print("Tool dir contents: ", tool_dir_items)
+    assert len(tool_dir_items) == 1
 
+    src_dir = insight_dir/tool_dir_name/tool_dir_items[0].parts[-1]
+    dst_dir = rai_insights_dir / tool_dir_name
+    print("Copy source:", str(src_dir))
+    print("Copy dest  :", str(dst_dir))
     shutil.copytree(
-        insight_dir/tool_dir_name,
-        pathlib.Path(rai_insights_dir) / tool_dir_name
+        src=src_dir,
+        dst=dst_dir
     )
     _logger.info("Copy complete")
-
 
 
 def save_to_output_port(rai_i: RAIInsights, output_port_path: str, tool_type: str):
@@ -153,5 +162,6 @@ def add_properties_to_tool_run(tool_type: str, constructor_run_id: str):
 
     _logger.info("Adding tool property to constructor run")
     extra_props = {pointer_format.format(target_run.id): target_run.id}
-    constructor_run = Run.get(target_run.experiment.workspace, constructor_run_id)
+    constructor_run = Run.get(
+        target_run.experiment.workspace, constructor_run_id)
     constructor_run.add_properties(extra_props)
