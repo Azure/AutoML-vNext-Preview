@@ -86,9 +86,9 @@ def copy_insight_to_raiinsights(rai_insights_dir: pathlib.Path, insight_dir: pat
     assert len(dir_items) == 1
 
     tool_dir_name = dir_items[0]
+    _logger.info("Detected tool: {0}".format(tool_dir_name))
     assert tool_dir_name in _tool_directory_mapping.values()
 
-    _logger.info("Detected tool: {0}".format(tool_dir_name))
 
     shutil.copytree(
         insight_dir/tool_dir_name,
