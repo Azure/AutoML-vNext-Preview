@@ -1,0 +1,36 @@
+$schema: http://azureml/sdk-2-0/CommandComponent.json
+name: RAIInsightsGather
+display_name: Gather RAI Insights Dashboard
+version: VERSION_REPLACEMENT_STRING
+type: command
+
+inputs:
+  constructor:
+    type: path
+  insight_1:
+    type: path
+  insight_2:
+    type: path
+  insight_3:
+    type: path
+  insight_4:
+    type: path
+outputs:
+  dashboard:
+    type: path
+  ux_json:
+    type: path
+
+environment: azureml:AML-RAI-Environment:VERSION_REPLACEMENT_STRING
+
+code:
+  local_path: ./rai_analyse/
+command: >-
+  python gather_rai_insights.py
+  --constructor ${{inputs.constructor}}
+  --insight_1 '${{inputs.insight_1}}'
+  --insight_2 '${{inputs.insight_2}}'
+  --insight_3 '${{inputs.insight_3}}'
+  --insight_4 '${{inputs.insight_4}}'
+  --dashboard ${{outputs.dashboard}}
+  --ux_json ${{outputs.ux_json}}
