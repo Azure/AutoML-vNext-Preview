@@ -200,7 +200,7 @@ class TestRAI:
         gather_job = ComponentJob(
             component=f"RAIInsightsGather:{version_string}",
             inputs=gather_inputs,
-            output=gather_outputs
+            outputs=gather_outputs
         )
 
         # Assemble into a pipeline
