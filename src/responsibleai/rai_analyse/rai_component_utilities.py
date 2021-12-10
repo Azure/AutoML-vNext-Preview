@@ -57,24 +57,43 @@ def load_dashboard_info_file(input_port_path: str) -> Dict[str, str]:
     return dashboard_info
 
 
+def create_rai_tool_directories(rai_insights_dir: pathlib.Path)->None:
+    # Have to create empty subdirectories for the managers
+    # THe RAI Insights object expect these to be present, but
+    # since directories don't actually exist in Azure Blob store
+    # they may not be present (some of the tools always have
+    # a file present, even if no tool instances have been added)
+    for v in _tool_directory_mapping.values():
+        os.makedirs(rai_insights_dir / v, exist_ok=True)
+    _logger.info("Added empty directories")
+
 def load_rai_insights_from_input_port(input_port_path: str) -> RAIInsights:
     with tempfile.TemporaryDirectory() as incoming_temp_dir:
         incoming_dir = pathlib.Path(incoming_temp_dir)
         shutil.copytree(input_port_path, incoming_dir, dirs_exist_ok=True)
         _logger.info("Copied RAI Insights input to temporary directory")
 
-        # Have to create empty subdirectories for the managers
-        # THe RAI Insights object expect these to be present, but
-        # since directories don't actually exist in Azure Blob store
-        # they may not be present (some of the tools always have
-        # a file present, even if no tool instances have been added)
-        for v in _tool_directory_mapping.values():
-            os.makedirs(incoming_dir / v, exist_ok=True)
-        _logger.info("Added empty directories")
+        create_rai_tool_directories(incoming_dir)
 
         result = RAIInsights.load(incoming_dir)
         _logger.info("Loaded RAIInsights object")
     return result
+
+def copy_insight_to_raiinsights(rai_insights_dir: pathlib.Path, insight_dir: pathlib.Path) -> None:
+    dir_items = list(insight_dir.iterdir())
+    assert len(dir_items) == 1
+
+    tool_dir_name = dir_items[0]
+    assert tool_dir_name in _tool_directory_mapping.values()
+
+    _logger.info("Detected tool: {0}".format(tool_dir_name))
+
+    shutil.copytree(
+        insight_dir/tool_dir_name,
+        pathlib.Path(rai_insights_dir) / tool_dir_name
+    )
+    _logger.info("Copy complete")
+
 
 
 def save_to_output_port(rai_i: RAIInsights, output_port_path: str, tool_type: str):
@@ -88,10 +107,14 @@ def save_to_output_port(rai_i: RAIInsights, output_port_path: str, tool_type: st
         _logger.info("Checking dirname is GUID")
         uuid.UUID(insight_dirs[0])
 
+        target_path = pathlib.Path(output_port_path) / tool_dir_name
+        target_path.mkdir()
+        _logger.info("Created output directory")
+
         _logger.info("Starting copy")
         shutil.copytree(
-            pathlib.Path(tmpdirname) / tool_dir_name / insight_dirs[0],
-            output_port_path,
+            pathlib.Path(tmpdirname) / tool_dir_name,
+            target_path,
             dirs_exist_ok=True,
         )
     _logger.info("Copied to output")
