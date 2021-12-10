@@ -92,7 +92,7 @@ def copy_insight_to_raiinsights(rai_insights_dir: pathlib.Path, insight_dir: pat
     assert tool_dir_name in _tool_directory_mapping.values()
     tool_dir = insight_dir/tool_dir_name
 
-    tool_dir_items = list(insight_dir.iterdir())
+    tool_dir_items = list(tool_dir)
     print("Tool dir contents: ", tool_dir_items)
     assert len(tool_dir_items) == 1
 
