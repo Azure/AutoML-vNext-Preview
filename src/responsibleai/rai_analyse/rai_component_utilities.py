@@ -97,12 +97,13 @@ def copy_insight_to_raiinsights(rai_insights_dir: pathlib.Path, insight_dir: pat
     assert len(tool_dir_items) == 1
 
     src_dir = insight_dir/tool_dir_name/tool_dir_items[0].parts[-1]
-    dst_dir = rai_insights_dir / tool_dir_name
+    dst_dir = rai_insights_dir / tool_dir_name / tool_dir_items[0].parts[-1]
     print("Copy source:", str(src_dir))
     print("Copy dest  :", str(dst_dir))
     shutil.copytree(
         src=src_dir,
-        dst=dst_dir
+        dst=dst_dir,
+
     )
     _logger.info("Copy complete")
 
