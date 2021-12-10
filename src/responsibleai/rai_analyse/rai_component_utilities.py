@@ -80,7 +80,9 @@ def load_rai_insights_from_input_port(input_port_path: str) -> RAIInsights:
     return result
 
 def copy_insight_to_raiinsights(rai_insights_dir: pathlib.Path, insight_dir: pathlib.Path) -> None:
+    print("Starting copy")
     dir_items = list(insight_dir.iterdir())
+    print("Directory contents: {0}".format(dir_items))
     assert len(dir_items) == 1
 
     tool_dir_name = dir_items[0]
