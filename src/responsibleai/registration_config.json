@@ -9,7 +9,8 @@
         "component_counterfactual.yaml",
         "component_error_analysis.yaml",
         "component_explain.yaml",
-        "component_rai_insights.yaml"
+        "component_rai_insights.yaml",
+        "component_gather_rai_insights.yaml"
     ],
     "data" : []
 }
