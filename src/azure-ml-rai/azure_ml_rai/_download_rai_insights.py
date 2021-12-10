@@ -68,9 +68,15 @@ def _download_port_files(
 ) -> None:
     port_info = _get_output_port_info(mlflow_client, run_id, port_name)
 
-    _, storage_account, _, account_dns_suffix = AzureBlobArtifactRepository.parse_wasbs_uri(
+    wasbs_tuple = AzureBlobArtifactRepository.parse_wasbs_uri(
         port_info['Uri']
     )
+    storage_account = wasbs_tuple[1]
+    if len(wasbs_tuple) == 4:
+        account_dns_suffix = wasbs_tuple[3]
+    else:
+        account_dns_suffix = 'blob.core.windows.net'
+
     account_url = "https://{account}.{suffix}".format(
         account=storage_account,
         suffix=account_dns_suffix
