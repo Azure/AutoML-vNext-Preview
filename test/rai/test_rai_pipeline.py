@@ -192,6 +192,9 @@ class TestRAI:
         gather_inputs = {
             'constructor': '${{jobs.create-rai-job.outputs.rai_insights_dashboard}}',
             'insight_1': '${{jobs.explain-rai-job.outputs.explanation}}',
+            'insight_2': '',
+            'insight_3': '',
+            'insight_4': ''
         }
         gather_outputs = {
             'dashboard': None,
