@@ -11,7 +11,7 @@ import tempfile
 
 from responsibleai import RAIInsights
 
-from .rai_component_utilities import create_rai_tool_directories, copy_insight_to_raiinsights
+from rai_component_utilities import create_rai_tool_directories, copy_insight_to_raiinsights, print_dir_tree
 
 _logger = logging.getLogger(__file__)
 logging.basicConfig(level=logging.INFO)
@@ -44,9 +44,15 @@ def main(args):
 
         create_rai_tool_directories(incoming_dir)
         _logger.info("Copied empty RAIInsights")
-        copy_insight_to_raiinsights(incoming_dir, Path(args.insight_1))
 
+        print_dir_tree(incoming_dir)
+        print("\n==================\n")
+
+        copy_insight_to_raiinsights(incoming_dir, Path(args.insight_1))
         _logger.info("All copies complete")
+
+        print_dir_tree(incoming_dir)
+        print("\n==================\n")
 
         rai_i = RAIInsights.load(incoming_dir)
         _logger.info("Object loaded")
