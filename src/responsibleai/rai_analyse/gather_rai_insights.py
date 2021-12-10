@@ -57,7 +57,7 @@ def main(args):
         rai_i = RAIInsights.load(incoming_dir)
         _logger.info("Object loaded")
 
-        rai_i.save(args.dashboard)
+        # rai_i.save(args.dashboard)
         _logger.info("Saved dashboard to oputput")
 
         rai_data = rai_i.get_data()
