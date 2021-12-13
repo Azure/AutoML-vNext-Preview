@@ -94,9 +94,8 @@ def main(args):
             json.dump(rai_dict, json_file)
         _logger.info("Dashboard JSON written")
 
-        add_properties_to_gather_run(dashboard_info[DashboardInfo.RAI_INSIGHTS_RUN_ID_KEY], included_tools)
+        add_properties_to_gather_run(dashboard_info, included_tools)
         _logger.info("Processing completed")
-
 
 
 # run script

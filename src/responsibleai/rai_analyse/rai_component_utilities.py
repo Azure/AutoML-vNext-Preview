@@ -135,20 +135,14 @@ def save_to_output_port(rai_i: RAIInsights, output_port_path: str, tool_type: st
     _logger.info("Copied to output")
 
 
-def add_properties_to_gather_run(constructor_run_id: str, tool_present_dict: Dict[str, str]):
+def add_properties_to_gather_run(dashboard_info: Dict[str, str], tool_present_dict: Dict[str, str]):
     _logger.info("Adding properties to the gather run")
     gather_run = Run.get_context()
-    constructor_run = Run(gather_run.experiment, constructor_run_id)
-
-    _logger.info("Fetching constructor run properties")
-    constructor_props = constructor_run.get_properties()
 
     run_properties = {
         PropertyKeyValues.RAI_INSIGHTS_TYPE_KEY: PropertyKeyValues.RAI_INSIGHTS_TYPE_GATHER,
         PropertyKeyValues.RAI_INSIGHTS_RESPONSIBLEAI_VERSION_KEY: responsibleai_version,
-        PropertyKeyValues.RAI_INSIGHTS_CONSTRUCTOR_RUN_ID_KEY: constructor_run_id,
-        PropertyKeyValues.RAI_INSIGHTS_MODEL_ID_KEY: constructor_props[
-            PropertyKeyValues.RAI_INSIGHTS_MODEL_ID_KEY]
+        PropertyKeyValues.RAI_INSIGHTS_MODEL_ID_KEY: dashboard_info[DashboardInfo.MODEL_ID_KEY]
     }
 
     _logger.info("Appending tool present information")

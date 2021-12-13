@@ -6,6 +6,8 @@
 class DashboardInfo:
     MODEL_ID_KEY = "id"  # To match Model schema
     MODEL_INFO_FILENAME = "model_info.json"
+
+    RAI_INSIGHTS_MODEL_ID_KEY = "model_id"
     RAI_INSIGHTS_RUN_ID_KEY = "rai_insights_parent_run_id"
     RAI_INSIGHTS_PARENT_FILENAME = "rai_insights.json"
 
