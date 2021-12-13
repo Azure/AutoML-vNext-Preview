@@ -23,10 +23,10 @@ def parse_args():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--constructor", type=str, required=True)
-    parser.add_argument("--insight_1", type=str, required=True)
-    parser.add_argument("--insight_2", type=str, required=True)
-    parser.add_argument("--insight_3", type=str, required=True)
-    parser.add_argument("--insight_4", type=str, required=True)
+    parser.add_argument("--insight_1", type=str, default=None)
+    parser.add_argument("--insight_2", type=str, default=None)
+    parser.add_argument("--insight_3", type=str, default=None)
+    parser.add_argument("--insight_4", type=str, default=None)
     parser.add_argument("--dashboard", type=str, required=True)
     parser.add_argument("--ux_json", type=str, required=True)
 
@@ -49,8 +49,19 @@ def main(args):
         print_dir_tree(incoming_dir)
         print("\n==================\n")
 
-        copy_insight_to_raiinsights(incoming_dir, Path(args.insight_1))
-        _logger.info("All copies complete")
+        insight_paths = [
+            args.insight_1,
+            args.insight_2,
+            args.insight_3,
+            args.insight_4
+        ]
+
+        for ip in insight_paths:
+            if ip is not None:
+                _logger.info("Copying insight")
+                copy_insight_to_raiinsights(incoming_dir, Path(ip))
+            else:
+                _logger.info("insight is None")
 
         print_dir_tree(incoming_dir)
         print("\n==================\n")
