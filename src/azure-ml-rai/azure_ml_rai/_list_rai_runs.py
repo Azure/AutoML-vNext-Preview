@@ -19,7 +19,7 @@ def list_rai_insights(
     # Return the Run ids for runs having RAI insights
 
     filter_properties = {
-        PropertyKeyValues.RAI_INSIGHTS_TYPE_KEY: PropertyKeyValues.RAI_INSIGHTS_TYPE_CONSTRUCT
+        PropertyKeyValues.RAI_INSIGHTS_TYPE_KEY: PropertyKeyValues.RAI_INSIGHTS_TYPE_GATHER
     }
     if model_id is not None:
         filter_properties[PropertyKeyValues.RAI_INSIGHTS_MODEL_ID_KEY] = model_id
@@ -32,24 +32,3 @@ def list_rai_insights(
         v1_experiment, properties=filter_properties, include_children=True)
 
     return [r.id for r in all_runs]
-
-
-def list_components_for_rai_insight(
-    ml_client: MLClient,
-    experiment_name: str,
-    rai_insight_id: str
-) -> List[Tuple[str, str]]:
-    v1_workspace = _get_v1_workspace_client(ml_client)
-    v1_experiment = v1_workspace.experiments[experiment_name]
-
-    filter_properties = {
-        PropertyKeyValues.RAI_INSIGHTS_CONSTRUCTOR_RUN_ID_KEY: rai_insight_id
-    }
-
-    all_runs = Run.list(
-        v1_experiment, properties=filter_properties, include_children=True)
-
-    return [
-        (r.id, r.properties[PropertyKeyValues.RAI_INSIGHTS_TYPE_KEY])
-        for r in all_runs
-    ]

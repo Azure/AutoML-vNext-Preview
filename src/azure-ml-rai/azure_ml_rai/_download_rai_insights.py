@@ -4,11 +4,10 @@
 
 import json
 import os
-import pathlib
-import shutil
+from pathlib import Path
 import tempfile
 
-from typing import Any, Dict
+from typing import Any
 
 import mlflow
 from mlflow.store.artifact.azure_blob_artifact_repo import AzureBlobArtifactRepository
@@ -19,25 +18,8 @@ from azure.storage.blob import BlobServiceClient
 
 from azure.ml import MLClient
 
-from ._constants import OutputPortNames, RAIToolType
-from ._list_rai_runs import list_components_for_rai_insight
+from ._constants import OutputPortNames
 from ._utilities import _get_v1_workspace_client
-
-
-# Directory names saved by RAIInsights might not match tool names
-_tool_directory_mapping: Dict[str, str] = {
-    RAIToolType.CAUSAL: "causal",
-    RAIToolType.COUNTERFACTUAL: "counterfactual",
-    RAIToolType.ERROR_ANALYSIS: "error_analysis",
-    RAIToolType.EXPLANATION: "explainer",
-}
-
-_tool_output_port_mapping: Dict[str, str] = {
-    RAIToolType.CAUSAL: "causal",
-    RAIToolType.COUNTERFACTUAL: "counterfactual",
-    RAIToolType.ERROR_ANALYSIS: "error_analysis",
-    RAIToolType.EXPLANATION: "explanation"
-}
 
 
 def _get_output_port_info(
@@ -63,7 +45,7 @@ def _download_port_files(
     mlflow_client: MlflowClient,
     run_id: str,
     port_name: str,
-    target_directory: pathlib.Path,
+    target_directory: Path,
     credential: ChainedTokenCredential
 ) -> None:
     port_info = _get_output_port_info(mlflow_client, run_id, port_name)
@@ -102,41 +84,18 @@ def download_rai_insights(
 
     mlflow_client = MlflowClient()
 
-    with tempfile.TemporaryDirectory() as temp_dir:
-        temp_dir_path = pathlib.Path(temp_dir)
+    output_directory = Path(path)
+    output_directory.mkdir(parents=True, exist_ok=False)
 
-        # Get the empty RAIInsights
-        _download_port_files(
-            mlflow_client,
-            rai_insight_id,
-            OutputPortNames.RAI_INSIGHTS_CONSTRUCTOR_OUTPUT_PORT,
-            temp_dir_path,
-            ml_client._credential
-        )
+    _download_port_files(
+        mlflow_client,
+        rai_insight_id,
+        OutputPortNames.RAI_INSIGHTS_GATHER_RAIINSIGHTS_PORT,
+        output_directory,
+        ml_client._credential
+    )
 
-        # Need to ensure all the tool directories exist
-        for v in _tool_directory_mapping.values():
-            os.makedirs(temp_dir_path / v, exist_ok=True)
-
-        # Start working through the insights
-        tool_runs = list_components_for_rai_insight(
-            ml_client,
-            v1_ws.get_run(rai_insight_id).experiment.name,
-            rai_insight_id=rai_insight_id
-        )
-        for t in tool_runs:
-            run_id = t[0]
-            tool = t[1]
-
-            insight_directory = temp_dir_path/_tool_directory_mapping[tool]/run_id
-            insight_directory.mkdir(parents=True, exist_ok=False)
-
-            _download_port_files(
-                mlflow_client,
-                run_id,
-                _tool_output_port_mapping[tool],
-                insight_directory,
-                ml_client._credential
-            )
-
-        shutil.copytree(temp_dir, path)
+    # Ensure empty directories are present
+    tool_dirs = ['causal', 'counterfactual', 'error_analysis', 'explainer']
+    for t in tool_dirs:
+        os.makedirs(Path(path) / t, exist_ok=True)
