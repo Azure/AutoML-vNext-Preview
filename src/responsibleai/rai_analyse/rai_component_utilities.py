@@ -135,37 +135,27 @@ def save_to_output_port(rai_i: RAIInsights, output_port_path: str, tool_type: st
     _logger.info("Copied to output")
 
 
-def add_properties_to_tool_run(tool_type: str, constructor_run_id: str):
-    target_run = Run.get_context()
-    if tool_type == RAIToolType.CAUSAL:
-        type_key = PropertyKeyValues.RAI_INSIGHTS_TYPE_CAUSAL
-        pointer_format = PropertyKeyValues.RAI_INSIGHTS_CAUSAL_POINTER_KEY_FORMAT
-    elif tool_type == RAIToolType.COUNTERFACTUAL:
-        type_key = PropertyKeyValues.RAI_INSIGHTS_TYPE_COUNTERFACTUAL
-        pointer_format = (
-            PropertyKeyValues.RAI_INSIGHTS_COUNTERFACTUAL_POINTER_KEY_FORMAT
-        )
-    elif tool_type == RAIToolType.ERROR_ANALYSIS:
-        type_key = RAIToolType.ERROR_ANALYSIS
-        pointer_format = (
-            PropertyKeyValues.RAI_INSIGHTS_ERROR_ANALYSIS_POINTER_KEY_FORMAT
-        )
-    elif tool_type == RAIToolType.EXPLANATION:
-        type_key = PropertyKeyValues.RAI_INSIGHTS_TYPE_EXPLANATION
-        pointer_format = PropertyKeyValues.RAI_INSIGHTS_EXPLANATION_POINTER_KEY_FORMAT
-    else:
-        raise ValueError("Unrecognised tool_type: {0}".format(tool_type))
+def add_properties_to_gather_run(constructor_run_id: str, tool_present_dict: Dict[str, str]):
+    _logger.info("Adding properties to the gather run")
+    gather_run = Run.get_context()
+    constructor_run = Run(gather_run.experiment, constructor_run_id)
 
-    _logger.info("Adding properties to Run")
+    _logger.info("Fetching constructor run properties")
+    constructor_props = constructor_run.get_properties()
+
     run_properties = {
-        PropertyKeyValues.RAI_INSIGHTS_TYPE_KEY: type_key,
+        PropertyKeyValues.RAI_INSIGHTS_TYPE_KEY: PropertyKeyValues.RAI_INSIGHTS_TYPE_GATHER,
         PropertyKeyValues.RAI_INSIGHTS_RESPONSIBLEAI_VERSION_KEY: responsibleai_version,
         PropertyKeyValues.RAI_INSIGHTS_CONSTRUCTOR_RUN_ID_KEY: constructor_run_id,
+        PropertyKeyValues.RAI_INSIGHTS_MODEL_ID_KEY: constructor_props[
+            PropertyKeyValues.RAI_INSIGHTS_MODEL_ID_KEY]
     }
-    target_run.add_properties(run_properties)
 
-    _logger.info("Adding tool property to constructor run")
-    extra_props = {pointer_format.format(target_run.id): target_run.id}
-    constructor_run = Run.get(
-        target_run.experiment.workspace, constructor_run_id)
-    constructor_run.add_properties(extra_props)
+    _logger.info("Appending tool present information")
+    for k, v in tool_present_dict.items():
+        key = PropertyKeyValues.RAI_INSIGHTS_TOOL_KEY_FORMAT.format(k)
+        run_properties[key] = str(v)
+
+    _logger.info("Making service call")
+    gather_run.add_properties(run_properties)
+    _logger.info("Properties added to gather run")

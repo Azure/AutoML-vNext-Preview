@@ -14,8 +14,8 @@ from typing import Dict
 from responsibleai import RAIInsights
 from responsibleai.serialization_utilities import serialize_json_safe
 
-from constants import RAIToolType
-from rai_component_utilities import create_rai_tool_directories, copy_insight_to_raiinsights, print_dir_tree
+from constants import DashboardInfo, RAIToolType
+from rai_component_utilities import create_rai_tool_directories, copy_insight_to_raiinsights, print_dir_tree, load_dashboard_info_file, add_properties_to_gather_run
 
 _logger = logging.getLogger(__file__)
 logging.basicConfig(level=logging.INFO)
@@ -41,6 +41,8 @@ def parse_args():
 
 
 def main(args):
+    dashboard_info = load_dashboard_info_file(args.rai_insights_dashboard)
+
     with tempfile.TemporaryDirectory() as incoming_temp_dir:
         incoming_dir = Path(incoming_temp_dir)
         shutil.copytree(args.constructor, incoming_dir, dirs_exist_ok=True)
@@ -91,6 +93,10 @@ def main(args):
         with open(output_path, 'w') as json_file:
             json.dump(rai_dict, json_file)
         _logger.info("Dashboard JSON written")
+
+        add_properties_to_gather_run(dashboard_info[DashboardInfo.RAI_INSIGHTS_RUN_ID_KEY], included_tools)
+        _logger.info("Processing completed")
+
 
 
 # run script
