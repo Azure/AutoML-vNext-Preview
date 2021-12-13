@@ -47,7 +47,7 @@ def parse_args():
 
 
 def main(args):
-    dashboard_info = load_dashboard_info_file(args.rai_insights_dashboard)
+    dashboard_info = load_dashboard_info_file(args.constructor)
 
     with tempfile.TemporaryDirectory() as incoming_temp_dir:
         incoming_dir = Path(incoming_temp_dir)
