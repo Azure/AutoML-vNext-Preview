@@ -12,7 +12,7 @@ from responsibleai import RAIInsights
 from constants import RAIToolType
 from rai_component_utilities import (
     load_rai_insights_from_input_port,
-    save_to_output_port
+    save_to_output_port,
 )
 from arg_helpers import (
     float_or_json_parser,

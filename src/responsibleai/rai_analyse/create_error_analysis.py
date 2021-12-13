@@ -42,8 +42,7 @@ def parse_args():
 
 def main(args):
     # Load the RAI Insights object
-    rai_i: RAIInsights = load_rai_insights_from_input_port(
-        args.rai_insights_dashboard)
+    rai_i: RAIInsights = load_rai_insights_from_input_port(args.rai_insights_dashboard)
 
     # Add the error analysis
     rai_i.error_analysis.add(
@@ -58,8 +57,7 @@ def main(args):
     _logger.info("Computation complete")
 
     # Save
-    save_to_output_port(rai_i, args.error_analysis_path,
-                        RAIToolType.ERROR_ANALYSIS)
+    save_to_output_port(rai_i, args.error_analysis_path, RAIToolType.ERROR_ANALYSIS)
 
     _logger.info("Completing")
 

@@ -81,7 +81,9 @@ def load_rai_insights_from_input_port(input_port_path: str) -> RAIInsights:
     return result
 
 
-def copy_insight_to_raiinsights(rai_insights_dir: pathlib.Path, insight_dir: pathlib.Path) -> str:
+def copy_insight_to_raiinsights(
+    rai_insights_dir: pathlib.Path, insight_dir: pathlib.Path
+) -> str:
     print("Starting copy")
     dir_items = list(insight_dir.iterdir())
     assert len(dir_items) == 1
@@ -93,19 +95,18 @@ def copy_insight_to_raiinsights(rai_insights_dir: pathlib.Path, insight_dir: pat
         if tool_dir_name == v:
             tool_type = k
     _logger.info("Mapped to tool: {0}".format(tool_type))
-    tool_dir = insight_dir/tool_dir_name
+    tool_dir = insight_dir / tool_dir_name
 
     tool_dir_items = list(tool_dir.iterdir())
     assert len(tool_dir_items) == 1
 
-    src_dir = insight_dir/tool_dir_name/tool_dir_items[0].parts[-1]
+    src_dir = insight_dir / tool_dir_name / tool_dir_items[0].parts[-1]
     dst_dir = rai_insights_dir / tool_dir_name / tool_dir_items[0].parts[-1]
     print("Copy source:", str(src_dir))
     print("Copy dest  :", str(dst_dir))
     shutil.copytree(
         src=src_dir,
         dst=dst_dir,
-
     )
     _logger.info("Copy complete")
     return tool_type
@@ -135,14 +136,18 @@ def save_to_output_port(rai_i: RAIInsights, output_port_path: str, tool_type: st
     _logger.info("Copied to output")
 
 
-def add_properties_to_gather_run(dashboard_info: Dict[str, str], tool_present_dict: Dict[str, str]):
+def add_properties_to_gather_run(
+    dashboard_info: Dict[str, str], tool_present_dict: Dict[str, str]
+):
     _logger.info("Adding properties to the gather run")
     gather_run = Run.get_context()
 
     run_properties = {
         PropertyKeyValues.RAI_INSIGHTS_TYPE_KEY: PropertyKeyValues.RAI_INSIGHTS_TYPE_GATHER,
         PropertyKeyValues.RAI_INSIGHTS_RESPONSIBLEAI_VERSION_KEY: responsibleai_version,
-        PropertyKeyValues.RAI_INSIGHTS_MODEL_ID_KEY: dashboard_info[DashboardInfo.MODEL_ID_KEY]
+        PropertyKeyValues.RAI_INSIGHTS_MODEL_ID_KEY: dashboard_info[
+            DashboardInfo.MODEL_ID_KEY
+        ],
     }
 
     _logger.info("Appending tool present information")

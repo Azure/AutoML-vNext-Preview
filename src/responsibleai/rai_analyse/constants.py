@@ -36,9 +36,7 @@ class PropertyKeyValues:
     )
 
     # Property format to indicate presence of a tool
-    RAI_INSIGHTS_TOOL_KEY_FORMAT = (
-        "_azureml.responsibleai.rai_insights.has_{0}"
-    )
+    RAI_INSIGHTS_TOOL_KEY_FORMAT = "_azureml.responsibleai.rai_insights.has_{0}"
 
 
 class RAIToolType:

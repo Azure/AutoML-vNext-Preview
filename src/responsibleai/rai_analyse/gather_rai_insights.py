@@ -15,7 +15,13 @@ from responsibleai import RAIInsights
 from responsibleai.serialization_utilities import serialize_json_safe
 
 from constants import DashboardInfo, RAIToolType
-from rai_component_utilities import create_rai_tool_directories, copy_insight_to_raiinsights, print_dir_tree, load_dashboard_info_file, add_properties_to_gather_run
+from rai_component_utilities import (
+    create_rai_tool_directories,
+    copy_insight_to_raiinsights,
+    print_dir_tree,
+    load_dashboard_info_file,
+    add_properties_to_gather_run,
+)
 
 _logger = logging.getLogger(__file__)
 logging.basicConfig(level=logging.INFO)
@@ -54,18 +60,13 @@ def main(args):
         print_dir_tree(incoming_dir)
         print("\n==================\n")
 
-        insight_paths = [
-            args.insight_1,
-            args.insight_2,
-            args.insight_3,
-            args.insight_4
-        ]
+        insight_paths = [args.insight_1, args.insight_2, args.insight_3, args.insight_4]
 
         included_tools: Dict[str, bool] = {
             RAIToolType.CAUSAL: False,
             RAIToolType.COUNTERFACTUAL: False,
             RAIToolType.ERROR_ANALYSIS: False,
-            RAIToolType.EXPLANATION: False
+            RAIToolType.EXPLANATION: False,
         }
         for ip in insight_paths:
             if ip is not None:
@@ -88,9 +89,9 @@ def main(args):
 
         rai_data = rai_i.get_data()
         rai_dict = serialize_json_safe(rai_data)
-        json_filename = 'dashboard.json'
+        json_filename = "dashboard.json"
         output_path = Path(args.ux_json) / json_filename
-        with open(output_path, 'w') as json_file:
+        with open(output_path, "w") as json_file:
             json.dump(rai_dict, json_file)
         _logger.info("Dashboard JSON written")
 
