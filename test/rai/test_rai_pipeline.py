@@ -194,7 +194,7 @@ class TestRAI:
             'insight_1': '${{jobs.explain-rai-job.outputs.explanation}}',
             'insight_2': '${{jobs.causal-rai-job.outputs.causal}}',
             'insight_3': '${{jobs.counterfactual-rai-job.outputs.counterfactual}}',
-            # 'insight_4': '${{jobs.error-analysis-rai-job.outputs.error_analysis}}'
+            'insight_4': '${{jobs.error-analysis-rai-job.outputs.error_analysis}}'
         }
         gather_outputs = {
             'dashboard': None,
