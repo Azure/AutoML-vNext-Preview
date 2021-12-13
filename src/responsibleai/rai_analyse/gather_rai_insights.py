@@ -57,9 +57,6 @@ def main(args):
         create_rai_tool_directories(incoming_dir)
         _logger.info("Copied empty RAIInsights")
 
-        print_dir_tree(incoming_dir)
-        print("\n==================\n")
-
         insight_paths = [args.insight_1, args.insight_2, args.insight_3, args.insight_4]
 
         included_tools: Dict[str, bool] = {
@@ -78,13 +75,10 @@ def main(args):
 
         _logger.info("Tool summary: {0}".format(included_tools))
 
-        print_dir_tree(incoming_dir)
-        print("\n==================\n")
-
         rai_i = RAIInsights.load(incoming_dir)
         _logger.info("Object loaded")
 
-        # rai_i.save(args.dashboard)
+        rai_i.save(args.dashboard)
         _logger.info("Saved dashboard to oputput")
 
         rai_data = rai_i.get_data()
