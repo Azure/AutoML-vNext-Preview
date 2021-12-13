@@ -114,7 +114,10 @@ def main(args):
     insights.save(args.output_path)
 
     _logger.info("Saving JSON for tool components")
-    output_dict = {DashboardInfo.RAI_INSIGHTS_RUN_ID_KEY: str(my_run.id)}
+    output_dict = {
+        DashboardInfo.RAI_INSIGHTS_RUN_ID_KEY: str(my_run.id),
+        DashboardInfo.RAI_INSIGHTS_MODEL_ID_KEY: model_id,
+    }
     output_file = os.path.join(
         args.output_path, DashboardInfo.RAI_INSIGHTS_PARENT_FILENAME
     )

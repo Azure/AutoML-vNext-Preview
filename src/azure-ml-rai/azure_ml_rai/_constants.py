@@ -14,19 +14,10 @@ class RAIToolType:
 class PropertyKeyValues:
     # The property to indicate the type of Run
     RAI_INSIGHTS_TYPE_KEY = "_azureml.responsibleai.rai_insights.type"
-    RAI_INSIGHTS_TYPE_CONSTRUCT = "construction"
-    RAI_INSIGHTS_TYPE_CAUSAL = "causal"
-    RAI_INSIGHTS_TYPE_COUNTERFACTUAL = "counterfactual"
-    RAI_INSIGHTS_TYPE_EXPLANATION = "explanation"
-    RAI_INSIGHTS_TYPE_ERROR_ANALYSIS = "error_analysis"
+    RAI_INSIGHTS_TYPE_GATHER = "gather"
 
     # Property to point at the model under examination
     RAI_INSIGHTS_MODEL_ID_KEY = "_azureml.responsibleai.rai_insights.model_id"
-
-    # Property for tool runs to point at their constructor run
-    RAI_INSIGHTS_CONSTRUCTOR_RUN_ID_KEY = (
-        "_azureml.responsibleai.rai_insights.constructor_run"
-    )
 
     # Property to record responsibleai version
     RAI_INSIGHTS_RESPONSIBLEAI_VERSION_KEY = (
@@ -36,4 +27,4 @@ class PropertyKeyValues:
 
 # This comes from the component definitions
 class OutputPortNames:
-    RAI_INSIGHTS_CONSTRUCTOR_OUTPUT_PORT = 'rai_insights_dashboard'
+    RAI_INSIGHTS_GATHER_RAIINSIGHTS_PORT = 'dashboard'

@@ -185,6 +185,24 @@ class TestRAI:
             outputs=error_analysis_outputs
         )
 
+        # Configure the gather component
+        gather_inputs = {
+            'constructor': '${{jobs.create-rai-job.outputs.rai_insights_dashboard}}',
+            # 'insight_1': '${{jobs.explain-rai-job.outputs.explanation}}',
+            'insight_2': '${{jobs.causal-rai-job.outputs.causal}}',
+            'insight_3': '${{jobs.counterfactual-rai-job.outputs.counterfactual}}',
+            'insight_4': '${{jobs.error-analysis-rai-job.outputs.error_analysis}}'
+        }
+        gather_outputs = {
+            'dashboard': None,
+            'ux_json': None
+        }
+        gather_job = ComponentJob(
+            component=f"RAIInsightsGather:{version_string}",
+            inputs=gather_inputs,
+            outputs=gather_outputs
+        )
+
         # Assemble into a pipeline
         pipeline_job = PipelineJob(
             experiment_name=f"Classification_from_Python_{version_string}",
@@ -196,7 +214,8 @@ class TestRAI:
                 'explain-rai-job': explain_job,
                 'causal-rai-job': causal_job,
                 'counterfactual-rai-job': counterfactual_job,
-                'error-analysis-rai-job': error_analysis_job
+                'error-analysis-rai-job': error_analysis_job,
+                'gather-job': gather_job
             },
             inputs=pipeline_inputs,
             outputs=train_job_outputs,

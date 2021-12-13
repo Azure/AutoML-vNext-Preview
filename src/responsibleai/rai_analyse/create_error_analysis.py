@@ -9,12 +9,10 @@ import logging
 from responsibleai import RAIInsights
 
 
-from constants import DashboardInfo, RAIToolType
+from constants import RAIToolType
 from rai_component_utilities import (
-    load_dashboard_info_file,
     load_rai_insights_from_input_port,
     save_to_output_port,
-    add_properties_to_tool_run,
 )
 
 _logger = logging.getLogger(__file__)
@@ -43,9 +41,6 @@ def parse_args():
 
 
 def main(args):
-    # Load the model_analysis_parent info
-    dashboard_info = load_dashboard_info_file(args.rai_insights_dashboard)
-
     # Load the RAI Insights object
     rai_i: RAIInsights = load_rai_insights_from_input_port(args.rai_insights_dashboard)
 
@@ -64,11 +59,6 @@ def main(args):
     # Save
     save_to_output_port(rai_i, args.error_analysis_path, RAIToolType.ERROR_ANALYSIS)
 
-    # Add the necessary properties
-    add_properties_to_tool_run(
-        RAIToolType.ERROR_ANALYSIS,
-        dashboard_info[DashboardInfo.RAI_INSIGHTS_RUN_ID_KEY],
-    )
     _logger.info("Completing")
 
 

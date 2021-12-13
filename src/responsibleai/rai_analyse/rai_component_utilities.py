@@ -57,24 +57,59 @@ def load_dashboard_info_file(input_port_path: str) -> Dict[str, str]:
     return dashboard_info
 
 
+def create_rai_tool_directories(rai_insights_dir: pathlib.Path) -> None:
+    # Have to create empty subdirectories for the managers
+    # THe RAI Insights object expect these to be present, but
+    # since directories don't actually exist in Azure Blob store
+    # they may not be present (some of the tools always have
+    # a file present, even if no tool instances have been added)
+    for v in _tool_directory_mapping.values():
+        os.makedirs(rai_insights_dir / v, exist_ok=True)
+    _logger.info("Added empty directories")
+
+
 def load_rai_insights_from_input_port(input_port_path: str) -> RAIInsights:
     with tempfile.TemporaryDirectory() as incoming_temp_dir:
         incoming_dir = pathlib.Path(incoming_temp_dir)
         shutil.copytree(input_port_path, incoming_dir, dirs_exist_ok=True)
         _logger.info("Copied RAI Insights input to temporary directory")
 
-        # Have to create empty subdirectories for the managers
-        # THe RAI Insights object expect these to be present, but
-        # since directories don't actually exist in Azure Blob store
-        # they may not be present (some of the tools always have
-        # a file present, even if no tool instances have been added)
-        for v in _tool_directory_mapping.values():
-            os.makedirs(incoming_dir / v, exist_ok=True)
-        _logger.info("Added empty directories")
+        create_rai_tool_directories(incoming_dir)
 
         result = RAIInsights.load(incoming_dir)
         _logger.info("Loaded RAIInsights object")
     return result
+
+
+def copy_insight_to_raiinsights(
+    rai_insights_dir: pathlib.Path, insight_dir: pathlib.Path
+) -> str:
+    print("Starting copy")
+    dir_items = list(insight_dir.iterdir())
+    assert len(dir_items) == 1
+
+    tool_dir_name = dir_items[0].parts[-1]
+    _logger.info("Detected tool: {0}".format(tool_dir_name))
+    assert tool_dir_name in _tool_directory_mapping.values()
+    for k, v in _tool_directory_mapping.items():
+        if tool_dir_name == v:
+            tool_type = k
+    _logger.info("Mapped to tool: {0}".format(tool_type))
+    tool_dir = insight_dir / tool_dir_name
+
+    tool_dir_items = list(tool_dir.iterdir())
+    assert len(tool_dir_items) == 1
+
+    src_dir = insight_dir / tool_dir_name / tool_dir_items[0].parts[-1]
+    dst_dir = rai_insights_dir / tool_dir_name / tool_dir_items[0].parts[-1]
+    print("Copy source:", str(src_dir))
+    print("Copy dest  :", str(dst_dir))
+    shutil.copytree(
+        src=src_dir,
+        dst=dst_dir,
+    )
+    _logger.info("Copy complete")
+    return tool_type
 
 
 def save_to_output_port(rai_i: RAIInsights, output_port_path: str, tool_type: str):
@@ -88,45 +123,38 @@ def save_to_output_port(rai_i: RAIInsights, output_port_path: str, tool_type: st
         _logger.info("Checking dirname is GUID")
         uuid.UUID(insight_dirs[0])
 
+        target_path = pathlib.Path(output_port_path) / tool_dir_name
+        target_path.mkdir()
+        _logger.info("Created output directory")
+
         _logger.info("Starting copy")
         shutil.copytree(
-            pathlib.Path(tmpdirname) / tool_dir_name / insight_dirs[0],
-            output_port_path,
+            pathlib.Path(tmpdirname) / tool_dir_name,
+            target_path,
             dirs_exist_ok=True,
         )
     _logger.info("Copied to output")
 
 
-def add_properties_to_tool_run(tool_type: str, constructor_run_id: str):
-    target_run = Run.get_context()
-    if tool_type == RAIToolType.CAUSAL:
-        type_key = PropertyKeyValues.RAI_INSIGHTS_TYPE_CAUSAL
-        pointer_format = PropertyKeyValues.RAI_INSIGHTS_CAUSAL_POINTER_KEY_FORMAT
-    elif tool_type == RAIToolType.COUNTERFACTUAL:
-        type_key = PropertyKeyValues.RAI_INSIGHTS_TYPE_COUNTERFACTUAL
-        pointer_format = (
-            PropertyKeyValues.RAI_INSIGHTS_COUNTERFACTUAL_POINTER_KEY_FORMAT
-        )
-    elif tool_type == RAIToolType.ERROR_ANALYSIS:
-        type_key = RAIToolType.ERROR_ANALYSIS
-        pointer_format = (
-            PropertyKeyValues.RAI_INSIGHTS_ERROR_ANALYSIS_POINTER_KEY_FORMAT
-        )
-    elif tool_type == RAIToolType.EXPLANATION:
-        type_key = PropertyKeyValues.RAI_INSIGHTS_TYPE_EXPLANATION
-        pointer_format = PropertyKeyValues.RAI_INSIGHTS_EXPLANATION_POINTER_KEY_FORMAT
-    else:
-        raise ValueError("Unrecognised tool_type: {0}".format(tool_type))
+def add_properties_to_gather_run(
+    dashboard_info: Dict[str, str], tool_present_dict: Dict[str, str]
+):
+    _logger.info("Adding properties to the gather run")
+    gather_run = Run.get_context()
 
-    _logger.info("Adding properties to Run")
     run_properties = {
-        PropertyKeyValues.RAI_INSIGHTS_TYPE_KEY: type_key,
+        PropertyKeyValues.RAI_INSIGHTS_TYPE_KEY: PropertyKeyValues.RAI_INSIGHTS_TYPE_GATHER,
         PropertyKeyValues.RAI_INSIGHTS_RESPONSIBLEAI_VERSION_KEY: responsibleai_version,
-        PropertyKeyValues.RAI_INSIGHTS_CONSTRUCTOR_RUN_ID_KEY: constructor_run_id,
+        PropertyKeyValues.RAI_INSIGHTS_MODEL_ID_KEY: dashboard_info[
+            DashboardInfo.RAI_INSIGHTS_MODEL_ID_KEY
+        ],
     }
-    target_run.add_properties(run_properties)
 
-    _logger.info("Adding tool property to constructor run")
-    extra_props = {pointer_format.format(target_run.id): target_run.id}
-    constructor_run = Run.get(target_run.experiment.workspace, constructor_run_id)
-    constructor_run.add_properties(extra_props)
+    _logger.info("Appending tool present information")
+    for k, v in tool_present_dict.items():
+        key = PropertyKeyValues.RAI_INSIGHTS_TOOL_KEY_FORMAT.format(k)
+        run_properties[key] = str(v)
+
+    _logger.info("Making service call")
+    gather_run.add_properties(run_properties)
+    _logger.info("Properties added to gather run")

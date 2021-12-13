@@ -59,6 +59,7 @@ def str_or_list_parser(target: str) -> Union[str, list]:
         decoded = json.loads(target)
         if not isinstance(decoded, list):
             raise ValueError("Supplied JSON string not list: {0}".format(target))
+        return decoded
     except json.JSONDecodeError:
         # String, but need to get rid of quotes
         return target.strip('"').strip("'")
