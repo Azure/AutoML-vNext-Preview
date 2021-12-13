@@ -81,19 +81,21 @@ def load_rai_insights_from_input_port(input_port_path: str) -> RAIInsights:
     return result
 
 
-def copy_insight_to_raiinsights(rai_insights_dir: pathlib.Path, insight_dir: pathlib.Path) -> None:
+def copy_insight_to_raiinsights(rai_insights_dir: pathlib.Path, insight_dir: pathlib.Path) -> str:
     print("Starting copy")
     dir_items = list(insight_dir.iterdir())
-    print("Directory contents: {0}".format(dir_items))
     assert len(dir_items) == 1
 
     tool_dir_name = dir_items[0].parts[-1]
     _logger.info("Detected tool: {0}".format(tool_dir_name))
     assert tool_dir_name in _tool_directory_mapping.values()
+    for k, v in _tool_directory_mapping.items():
+        if tool_dir_name == v:
+            tool_type = k
+    _logger.info("Mapped to tool: {0}".format(tool_type))
     tool_dir = insight_dir/tool_dir_name
 
     tool_dir_items = list(tool_dir.iterdir())
-    print("Tool dir contents: ", tool_dir_items)
     assert len(tool_dir_items) == 1
 
     src_dir = insight_dir/tool_dir_name/tool_dir_items[0].parts[-1]
@@ -106,6 +108,7 @@ def copy_insight_to_raiinsights(rai_insights_dir: pathlib.Path, insight_dir: pat
 
     )
     _logger.info("Copy complete")
+    return tool_type
 
 
 def save_to_output_port(rai_i: RAIInsights, output_port_path: str, tool_type: str):

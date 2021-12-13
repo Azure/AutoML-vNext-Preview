@@ -9,9 +9,12 @@ from pathlib import Path
 import shutil
 import tempfile
 
+from typing import Dict
+
 from responsibleai import RAIInsights
 from responsibleai.serialization_utilities import serialize_json_safe
 
+from constants import RAIToolType
 from rai_component_utilities import create_rai_tool_directories, copy_insight_to_raiinsights, print_dir_tree
 
 _logger = logging.getLogger(__file__)
@@ -56,12 +59,21 @@ def main(args):
             args.insight_4
         ]
 
+        included_tools: Dict[str, bool] = {
+            RAIToolType.CAUSAL: False,
+            RAIToolType.COUNTERFACTUAL: False,
+            RAIToolType.ERROR_ANALYSIS: False,
+            RAIToolType.EXPLANATION: False
+        }
         for ip in insight_paths:
             if ip is not None:
                 _logger.info("Copying insight")
-                copy_insight_to_raiinsights(incoming_dir, Path(ip))
+                tool = copy_insight_to_raiinsights(incoming_dir, Path(ip))
+                included_tools[tool] = True
             else:
                 _logger.info("insight is None")
+
+        _logger.info("Tool summary: {0}".format(included_tools))
 
         print_dir_tree(incoming_dir)
         print("\n==================\n")
