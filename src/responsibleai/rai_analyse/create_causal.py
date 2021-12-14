@@ -6,10 +6,13 @@ import argparse
 import json
 import logging
 
+from pathlib import Path
+from shutil import copyfile
+
 from responsibleai import RAIInsights
 
 
-from constants import RAIToolType
+from constants import RAIToolType, DashboardInfo
 from rai_component_utilities import (
     load_rai_insights_from_input_port,
     save_to_output_port,
@@ -31,7 +34,8 @@ def parse_args():
 
     parser.add_argument("--rai_insights_dashboard", type=str, required=True)
 
-    parser.add_argument("--treatment_features", type=json.loads, help="List[str]")
+    parser.add_argument("--treatment_features",
+                        type=json.loads, help="List[str]")
     parser.add_argument(
         "--heterogeneity_features",
         type=json.loads,
@@ -65,7 +69,8 @@ def parse_args():
 
 def main(args):
     # Load the RAI Insights object
-    rai_i: RAIInsights = load_rai_insights_from_input_port(args.rai_insights_dashboard)
+    rai_i: RAIInsights = load_rai_insights_from_input_port(
+        args.rai_insights_dashboard)
 
     # Add the causal analysis
     rai_i.causal.add(
@@ -92,6 +97,14 @@ def main(args):
 
     # Save
     save_to_output_port(rai_i, args.causal_path, RAIToolType.CAUSAL)
+    _logger.info("Saved computation to output port")
+
+    # Copy the dashboard info file
+    dashboard_info_src_path = Path(
+        args.rai_insights_dashboard) / DashboardInfo.RAI_INSIGHTS_PARENT_FILENAME
+    dashboard_info_dst_path = Path(
+        args.causal_path) / DashboardInfo.RAI_INSIGHTS_PARENT_FILENAME
+    copyfile(dashboard_info_src_path, dashboard_info_dst_path)
 
     _logger.info("Completing")
 
