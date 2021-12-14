@@ -13,6 +13,7 @@ from constants import RAIToolType
 from rai_component_utilities import (
     load_rai_insights_from_input_port,
     save_to_output_port,
+    copy_dashboard_info_file,
 )
 from arg_helpers import boolean_parser, str_or_int_parser, str_or_list_parser
 
@@ -43,7 +44,8 @@ def parse_args():
 
 def main(args):
     # Load the RAI Insights object
-    rai_i: RAIInsights = load_rai_insights_from_input_port(args.rai_insights_dashboard)
+    rai_i: RAIInsights = load_rai_insights_from_input_port(
+        args.rai_insights_dashboard)
 
     # Add the counterfactual
     rai_i.counterfactual.add(
@@ -62,7 +64,13 @@ def main(args):
     _logger.info("Computation complete")
 
     # Save
-    save_to_output_port(rai_i, args.counterfactual_path, RAIToolType.COUNTERFACTUAL)
+    save_to_output_port(rai_i, args.counterfactual_path,
+                        RAIToolType.COUNTERFACTUAL)
+    _logger.info("Saved to output port")
+
+    # Copy the dashboard info file
+    copy_dashboard_info_file(
+        args.rai_insights_dashboard, args.counterfactual_path)
 
     _logger.info("Completing")
 
