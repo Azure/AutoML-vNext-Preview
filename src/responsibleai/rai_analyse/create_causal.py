@@ -16,6 +16,7 @@ from constants import RAIToolType, DashboardInfo
 from rai_component_utilities import (
     load_rai_insights_from_input_port,
     save_to_output_port,
+    copy_dashboard_info_file
 )
 from arg_helpers import (
     float_or_json_parser,
@@ -100,11 +101,7 @@ def main(args):
     _logger.info("Saved computation to output port")
 
     # Copy the dashboard info file
-    dashboard_info_src_path = Path(
-        args.rai_insights_dashboard) / DashboardInfo.RAI_INSIGHTS_PARENT_FILENAME
-    dashboard_info_dst_path = Path(
-        args.causal_path) / DashboardInfo.RAI_INSIGHTS_PARENT_FILENAME
-    copyfile(dashboard_info_src_path, dashboard_info_dst_path)
+    copy_dashboard_info_file(args.rai_insights_dashboard, args.causal_path)
 
     _logger.info("Completing")
 

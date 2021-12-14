@@ -56,6 +56,12 @@ def load_dashboard_info_file(input_port_path: str) -> Dict[str, str]:
     _logger.info("rai_insights_parent info: {0}".format(dashboard_info))
     return dashboard_info
 
+def copy_dashboard_info_file(src_port_path: str, dst_port_path: str):
+    src = pathlib.Path(src_port_path) / DashboardInfo.RAI_INSIGHTS_PARENT_FILENAME
+    dst = pathlib.Path(dst_port_path) / DashboardInfo.RAI_INSIGHTS_PARENT_FILENAME
+
+    shutil.copyfile(src, dst)
+
 
 def create_rai_tool_directories(rai_insights_dir: pathlib.Path) -> None:
     # Have to create empty subdirectories for the managers
