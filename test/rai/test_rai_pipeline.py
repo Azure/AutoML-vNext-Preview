@@ -6,6 +6,7 @@ import logging
 import pathlib
 import time
 
+from azure.ml import MLClient
 from azure.ml.entities import JobInput
 from azure.ml.entities import ComponentJob, Job, PipelineJob
 
@@ -21,18 +22,20 @@ def process_file(input_file, output_file, replacements):
             outfile.write(line)
 
 
-def submit_and_wait(ml_client, pipeline_job) -> PipelineJob:
+def submit_and_wait(ml_client: MLClient, pipeline_job: PipelineJob, expected_state: str = 'Completed') -> PipelineJob:
     created_job = ml_client.jobs.create_or_update(pipeline_job)
+    terminal_states = ['Completed', 'Failed', 'Canceled', 'NotResponding']
     assert created_job is not None
+    assert expected_state in terminal_states
 
-    while created_job.status not in ['Completed', 'Failed', 'Canceled', 'NotResponding']:
+    while created_job.status not in terminal_states:
         time.sleep(30)
         created_job = ml_client.jobs.get(created_job.name)
         print("Latest status : {0}".format(created_job.status))
         _logger.info("Latest status : {0}".format(created_job.status))
-    if created_job.status != 'Completed':
+    if created_job.status != expected_state:
         _logger.error(str(created_job))
-    assert created_job.status == 'Completed'
+    assert created_job.status == expected_state
     return created_job
 
 
@@ -69,7 +72,7 @@ class TestRAI:
 
         submit_and_wait(ml_client, pipeline_job)
 
-    def test_classification_pipeline(self, ml_client, component_config):
+    def test_classification_pipeline(self, ml_client: MLClient, component_config):
         # This is for the Adult dataset
         version_string = component_config['version']
 
@@ -226,7 +229,7 @@ class TestRAI:
         pipeline_job = submit_and_wait(ml_client, pipeline_job)
         assert pipeline_job is not None
 
-    def test_tool_component_mismatch(self, ml_client, component_config):
+    def test_tool_component_mismatch(self, ml_client: MLClient, component_config):
         # Checks that components from different constructors can't be mixed
         # This is for the Adult dataset
         version_string = component_config['version']
@@ -366,9 +369,10 @@ class TestRAI:
         )
 
         # Send it
-        pipeline_job = submit_and_wait(ml_client, pipeline_job)
+        pipeline_job = submit_and_wait(ml_client, pipeline_job, 'Failed')
+        # Want to do more here, but there isn't anything useful in the returned job
+        # Problem is, the job might have failed for some other reason
         assert pipeline_job is not None
-
 
     def test_fetch_registered_model_component(self, ml_client, component_config):
         # Actually does two pipelines. One to register, then one to use
