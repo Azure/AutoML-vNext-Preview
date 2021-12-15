@@ -114,8 +114,6 @@ class TestRAI:
             'train_dataset': '${{inputs.my_training_data}}',
             'test_dataset': '${{inputs.my_test_data}}',
             'target_column_name': '${{inputs.target_column_name}}',
-            # 'X_column_names': '["Age", "Workclass", "Education-Num", "Marital Status", "Occupation", "Relationship", "Race", "Sex", "Capital Gain", "Capital Loss", "Hours per week", "Country"]',
-            # 'datastore_name': 'workspaceblobstore',
             'categorical_column_names': '["Race", "Sex", "Workclass", "Marital Status", "Country", "Occupation"]',
         }
         create_rai_outputs = {
