@@ -6,13 +6,17 @@ import argparse
 import json
 import logging
 
+from pathlib import Path
+from shutil import copyfile
+
 from responsibleai import RAIInsights
 
 
-from constants import RAIToolType
+from constants import RAIToolType, DashboardInfo
 from rai_component_utilities import (
     load_rai_insights_from_input_port,
     save_to_output_port,
+    copy_dashboard_info_file,
 )
 from arg_helpers import (
     float_or_json_parser,
@@ -92,6 +96,10 @@ def main(args):
 
     # Save
     save_to_output_port(rai_i, args.causal_path, RAIToolType.CAUSAL)
+    _logger.info("Saved computation to output port")
+
+    # Copy the dashboard info file
+    copy_dashboard_info_file(args.rai_insights_dashboard, args.causal_path)
 
     _logger.info("Completing")
 

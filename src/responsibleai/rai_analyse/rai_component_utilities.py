@@ -57,6 +57,13 @@ def load_dashboard_info_file(input_port_path: str) -> Dict[str, str]:
     return dashboard_info
 
 
+def copy_dashboard_info_file(src_port_path: str, dst_port_path: str):
+    src = pathlib.Path(src_port_path) / DashboardInfo.RAI_INSIGHTS_PARENT_FILENAME
+    dst = pathlib.Path(dst_port_path) / DashboardInfo.RAI_INSIGHTS_PARENT_FILENAME
+
+    shutil.copyfile(src, dst)
+
+
 def create_rai_tool_directories(rai_insights_dir: pathlib.Path) -> None:
     # Have to create empty subdirectories for the managers
     # THe RAI Insights object expect these to be present, but
@@ -85,10 +92,20 @@ def copy_insight_to_raiinsights(
     rai_insights_dir: pathlib.Path, insight_dir: pathlib.Path
 ) -> str:
     print("Starting copy")
-    dir_items = list(insight_dir.iterdir())
-    assert len(dir_items) == 1
 
-    tool_dir_name = dir_items[0].parts[-1]
+    # Recall that we copy the JSON containing metadata from the
+    # constructor component into each directory
+    # This means we have that file and the results directory
+    # present in the insight_dir
+    dir_items = list(insight_dir.iterdir())
+    assert len(dir_items) == 2
+
+    # We want the directory, not the JSON file
+    if dir_items[0].name == DashboardInfo.RAI_INSIGHTS_PARENT_FILENAME:
+        tool_dir_name = dir_items[1].name
+    else:
+        tool_dir_name = dir_items[0].name
+
     _logger.info("Detected tool: {0}".format(tool_dir_name))
     assert tool_dir_name in _tool_directory_mapping.values()
     for k, v in _tool_directory_mapping.items():

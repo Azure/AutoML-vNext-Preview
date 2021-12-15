@@ -13,6 +13,7 @@ from constants import RAIToolType
 from rai_component_utilities import (
     load_rai_insights_from_input_port,
     save_to_output_port,
+    copy_dashboard_info_file,
 )
 
 _logger = logging.getLogger(__file__)
@@ -58,6 +59,10 @@ def main(args):
 
     # Save
     save_to_output_port(rai_i, args.error_analysis_path, RAIToolType.ERROR_ANALYSIS)
+    _logger.info("Saved to output port")
+
+    # Copy the dashboard info file
+    copy_dashboard_info_file(args.rai_insights_dashboard, args.error_analysis_path)
 
     _logger.info("Completing")
 
