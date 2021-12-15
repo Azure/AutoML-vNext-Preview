@@ -260,7 +260,14 @@ class TestRAI:
         register_job_outputs = {
             'model_info_output_path': None
         }
-        register_job = ComponentJob(
+        # Register twice (the component is non-deterministic so we can be
+        # sure output won't be reused)
+        register_job_1 = ComponentJob(
+            component=f"RegisterModel:{version_string}",
+            inputs=register_job_inputs,
+            outputs=register_job_outputs
+        )
+        register_job_2 = ComponentJob(
             component=f"RegisterModel:{version_string}",
             inputs=register_job_inputs,
             outputs=register_job_outputs
@@ -270,7 +277,7 @@ class TestRAI:
         create_rai_inputs = {
             'title': 'Run built from Python',
             'task_type': 'classification',
-            'model_info_path': '${{jobs.register-model-job.outputs.model_info_output_path}}',
+            'model_info_path': '${{jobs.register-model-job-1.outputs.model_info_output_path}}',
             'train_dataset': '${{inputs.my_training_data}}',
             'test_dataset': '${{inputs.my_test_data}}',
             'target_column_name': '${{inputs.target_column_name}}',
@@ -286,6 +293,7 @@ class TestRAI:
             inputs=create_rai_inputs,
             outputs=create_rai_outputs
         )
+        create_rai_inputs['model_info_path'] = '${{jobs.register-model-job-2.outputs.model_info_output_path}}'
         create_rai_2 = ComponentJob(
             component=f"RAIInsightsConstructor:{version_string}",
             inputs=create_rai_inputs,
@@ -344,7 +352,8 @@ class TestRAI:
             description="Python submitted Adult",
             jobs={
                 'train-model-job': train_job,
-                'register-model-job': register_job,
+                'register-model-job-1': register_job_1,
+                'register-model-job-2': register_job_2,
                 'create-rai-job-1': create_rai_1,
                 'create-rai-job-2': create_rai_2,
                 'causal-rai-job': causal_job,
