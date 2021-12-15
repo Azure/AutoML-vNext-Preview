@@ -44,8 +44,7 @@ def parse_args():
 
 def main(args):
     # Load the RAI Insights object
-    rai_i: RAIInsights = load_rai_insights_from_input_port(
-        args.rai_insights_dashboard)
+    rai_i: RAIInsights = load_rai_insights_from_input_port(args.rai_insights_dashboard)
 
     # Add the counterfactual
     rai_i.counterfactual.add(
@@ -64,13 +63,11 @@ def main(args):
     _logger.info("Computation complete")
 
     # Save
-    save_to_output_port(rai_i, args.counterfactual_path,
-                        RAIToolType.COUNTERFACTUAL)
+    save_to_output_port(rai_i, args.counterfactual_path, RAIToolType.COUNTERFACTUAL)
     _logger.info("Saved to output port")
 
     # Copy the dashboard info file
-    copy_dashboard_info_file(
-        args.rai_insights_dashboard, args.counterfactual_path)
+    copy_dashboard_info_file(args.rai_insights_dashboard, args.counterfactual_path)
 
     _logger.info("Completing")
 

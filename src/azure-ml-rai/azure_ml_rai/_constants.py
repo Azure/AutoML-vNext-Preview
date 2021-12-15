@@ -11,6 +11,7 @@ class RAIToolType:
     ERROR_ANALYSIS = "error_analysis"
     EXPLANATION = "explanation"
 
+
 class PropertyKeyValues:
     # The property to indicate the type of Run
     RAI_INSIGHTS_TYPE_KEY = "_azureml.responsibleai.rai_insights.type"
@@ -27,4 +28,4 @@ class PropertyKeyValues:
 
 # This comes from the component definitions
 class OutputPortNames:
-    RAI_INSIGHTS_GATHER_RAIINSIGHTS_PORT = 'dashboard'
+    RAI_INSIGHTS_GATHER_RAIINSIGHTS_PORT = "dashboard"

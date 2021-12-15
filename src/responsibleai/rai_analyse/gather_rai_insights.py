@@ -22,8 +22,9 @@ from rai_component_utilities import (
     add_properties_to_gather_run,
 )
 
-_DASHBOARD_CONSTRUCTOR_MISMATCH = "Insight {0} was not " \
-    "computed from the constructor specified"
+_DASHBOARD_CONSTRUCTOR_MISMATCH = (
+    "Insight {0} was not " "computed from the constructor specified"
+)
 
 _logger = logging.getLogger(__file__)
 logging.basicConfig(level=logging.INFO)
@@ -75,14 +76,14 @@ def main(args):
                 insight_info = load_dashboard_info_file(Path(ip))
                 _logger.info("Insight info: {0}".format(insight_info))
                 if insight_info != dashboard_info:
-                    err_string = _DASHBOARD_CONSTRUCTOR_MISMATCH.format(i+1)
+                    err_string = _DASHBOARD_CONSTRUCTOR_MISMATCH.format(i + 1)
                     raise ValueError(err_string)
 
-                _logger.info("Copying insight {0}".format(i+1))
+                _logger.info("Copying insight {0}".format(i + 1))
                 tool = copy_insight_to_raiinsights(incoming_dir, Path(ip))
                 included_tools[tool] = True
             else:
-                _logger.info("Insight {0} is None".format(i+1))
+                _logger.info("Insight {0} is None".format(i + 1))
 
         _logger.info("Tool summary: {0}".format(included_tools))
 

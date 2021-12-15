@@ -13,7 +13,7 @@ from constants import RAIToolType
 from rai_component_utilities import (
     load_rai_insights_from_input_port,
     save_to_output_port,
-    copy_dashboard_info_file
+    copy_dashboard_info_file,
 )
 
 _logger = logging.getLogger(__file__)
@@ -43,8 +43,7 @@ def parse_args():
 
 def main(args):
     # Load the RAI Insights object
-    rai_i: RAIInsights = load_rai_insights_from_input_port(
-        args.rai_insights_dashboard)
+    rai_i: RAIInsights = load_rai_insights_from_input_port(args.rai_insights_dashboard)
 
     # Add the error analysis
     rai_i.error_analysis.add(
@@ -59,13 +58,11 @@ def main(args):
     _logger.info("Computation complete")
 
     # Save
-    save_to_output_port(rai_i, args.error_analysis_path,
-                        RAIToolType.ERROR_ANALYSIS)
+    save_to_output_port(rai_i, args.error_analysis_path, RAIToolType.ERROR_ANALYSIS)
     _logger.info("Saved to output port")
 
     # Copy the dashboard info file
-    copy_dashboard_info_file(
-        args.rai_insights_dashboard, args.error_analysis_path)
+    copy_dashboard_info_file(args.rai_insights_dashboard, args.error_analysis_path)
 
     _logger.info("Completing")
 

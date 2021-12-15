@@ -12,9 +12,7 @@ from ._utilities import _get_v1_workspace_client
 
 
 def list_rai_insights(
-    ml_client: MLClient,
-    experiment_name: str,
-    model_id: Optional[str] = None
+    ml_client: MLClient, experiment_name: str, model_id: Optional[str] = None
 ) -> List[str]:
     # Return the Run ids for runs having RAI insights
 
@@ -29,6 +27,7 @@ def list_rai_insights(
     v1_experiment = v1_workspace.experiments[experiment_name]
 
     all_runs = Run.list(
-        v1_experiment, properties=filter_properties, include_children=True)
+        v1_experiment, properties=filter_properties, include_children=True
+    )
 
     return [r.id for r in all_runs]

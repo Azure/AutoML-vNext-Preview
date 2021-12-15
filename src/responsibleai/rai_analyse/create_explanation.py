@@ -36,8 +36,7 @@ def parse_args():
 
 def main(args):
     # Load the RAI Insights object
-    rai_i: RAIInsights = load_rai_insights_from_input_port(
-        args.rai_insights_dashboard)
+    rai_i: RAIInsights = load_rai_insights_from_input_port(args.rai_insights_dashboard)
 
     # Add the explanation
     rai_i.explainer.add()
@@ -52,8 +51,7 @@ def main(args):
     _logger.info("Saved to output port")
 
     # Copy the dashboard info file
-    copy_dashboard_info_file(
-        args.rai_insights_dashboard, args.explanation_path)
+    copy_dashboard_info_file(args.rai_insights_dashboard, args.explanation_path)
 
     _logger.info("Completing")
 
