@@ -72,7 +72,7 @@ class TestRAI:
 
         submit_and_wait(ml_client, pipeline_job)
 
-    def test_classification_pipeline(self, ml_client: MLClient, component_config):
+    def test_classification_pipeline_from_python(self, ml_client: MLClient, component_config):
         # This is for the Adult dataset
         version_string = component_config['version']
 
@@ -208,7 +208,7 @@ class TestRAI:
 
         # Assemble into a pipeline
         pipeline_job = PipelineJob(
-            experiment_name=f"Classification_from_Python_{version_string}",
+            experiment_name=f"classification_pipeline_from_python_{version_string}",
             description="Python submitted Adult",
             jobs={
                 'train-model-job': train_job,
@@ -351,7 +351,7 @@ class TestRAI:
 
         # Assemble into a pipeline
         pipeline_job = PipelineJob(
-            experiment_name=f"Gather_Component_Crosscheck_{version_string}",
+            experiment_name=f"XFAIL_tool_component_mismatch_{version_string}",
             description="Python submitted Adult",
             jobs={
                 'train-model-job': train_job,
@@ -486,7 +486,7 @@ class TestRAI:
 
         # Pipeline to construct the RAI Insights
         insights_pipeline_job = PipelineJob(
-            experiment_name=f"Fetch_Model_for_Insights_{version_string}",
+            experiment_name=f"fetch_registered_model_component_{version_string}",
             description="Python submitted Adult insights using fetched model",
             jobs={
                 'fetch-model-job': fetch_job,
