@@ -50,6 +50,7 @@ def parse_args():
 
 def main(args):
     dashboard_info = load_dashboard_info_file(args.constructor)
+    _logger.info("Constructor info: {0}".format(dashboard_info))
 
     with tempfile.TemporaryDirectory() as incoming_temp_dir:
         incoming_dir = Path(incoming_temp_dir)
@@ -72,6 +73,7 @@ def main(args):
             if ip is not None:
                 _logger.info("Checking dashboard info")
                 insight_info = load_dashboard_info_file(Path(ip))
+                _logger.info("Insight info: {0}".format(insight_info))
                 if insight_info != dashboard_info:
                     err_string = _DASHBOARD_CONSTRUCTOR_MISMATCH.format(i+1)
                     raise ValueError(err_string)
