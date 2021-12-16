@@ -168,6 +168,14 @@ function Process-Directory(
     Write-Host
     Write-Host "Dataset registration complete"
     Write-Host
+
+    foreach ($directory in $reg_config.nested_directories){
+        $nxt_dir = [System.IO.Path]::Join($base_directory, $directory)
+        Write-Host "Recursing into $nxt_dir"
+        Process-Directory -workspace_config $workspace_config `
+                        -component_config $component_config `
+                        -base_directory $nxt_dir
+    }
 }
 
 # Enable all the commands

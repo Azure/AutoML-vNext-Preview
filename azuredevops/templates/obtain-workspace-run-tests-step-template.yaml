@@ -145,33 +145,13 @@ steps:
     failOnStandardError: false # Since the new CLI writes stuff there
 
 - task: AzureCLI@2
-  displayName: Register Adult Dataset
+  displayName: Register AzureML items for Test
   inputs:
     azureSubscription: "${{parameters.subscriptionName}}"
     scriptType: pscore
     scriptLocation: scriptPath
     scriptPath: scripts/Register-AzureML.ps1
-    arguments: test/data/adult/
-    failOnStandardError: false # Since the new CLI writes stuff there
-
-- task: AzureCLI@2
-  displayName: Register Boston Dataset
-  inputs:
-    azureSubscription: "${{parameters.subscriptionName}}"
-    scriptType: pscore
-    scriptLocation: scriptPath
-    scriptPath: scripts/Register-AzureML.ps1
-    arguments: test/data/boston/
-    failOnStandardError: false # Since the new CLI writes stuff there
-
-- task: AzureCLI@2
-  displayName: Register Test-only components
-  inputs:
-    azureSubscription: "${{parameters.subscriptionName}}"
-    scriptType: pscore
-    scriptLocation: scriptPath
-    scriptPath: scripts/Register-AzureML.ps1
-    arguments: test/components/
+    arguments: test/
     failOnStandardError: false # Since the new CLI writes stuff there
 
 - task: AzureCLI@2
