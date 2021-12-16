@@ -182,5 +182,5 @@ Write-Host "Starting in directory $initial_directory"
 Write-Host
 
 Process-Directory -workspace_config $ws `
-                -component_config $reg_config `
+                -component_config $component_config `
                 -base_directory $initial_directory
