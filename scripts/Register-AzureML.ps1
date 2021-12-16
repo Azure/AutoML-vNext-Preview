@@ -124,7 +124,7 @@ function Register-Dataset(
 function Process-Directory(
     $workspace_config,
     $component_config,
-    [string]$base_directory
+    $base_directory
 )
 {
     Write-Host "Processing directory: $base_directory"
