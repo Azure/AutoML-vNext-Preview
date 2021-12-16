@@ -32,7 +32,7 @@
 # registered as datasets
 
 param (
-        [string]$path_to_registration_json
+        [string]$initial_directory
 )
 
 function Read-JsonConfig(
@@ -120,6 +120,55 @@ function Register-Dataset(
     }
 }
 
+
+function Process-Directory(
+    $workspace_config,
+    $component_config,
+    [string]$base_directory
+)
+{
+    $reg_config_file = [System.IO.Path]::Join($base_directory, 'registration_config.json')
+    $reg_config = Read-JsonConfig($reg_config_file)
+
+    # Register the environments
+    foreach ($env_file in $reg_config.environments) {
+        Write-Host "Registering environment $env_file"
+        Register-Environment -workspace_config $workspace_config `
+                            -component_config $component_config `
+                            -base_directory $base_directory `
+                            -environment_file $env_file
+        Write-Host
+    }
+    Write-Host
+    Write-Host "Environment registration complete"
+    Write-Host
+
+    
+    # Register the components
+    foreach ($component_file in $reg_config.components){
+        Write-Host "Registering component $component_file"
+        Register-Component -workspace_config $ws `
+                        -component_config $component_config `
+                        -base_directory $component_directory `
+                        -component_file $component_file
+        Write-Host
+    }
+    Write-Host
+    Write-Host "Component registration complete"
+    Write-Host
+
+    # Register the datasets
+    foreach ($data_item in $reg_config.data){
+        Register-Dataset -workspace_config $ws `
+                        -component_config $component_config `
+                        -base_directory $component_directory `
+                        -data_info $data_item
+    }
+    Write-Host
+    Write-Host "Dataset registration complete"
+    Write-Host
+}
+
 # Enable all the commands
 $Env:AZURE_ML_CLI_PRIVATE_FEATURES_ENABLED=$true
 
@@ -128,30 +177,4 @@ $ws = Read-JsonConfig('config.json')
 $component_config = Read-JsonConfig('component_config.json')
 $reg_config = Read-JsonConfig($path_to_registration_json)
 
-# Figure out the target directory
-$component_directory = [System.IO.Path]::GetDirectoryName($path_to_registration_json)
-Write-Host "Directory containing components: $component_directory"
-Write-Host
-
-# Register the environments
-foreach ($env_file in $reg_config.environments) {
-    Write-Host "Registering environment $env_file"
-    Register-Environment -workspace_config $ws -component_config $component_config  -base_directory $component_directory -environment_file $env_file
-    Write-Host
-}
-Write-Host
-Write-Host "Environment registration complete"
-
-# Register the components
-foreach ($component_file in $reg_config.components){
-    Write-Host "Registering component $component_file"
-    Register-Component -workspace_config $ws -component_config $component_config  -base_directory $component_directory -component_file $component_file
-    Write-Host
-}
-Write-Host
-Write-Host "Component registration complete"
-
-# Register the datasets
-foreach ($data_item in $reg_config.data){
-    Register-Dataset -workspace_config $ws -component_config $component_config  -base_directory $component_directory -data_info $data_item
-}
+Process-Directory($ws, $reg_config, $initial_directory)
