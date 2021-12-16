@@ -177,4 +177,8 @@ $Env:AZURE_ML_CLI_PRIVATE_FEATURES_ENABLED=$true
 $ws = Read-JsonConfig('config.json')
 $component_config = Read-JsonConfig('component_config.json')
 
+Write-Host
+Write-Host "Starting in directory $initial_directory"
+Write-Host
+
 Process-Directory($ws, $reg_config, $initial_directory)
