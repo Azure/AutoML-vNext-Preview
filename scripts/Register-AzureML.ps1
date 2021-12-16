@@ -127,6 +127,7 @@ function Process-Directory(
     [string]$base_directory
 )
 {
+    Write-Host "Processing directory: $base_directory"
     $reg_config_file = [System.IO.Path]::Join($base_directory, 'registration_config.json')
     $reg_config = Read-JsonConfig($reg_config_file)
 
