@@ -175,6 +175,5 @@ $Env:AZURE_ML_CLI_PRIVATE_FEATURES_ENABLED=$true
 # Read in the configuration files
 $ws = Read-JsonConfig('config.json')
 $component_config = Read-JsonConfig('component_config.json')
-$reg_config = Read-JsonConfig($path_to_registration_json)
 
 Process-Directory($ws, $reg_config, $initial_directory)
