@@ -1,5 +1,6 @@
 {
     "environments": [],
     "components": ["component_train_logreg.yaml", "component_train_boston.yaml"],
-    "data": []
+    "data": [],
+    "nested_directories": []
 }

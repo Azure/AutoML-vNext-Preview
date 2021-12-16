@@ -12,5 +12,6 @@
         "component_rai_insights.yaml",
         "component_gather_rai_insights.yaml"
     ],
-    "data" : []
+    "data" : [],
+    "nested_directories": []
 }
