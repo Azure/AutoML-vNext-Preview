@@ -150,7 +150,7 @@ function Process-Directory(
         Write-Host "Registering component $component_file"
         Register-Component -workspace_config $ws `
                         -component_config $component_config `
-                        -base_directory $component_directory `
+                        -base_directory $base_directory `
                         -component_file $component_file
         Write-Host
     }
@@ -162,7 +162,7 @@ function Process-Directory(
     foreach ($data_item in $reg_config.data){
         Register-Dataset -workspace_config $ws `
                         -component_config $component_config `
-                        -base_directory $component_directory `
+                        -base_directory $base_directory `
                         -data_info $data_item
     }
     Write-Host
