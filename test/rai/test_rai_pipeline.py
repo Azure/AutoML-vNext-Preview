@@ -458,7 +458,7 @@ class TestRAI:
             jobs={
                 "fetch-model-job": fetch_job,
                 "create-rai-job": create_rai_job,
-                "explain-job": explain_job,
+                "explain-rai-job": explain_job,
                 "gather-job": gather_job,
             },
             inputs=pipeline_inputs,
