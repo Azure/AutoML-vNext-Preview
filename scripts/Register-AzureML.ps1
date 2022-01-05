@@ -128,7 +128,7 @@ function Process-Directory(
 )
 {
     Write-Host "Processing directory: $base_directory"
-    $reg_config_file = [System.IO.Path]::Join($base_directory, 'registration_config.json')
+    $reg_config_file = Join-Path -Path $base_directory -ChildPath 'registration_config.json'
     $reg_config = Read-JsonConfig($reg_config_file)
 
     # Register the environments
@@ -170,7 +170,7 @@ function Process-Directory(
     Write-Host
 
     foreach ($directory in $reg_config.nested_directories){
-        $nxt_dir = [System.IO.Path]::Join($base_directory, $directory)
+        $nxt_dir = Join-Path -Path $base_directory -ChildPath $directory
         Write-Host "Recursing into $nxt_dir"
         Process-Directory -workspace_config $workspace_config `
                         -component_config $component_config `
