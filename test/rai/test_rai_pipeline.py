@@ -173,7 +173,7 @@ class TestRAI:
         # Configure the gather component
         gather_inputs = {
             "constructor": "${{jobs.create-rai-job.outputs.rai_insights_dashboard}}",
-            # 'insight_1': '${{jobs.explain-rai-job.outputs.explanation}}',
+            "insight_1": "${{jobs.explain-rai-job.outputs.explanation}}",
             "insight_2": "${{jobs.causal-rai-job.outputs.causal}}",
             "insight_3": "${{jobs.counterfactual-rai-job.outputs.counterfactual}}",
             "insight_4": "${{jobs.error-analysis-rai-job.outputs.error_analysis}}",
