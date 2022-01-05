@@ -10,5 +10,5 @@ dependencies:
     - pyarrow
     - scikit-learn
     - mlflow
-    - azureml-mlflow~=1.35.0
-    - responsibleai~=0.15.1
+    - azureml-mlflow~=1.37.0
+    - responsibleai~=0.16.0

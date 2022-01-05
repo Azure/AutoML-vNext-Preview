@@ -92,3 +92,13 @@ jobs:
     inputs:
       rai_insights_dashboard: ${{jobs.create-rai-job.outputs.rai_insights_dashboard}}
       filter_features: '["Race", "Sex", "Workclass", "Marital Status", "Country", "Occupation"]'
+
+  gather_01:
+    type: component_job
+    component: azureml:RAIInsightsGather:VERSION_REPLACEMENT_STRING
+    inputs:
+      constructor: ${{jobs.create-rai-job.outputs.rai_insights_dashboard}}
+      insight_1: ${{jobs.causal_01.outputs.causal}}
+      insight_2: ${{jobs.counterfactual_01.outputs.counterfactual}}
+      insight_3: ${{jobs.error_analysis_01.outputs.error_analysis}}
+      insight_4: ${{jobs.explain_01.outputs.explanation}}
