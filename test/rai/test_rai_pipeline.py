@@ -439,6 +439,18 @@ class TestRAI:
             outputs=explain_outputs,
         )
 
+        # Configure the gather component
+        gather_inputs = {
+            "constructor": "${{jobs.create-rai-job.outputs.rai_insights_dashboard}}",
+            "insight_1": "${{jobs.explain-rai-job.outputs.explanation}}",
+        }
+        gather_outputs = {"dashboard": None, "ux_json": None}
+        gather_job = ComponentJob(
+            component=f"RAIInsightsGather:{version_string}",
+            inputs=gather_inputs,
+            outputs=gather_outputs,
+        )
+
         # Pipeline to construct the RAI Insights
         insights_pipeline_job = PipelineJob(
             experiment_name=f"fetch_registered_model_component_{version_string}",
@@ -447,6 +459,7 @@ class TestRAI:
                 "fetch-model-job": fetch_job,
                 "create-rai-job": create_rai_job,
                 "explain-job": explain_job,
+                "gather-job": gather_job,
             },
             inputs=pipeline_inputs,
             outputs=None,
