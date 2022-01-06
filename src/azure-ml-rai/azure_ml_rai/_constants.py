@@ -29,3 +29,4 @@ class PropertyKeyValues:
 # This comes from the component definitions
 class OutputPortNames:
     RAI_INSIGHTS_GATHER_RAIINSIGHTS_PORT = "dashboard"
+    RAI_INSIGHTS_GATHER_RAIINSIGHTS_UX_PORT = "ux_json"

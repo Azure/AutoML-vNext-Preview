@@ -85,3 +85,24 @@ def download_rai_insights(ml_client: MLClient, rai_insight_id: str, path: str) -
     tool_dirs = ["causal", "counterfactual", "error_analysis", "explainer"]
     for t in tool_dirs:
         os.makedirs(Path(path) / t, exist_ok=True)
+
+
+def download_rai_insights_ux(
+    ml_client: MLClient, rai_insight_id: str, path: str
+) -> None:
+    v1_ws = _get_v1_workspace_client(ml_client)
+
+    mlflow.set_tracking_uri(v1_ws.get_mlflow_tracking_uri())
+
+    mlflow_client = MlflowClient()
+
+    output_directory = Path(path)
+    output_directory.mkdir(parents=True, exist_ok=False)
+
+    _download_port_files(
+        mlflow_client,
+        rai_insight_id,
+        OutputPortNames.RAI_INSIGHTS_GATHER_RAIINSIGHTS_UX_PORT,
+        output_directory,
+        ml_client._credential,
+    )
